@@ -2,6 +2,8 @@ server:
   port: 18080
 
 spring:
+  config:
+    import: "optional:nacos:window-order-gateway.yaml"
   application:
     name: window-order-gateway
   cloud:

@@ -2,10 +2,15 @@ server:
   port: 18081
 
 spring:
+  config:
+    import: "optional:nacos:window-order-auth.yaml"
   application:
     name: window-order-auth
   cloud:
     nacos:
+      config:
+        server-addr: 10.100.106.134:8848
+        namespace: dev123456
       discovery:
         server-addr: 10.100.106.134:8848
         namespace: dev123456
@@ -28,3 +33,10 @@ mybatis-plus:
 logging:
   level:
     com.window.system: DEBUG
+
+minio:
+  endpoint: http://127.0.0.1:9000
+  access-key: lkANXxJWqWDjNG9nECfG
+  secret-key: 6r9lidmuaHG5kABZe82WWS6S7TwCtMPrCZIKIBYJ
+  bucket-name: ssjj
+

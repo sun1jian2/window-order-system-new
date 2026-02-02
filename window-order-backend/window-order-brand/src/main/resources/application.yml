@@ -2,10 +2,15 @@ server:
   port: 18082
 
 spring:
+  config:
+    import: "optional:nacos:window-order-brand.yaml"
   application:
     name: window-order-brand
   cloud:
     nacos:
+      config:
+        server-addr: 10.100.106.134:8848
+        namespace: dev123456
       discovery:
         server-addr: 10.100.106.134:8848
         namespace: dev123456
@@ -20,3 +25,15 @@ mybatis-plus:
   type-aliases-package: com.window.system.model.entity
   configuration:
     map-underscore-to-camel-case: true
+
+
+logging:
+  level:
+    com.window.system.mapper: debug
+
+minio:
+  endpoint: http://127.0.0.1:9000
+  access-key: lkANXxJWqWDjNG9nECfG
+  secret-key: 6r9lidmuaHG5kABZe82WWS6S7TwCtMPrCZIKIBYJ
+  bucket-name: ssjj
+
