@@ -28,7 +28,7 @@
         <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <hutool.version>5.8.25</hutool.version>
-        <mysql.version>8.2.0</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <lombok.version>1.18.30</lombok.version>
         <jjwt.version>0.11.5</jjwt.version>
         <minio.version>8.5.7</minio.version>
@@ -62,13 +62,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Common Module -->
-            <dependency>
-                <groupId>com.window</groupId>
-                <artifactId>window-order-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <!-- Third Party -->
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -77,7 +70,7 @@
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
-                <artifactId>mysql-connector-j</artifactId>
+                <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
             <dependency>

@@ -19,6 +19,7 @@
         <dependency>
             <groupId>com.window</groupId>
             <artifactId>window-order-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

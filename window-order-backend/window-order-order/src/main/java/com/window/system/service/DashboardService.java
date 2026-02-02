@@ -22,10 +22,10 @@ public class DashboardService {
         stats.setTotalOrders(windowOrderMapper.countTotalOrders(userId, role));
         
         BigDecimal monthlySales = windowOrderMapper.sumMonthlySales(userId, role);
-        stats.setMonthlySales(monthlySales != null ? monthlySales : BigDecimal.ZERO);
+        stats.setMonthlySales(monthlySales != null ? monthlySales.toPlainString() : "0");
         
         BigDecimal monthlyPaid = windowOrderMapper.sumMonthlyPaidAmount(userId, role);
-        stats.setMonthlyPaidAmount(monthlyPaid != null ? monthlyPaid : BigDecimal.ZERO);
+        stats.setMonthlyPaidAmount(monthlyPaid != null ? monthlyPaid.toPlainString() : "0");
         
         stats.setOrderTrend(windowOrderMapper.getOrderTrend(userId, role));
         stats.setBrandDistribution(windowOrderMapper.getBrandDistribution(userId, role));
