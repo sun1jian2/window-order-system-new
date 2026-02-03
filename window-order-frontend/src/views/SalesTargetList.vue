@@ -21,6 +21,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="fetchData" :icon="Search">查询</el-button>
+            <el-button @click="handleReset" :icon="Refresh">重置</el-button>
             <el-button type="warning" @click="handleExport" :icon="Download">导出</el-button>
             <el-button type="success" @click="handleSetTarget" :icon="Plus" v-if="userStore.currentUser.role === 'ADMIN'">设置目标</el-button>
           </el-form-item>
@@ -98,7 +99,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { Search, Plus, Download } from '@element-plus/icons-vue'
+import { Search, Plus, Download, Refresh } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import request from '@/utils/request'
 import { listTargets, setTarget, exportTargets } from '@/api/salesTarget'
@@ -154,6 +155,12 @@ const fetchData = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const handleReset = () => {
+  queryMonth.value = dayjs().format('YYYY-MM')
+  querySalespersonId.value = null
+  fetchData()
 }
 
 const handleExport = async () => {

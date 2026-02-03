@@ -8,6 +8,7 @@
           </el-form-item>
           <el-form-item class="search-actions">
             <el-button type="primary" @click="handleSearch" :icon="Search">查询</el-button>
+            <el-button @click="handleReset" :icon="Refresh">重置</el-button>
             <el-button type="success" @click="handleCreate" :icon="Plus">新建品牌</el-button>
             <el-button type="warning" @click="handleExport" :icon="Download">导出</el-button>
           </el-form-item>
@@ -70,7 +71,7 @@ import { ref, reactive, onMounted } from 'vue'
 import request from '@/utils/request'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Plus, Edit, Delete, Goods, View, Download } from '@element-plus/icons-vue'
+import { Search, Plus, Edit, Delete, Goods, View, Download, Refresh } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const currentUser = ref({})
@@ -122,6 +123,12 @@ const fetchData = async () => {
 }
 
 const handleSearch = () => {
+  queryForm.pageNo = 1
+  fetchData()
+}
+
+const handleReset = () => {
+  queryForm.name = ''
   queryForm.pageNo = 1
   fetchData()
 }
