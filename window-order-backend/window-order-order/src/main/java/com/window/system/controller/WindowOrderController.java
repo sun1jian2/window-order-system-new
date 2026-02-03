@@ -48,15 +48,15 @@ public class WindowOrderController {
     @DeleteMapping("/{id}")
     @Log(module = "订单", operation = "删除订单")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
-    public Result<String> delete(@PathVariable Long id, 
-                               @RequestParam(required = false) Long currentUserId,
-                               @RequestParam(required = false) String currentUserRole) {
+    public Result<String> delete(@PathVariable("id") Long id, 
+                               @RequestParam(name = "currentUserId", required = false) Long currentUserId,
+                               @RequestParam(name = "currentUserRole", required = false) String currentUserRole) {
         log.info("Delete order id: {}, user: {}, role: {}", id, currentUserId, currentUserRole);
         return windowOrderService.delete(id, currentUserId, currentUserRole);
     }
     
     @GetMapping("/detail/{id}")
-    public Result<WindowOrder> get(@PathVariable Long id) {
+    public Result<WindowOrder> get(@PathVariable("id") Long id) {
         log.info("Get order detail id: {}", id);
         return windowOrderService.get(id);
     }

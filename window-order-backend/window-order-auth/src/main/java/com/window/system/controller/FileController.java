@@ -84,7 +84,7 @@ public class FileController {
     }
 
     @GetMapping("/{date}/{filename}")
-    public ResponseEntity<byte[]> get(@PathVariable String date, @PathVariable String filename) {
+    public ResponseEntity<byte[]> get(@PathVariable("date") String date, @PathVariable("filename") String filename) {
         try {
             String objectName = date + "/" + filename;
             InputStream stream = minioClient.getObject(

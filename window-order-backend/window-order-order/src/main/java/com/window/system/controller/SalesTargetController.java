@@ -31,8 +31,8 @@ public class SalesTargetController {
     }
 
     @GetMapping("/list")
-    public Result<List<SalesTargetResp>> list(@RequestParam(required = false) String month,
-                                              @RequestParam(required = false) Long salespersonId) {
+    public Result<List<SalesTargetResp>> list(@RequestParam(name = "month", required = false) String month,
+                                              @RequestParam(name = "salespersonId", required = false) Long salespersonId) {
         return salesTargetService.list(month, salespersonId);
     }
 

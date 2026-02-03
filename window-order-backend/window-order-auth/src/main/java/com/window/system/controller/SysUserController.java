@@ -62,7 +62,7 @@ public class SysUserController {
     
     @GetMapping("/role/{role}")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
-    public Result<List<SysUser>> listByRole(@PathVariable String role) {
+    public Result<List<SysUser>> listByRole(@PathVariable("role") String role) {
         return sysUserService.listByRole(role);
     }
 
@@ -76,12 +76,12 @@ public class SysUserController {
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Log(module = "账号", operation = "删除账号")
-    public Result<String> delete(@PathVariable Long id) {
+    public Result<String> delete(@PathVariable("id") Long id) {
         return sysUserService.delete(id);
     }
 
     @GetMapping("/ids")
-    public Result<Map<Long, SysUser>> getUsersByIds(@RequestParam List<Long> ids) {
+    public Result<Map<Long, SysUser>> getUsersByIds(@RequestParam("ids") List<Long> ids) {
         return sysUserService.getUsersByIds(ids);
     }
 

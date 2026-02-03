@@ -31,7 +31,7 @@ public class OrderPaymentController {
 
     @GetMapping("/order/{orderId}")
     @Operation(summary = "List payments by order id")
-    public Result<List<OrderPayment>> listByOrderId(@PathVariable Long orderId) {
+    public Result<List<OrderPayment>> listByOrderId(@PathVariable("orderId") Long orderId) {
         return orderPaymentService.listByOrderId(orderId);
     }
 }

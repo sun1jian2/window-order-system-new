@@ -67,13 +67,13 @@ public class AfterSalesOrderController {
     
     @GetMapping("/detail/{id}")
     @Operation(summary = "Get detail")
-    public Result<AfterSalesOrder> detail(@PathVariable Long id, @AuthenticationPrincipal AuthUser user) {
+    public Result<AfterSalesOrder> detail(@PathVariable("id") Long id, @AuthenticationPrincipal AuthUser user) {
         return afterSalesOrderService.getDetail(id, user);
     }
     
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete order")
-    public Result<String> delete(@PathVariable Long id, @AuthenticationPrincipal AuthUser user) {
+    public Result<String> delete(@PathVariable("id") Long id, @AuthenticationPrincipal AuthUser user) {
         return afterSalesOrderService.delete(id, user);
     }
 }

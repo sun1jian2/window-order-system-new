@@ -47,7 +47,7 @@ public class BrandController {
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Log(module = "品牌", operation = "删除品牌")
-    public Result<String> delete(@PathVariable Long id) {
+    public Result<String> delete(@PathVariable("id") Long id) {
         return brandService.delete(id);
     }
 

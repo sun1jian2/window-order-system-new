@@ -32,10 +32,10 @@ public class CustomerController {
     @GetMapping("/list")
     @Operation(summary = "List customers")
     public Result<PageResponse<Customer>> list(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String phone,
-            @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize) {
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "phone", required = false) String phone,
+            @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         
         long count = customerMapper.countList(name, phone);
         if (count == 0) {
@@ -58,7 +58,7 @@ public class CustomerController {
     }
     
     @GetMapping("/phone")
-    public Result<Customer> getByPhone(@RequestParam String phone) {
+    public Result<Customer> getByPhone(@RequestParam("phone") String phone) {
         return Result.success(customerMapper.getByPhone(phone));
     }
 
@@ -73,7 +73,7 @@ public class CustomerController {
     
     @GetMapping("/detail/{id}")
     @Operation(summary = "Get customer detail")
-    public Result<Customer> getDetail(@PathVariable Long id) {
+    public Result<Customer> getDetail(@PathVariable("id") Long id) {
         return Result.success(customerMapper.getById(id));
     }
 }

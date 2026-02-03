@@ -70,14 +70,14 @@ public class RemeasureTaskController {
     
     @GetMapping("/detail/{id}")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
-    public Result<RemeasureTask> get(@PathVariable Long id, @AuthenticationPrincipal AuthUser user) {
+    public Result<RemeasureTask> get(@PathVariable("id") Long id, @AuthenticationPrincipal AuthUser user) {
         log.info("Get remeasure task detail id: {}", id);
         return remeasureTaskService.get(id, user);
     }
 
     @GetMapping("/order/{orderId}")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
-    public Result<RemeasureTask> getByOrderId(@PathVariable Long orderId, @AuthenticationPrincipal AuthUser user) {
+    public Result<RemeasureTask> getByOrderId(@PathVariable("orderId") Long orderId, @AuthenticationPrincipal AuthUser user) {
         log.info("Get remeasure task by order id: {}", orderId);
         return remeasureTaskService.getByOrderId(orderId, user);
     }
