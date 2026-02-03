@@ -24,7 +24,11 @@ spring:
         - id: auth-service
           uri: lb://window-order-auth
           predicates:
-            - Path=/api/auth/**, /api/role/**, /api/logs/**, /api/file/**
+            - Path=/api/auth/**, /api/role/**, /api/roles/**, /api/logs/**, /api/file/**
+          filters:
+            - name: RequestSize
+              args:
+                maxSize: 500000000
 
         - id: brand-service
           uri: lb://window-order-brand
