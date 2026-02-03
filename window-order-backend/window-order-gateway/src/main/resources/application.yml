@@ -24,7 +24,7 @@ spring:
         - id: auth-service
           uri: lb://window-order-auth
           predicates:
-            - Path=/api/auth/**, /api/roles/**, /api/logs/**, /api/file/**
+            - Path=/api/auth/**, /api/role/**, /api/logs/**, /api/file/**
 
         - id: brand-service
           uri: lb://window-order-brand
@@ -39,4 +39,4 @@ spring:
         - id: order-service
           uri: lb://window-order-order
           predicates:
-            - Path=/api/order/**, /api/orders/**, /api/payment/**, /api/remeasure/**, /api/after-sales/**, /api/sales-target/**, /api/dashboard/**, /api/export-task/**
+            - Path=/api/order/**, /api/payment/**, /api/remeasure/**, /api/after-sales/**, /api/sales-target/**, /api/dashboard/**, /api/export-task/**
