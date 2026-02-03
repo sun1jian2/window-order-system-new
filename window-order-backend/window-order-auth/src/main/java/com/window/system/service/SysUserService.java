@@ -40,7 +40,7 @@ public class SysUserService {
             return Result.error("Invalid username or password");
         }
         // Issue JWT
-        java.util.Map<String, Object> claims = new java.util.HashMap<>();
+        Map<String, Object> claims = new java.util.HashMap<>();
         claims.put("id", user.getId());
         claims.put("username", user.getUsername());
         claims.put("role", user.getRole());
