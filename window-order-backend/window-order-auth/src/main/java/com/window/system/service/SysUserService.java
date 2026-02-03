@@ -29,6 +29,12 @@ public class SysUserService {
     private PasswordEncoder passwordEncoder;
 
     public Result<LoginResp> login(String username, String password) {
+        if (sysUserMapper == null) {
+            return Result.error("Internal Error: SysUserMapper not injected");
+        }
+        if (passwordEncoder == null) {
+            return Result.error("Internal Error: PasswordEncoder not injected");
+        }
         SysUser user = sysUserMapper.findByUsername(username);
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             return Result.error("Invalid username or password");
