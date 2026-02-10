@@ -6,6 +6,8 @@ spring:
     import: "optional:nacos:window-order-gateway.yaml"
   application:
     name: window-order-gateway
+  codec:
+    max-in-memory-size: 500MB
   cloud:
     nacos:
       discovery:
