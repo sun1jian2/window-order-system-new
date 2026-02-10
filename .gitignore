@@ -3,6 +3,9 @@
 
 node_modules/
 dist/
+**/dist/**
+assets/
+**/assets/**
 
 # Maven构建目录
 target/
