@@ -2,6 +2,7 @@
 # 适用于所有Java Maven项目
 
 node_modules/
+dist/
 
 # Maven构建目录
 target/

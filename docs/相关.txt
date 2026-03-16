@@ -2,6 +2,8 @@ minio访问地址：http://localhost:9001
  --console-address "127.0.0.1:9001" --address "127.0.0.1:9000"
 http://localhost:9000/sssjjj/ssjj33.jpg
 
+D:\document\minio
+
 set MINIO_ROOT_USER=minioadmin
 
 set MINIO_ROOT_PASSWORD=minioadmin

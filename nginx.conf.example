@@ -1,0 +1,111 @@
+
+#user  nobody;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    server {
+       
+	   listen       80;
+        	   server_name  localhost;
+ 
+    
+
+	     # 访问日志，有助于排查问题
+	     access_log  logs/window_order.access.log;
+	     error_log   logs/window_order.error.log;
+
+	     # 前端项目构建后的 dist 目录绝对路径
+	     # 请根据实际情况修改路径，注意 Windows 下路径分隔符使用正斜杠 /
+	     root   D:/work/javaspace/window-order-system-git/window-order-frontend/dist;
+	     
+	     # 默认首页
+	     index  index.html;
+
+	     # 设置客户端请求体最大限制，解决 413 Request Entity Too Large 错误
+	     client_max_body_size 400m;
+
+	     # 开启 gzip 压缩（可选，提高加载速度）
+	     gzip on;
+	     gzip_min_length 1k;
+	     gzip_comp_level 6;
+	     gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/json;
+
+	     # 核心修改：针对 index.html 设置不缓存
+         # 这样每次发布新版本，浏览器都会请求最新的 index.html，从而加载最新的 JS/CSS
+	     location = /index.html {
+             add_header Cache-Control "no-cache, no-store, must-revalidate";
+             add_header Pragma "no-cache";
+             add_header Expires "0";
+         }
+
+	     # 处理单页应用 (SPA) 的路由刷新 404 问题
+	     location / {
+	         try_files $uri $uri/ /index.html;
+             # 其他静态资源可以设置缓存，因为文件名带有哈希
+             expires 30d;
+	     }
+
+	     # 反向代理后端接口
+	     # 将 /api 开头的请求转发到后端服务
+	     location /api/ {
+	         # 后端服务地址，请根据实际情况修改
+	         proxy_pass http://localhost:18080;
+	         
+	         # 设置请求头
+	         proxy_set_header Host $host;
+	         proxy_set_header X-Real-IP $remote_addr;
+	         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	     }
+
+         # WebSocket 代理配置
+         # 将 /ws/ 开头的请求转发到后端 WebSocket 服务
+         location /ws/ {
+             proxy_pass http://localhost:18080;
+             
+             proxy_http_version 1.1;
+             proxy_set_header Upgrade $http_upgrade;
+             proxy_set_header Connection "upgrade";
+             
+             proxy_set_header Host $host;
+             proxy_set_header X-Real-IP $remote_addr;
+             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         }
+
+	     # 静态资源缓存设置（可选）
+         # JS/CSS 文件名带有哈希，内容变了文件名也会变，所以可以安全地长缓存
+	     location ~ .*\.(gif|jpg|jpeg|png|bmp|swf|js|css)$ {
+	         expires      30d;
+	     }
+
+    }
+
+}

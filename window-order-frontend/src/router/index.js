@@ -30,80 +30,80 @@ const routes = [
         path: 'dashboard',
         name: 'Dashboard',
         component: Dashboard,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '首页概览' }
       },
       {
         path: 'orders',
         name: 'OrderList',
         component: OrderList,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '订单管理' }
       },
       {
         path: 'order/detail/:id',
         name: 'OrderDetail',
         component: OrderDetail,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '订单详情' }
       },
       {
         path: 'order/payments/:id',
         name: 'OrderPayments',
         component: OrderPayments,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '支付详情' }
       },
       {
         path: 'order/payment/:id',
         name: 'PaymentDetail',
         component: PaymentDetail,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '支付详情' }
       },
       {
         path: 'brands',
         name: 'BrandList',
         component: BrandList,
-        meta: { requiresAuth: true, role: 'ADMIN' }
+        meta: { requiresAuth: true, role: 'ADMIN', title: '品牌管理' }
       },
       {
         path: 'users',
         name: 'UserList',
         component: UserList,
-        meta: { requiresAuth: true, role: 'ADMIN' }
+        meta: { requiresAuth: true, role: 'ADMIN', title: '用户管理' }
       }
       ,
       {
         path: 'customers',
         name: 'CustomerList',
         component: CustomerList,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '客户管理' }
       },
       {
         path: 'after-sales',
         name: 'AfterSalesList',
         component: AfterSalesList,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '售后管理' }
       },
       {
         path: 'remeasure-tasks',
         name: 'RemeasureTaskList',
         component: RemeasureTaskList,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '复尺任务' }
       },
       {
         path: 'sales-targets',
         name: 'SalesTargetList',
         component: SalesTargetList,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '销售目标' }
       },
       {
         path: 'export-center',
         name: 'ExportCenter',
         component: () => import('../views/ExportCenter.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: '导出中心' }
       },
       {
         path: 'logs',
         name: 'Logs',
         component: Logs,
-        meta: { requiresAuth: true, role: 'ADMIN' }
+        meta: { requiresAuth: true, role: 'ADMIN', title: '操作日志' }
       }
     ]
   }

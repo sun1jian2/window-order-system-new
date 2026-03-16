@@ -6,8 +6,11 @@
     
     <div class="main-container" :class="{ 'collapsed': isCollapse }">
       <div class="header-container">
-        <div class="hamburger" @click="toggleCollapse">
-          <el-icon :size="20"><component :is="isCollapse ? 'Expand' : 'Fold'" /></el-icon>
+        <div class="left-section">
+          <div class="hamburger" @click="toggleCollapse">
+            <el-icon :size="20"><component :is="isCollapse ? 'Expand' : 'Fold'" /></el-icon>
+          </div>
+          <div class="page-title">{{ route.meta.title }}</div>
         </div>
         <HeaderBar :show-brand="false" />
       </div>
@@ -25,10 +28,12 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { Expand, Fold } from '@element-plus/icons-vue'
 import SideMenu from '../components/SideMenu.vue'
 import HeaderBar from '../components/HeaderBar.vue'
 
+const route = useRoute()
 const isCollapse = ref(false)
 
 const toggleCollapse = () => {
@@ -77,6 +82,19 @@ const toggleCollapse = () => {
   justify-content: space-between;
   padding: 0;
   z-index: 1000;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #303133;
+  margin-left: 10px;
 }
 
 .hamburger {
