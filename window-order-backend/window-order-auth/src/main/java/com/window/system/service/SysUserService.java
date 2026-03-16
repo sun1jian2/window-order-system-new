@@ -80,7 +80,7 @@ public class SysUserService {
         return Result.success(PageResponse.of(list, count));
     }
     
-    @Cacheable(value = "user_role_list", key = "#role")
+    @Cacheable(value = "user_role_list", key = "#p0")
     public Result<List<SysUser>> listByRole(String role) {
         return Result.success(sysUserMapper.selectByRole(role));
     }

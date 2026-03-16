@@ -57,12 +57,12 @@
     </div>
 
     <el-dialog v-model="dialogVisible" :title="getDialogTitle()" width="500px" destroy-on-close>
-      <el-form :model="form" label-width="100px">
+      <el-form :model="form" label-width="100px" autocomplete="off">
         <el-form-item label="用户名">
-          <el-input v-model="form.username" placeholder="请输入用户名" :disabled="dialogType === 'detail'" />
+          <el-input v-model="form.username" placeholder="请输入用户名" :disabled="dialogType === 'detail'" autocomplete="off" name="username_new" />
         </el-form-item>
         <el-form-item label="密码" v-if="dialogType !== 'detail'">
-          <el-input v-model="form.password" type="password" placeholder="留空则不修改(默认123456)" show-password />
+          <el-input v-model="form.password" type="password" placeholder="留空则不修改(默认123456)" show-password autocomplete="new-password" name="password_new" />
         </el-form-item>
         <el-form-item label="真实姓名">
           <el-input v-model="form.realName" :disabled="dialogType === 'detail'" />
@@ -201,7 +201,7 @@ const handleCreate = () => {
       username: '',
       password: '',
       realName: '',
-      role: 'SALES' // Default
+      role: '' // Default
   })
   dialogVisible.value = true
 }

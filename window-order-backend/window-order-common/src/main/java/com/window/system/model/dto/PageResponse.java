@@ -2,12 +2,14 @@ package com.window.system.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
-public class PageResponse<T> {
+public class PageResponse<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private List<T> list;
     private Long total;
 

@@ -3,11 +3,14 @@ package com.window.system.model.entity;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class SysUser {
+public class SysUser implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @ExcelProperty("ID")
     private Long id;
     
