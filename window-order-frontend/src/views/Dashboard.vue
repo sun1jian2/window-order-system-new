@@ -21,6 +21,17 @@
         </div>
       </div>
       <div class="hero-actions">
+        <el-date-picker
+          v-model="dateRange"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          size="large"
+          value-format="YYYY-MM-DD"
+          @change="handleDateChange"
+          class="date-picker-custom"
+        />
         <el-button type="primary" size="large" class="action-btn" @click="go('/orders')" round>
           <el-icon><List /></el-icon>
           管理订单
@@ -90,6 +101,23 @@
           </div>
           <div class="card-bg-icon">
             <el-icon><Money /></el-icon>
+          </div>
+        </div>
+
+        <!-- 筛选销售额 (仅在选择日期时显示) -->
+        <div v-if="dateRange && dateRange.length === 2" class="kpi-card pink-theme">
+          <div class="card-icon-wrapper">
+            <el-icon><Calendar /></el-icon>
+          </div>
+          <div class="card-info">
+            <div class="card-label">筛选期销售额</div>
+            <div class="card-value money">{{ formatMoney(stats.customPeriodSales) }}</div>
+            <div class="card-trend">
+              <span>{{ dateRange[0] }} 至 {{ dateRange[1] }}</span>
+            </div>
+          </div>
+          <div class="card-bg-icon">
+            <el-icon><Calendar /></el-icon>
           </div>
         </div>
 
@@ -314,7 +342,7 @@ import {
 import {
   Sunny, List, User, Timer, CircleCheckFilled, Money, DataLine,
   ArrowRight, TrendCharts, DataAnalysis, PieChart as PieChartIcon,
-  Trophy, Lightning, DocumentAdd, UserFilled, Aim, Download, Avatar
+  Trophy, Lightning, DocumentAdd, UserFilled, Aim, Download, Avatar, Calendar
 } from '@element-plus/icons-vue'
 
 use([
@@ -331,6 +359,7 @@ use([
 const userStore = useUserStore()
 const router = useRouter()
 const loading = ref(true)
+const dateRange = ref([])
 
 const displayName = computed(() => {
   const user = userStore.currentUser || {}
@@ -365,6 +394,7 @@ const stats = ref({
     totalOrders: 0,
     monthlySales: 0,
     monthlyPaidAmount: 0,
+    customPeriodSales: 0,
     orderTrend: [],
     brandDistribution: [],
     statusDistribution: [],
@@ -374,6 +404,30 @@ const stats = ref({
     totalUsers: 0,
     todaySales: 0
 })
+
+const fetchStats = async () => {
+  try {
+    loading.value = true
+    const params = {}
+    if (dateRange.value && dateRange.value.length === 2) {
+      params.startDate = dateRange.value[0]
+      params.endDate = dateRange.value[1]
+    }
+    const res = await getDashboardStats(params)
+    if (res.code === 200) {
+      stats.value = res.data
+      initCharts()
+    }
+  } catch (e) {
+    console.error(e)
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleDateChange = () => {
+  fetchStats()
+}
 
 const lineOption = ref({})
 const pieOption = ref({})
@@ -509,18 +563,8 @@ const initCharts = () => {
   }
 }
 
-onMounted(async () => {
-  try {
-    const res = await getDashboardStats()
-    if (res.code === 200) {
-      stats.value = res.data
-      initCharts()
-    }
-  } catch (e) {
-    console.error(e)
-  } finally {
-    loading.value = false
-  }
+onMounted(() => {
+  fetchStats()
 })
 </script>
 
@@ -760,6 +804,16 @@ onMounted(async () => {
 
 .blue-theme .card-icon-wrapper { background: #eff6ff; color: #3b82f6; }
 .blue-theme .card-trend { color: #3b82f6; }
+
+.pink-theme .card-icon-wrapper { background: #fdf2f8; color: #db2777; }
+.pink-theme .card-trend { color: #db2777; font-size: 12px; }
+
+.date-picker-custom {
+  margin-right: 12px;
+  width: 260px !important;
+  border-radius: 20px !important;
+  box-shadow: 0 4px 12px rgba(148, 163, 184, 0.05);
+}
 
 /* Charts Grid */
 .charts-grid {

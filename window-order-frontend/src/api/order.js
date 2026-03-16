@@ -6,4 +6,4 @@ export const updateOrder = (data) => request.post('/order/update', data)
 export const deleteOrder = (id, params) => request.delete(`/order/${id}`, { params })
 export const getOrder = (id) => request.get(`/order/detail/${id}`)
 
-export const getDashboardStats = () => request.get('/dashboard/stats')
+export const getDashboardStats = (params) => request.get('/dashboard/stats', { params })

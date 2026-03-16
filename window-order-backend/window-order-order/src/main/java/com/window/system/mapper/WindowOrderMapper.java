@@ -163,6 +163,16 @@ public interface WindowOrderMapper {
             "</script>")
     java.math.BigDecimal sumTodaySales(@Param("userId") Long userId, @Param("role") String role);
 
+    @Select("<script>" +
+            "SELECT IFNULL(SUM(price), 0) FROM window_order WHERE is_deleted = 0 " +
+            "<if test='startDate != null'> AND create_time &gt;= #{startDate} </if> " +
+            "<if test='endDate != null'> AND create_time &lt;= CONCAT(#{endDate}, ' 23:59:59') </if> " +
+            "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
+            "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
+            "</script>")
+    java.math.BigDecimal sumSalesByDateRange(@Param("userId") Long userId, @Param("role") String role, 
+                                            @Param("startDate") String startDate, @Param("endDate") String endDate);
+
     @Select("SELECT count(1) FROM customer WHERE is_deleted = 0")
     long countTotalCustomers();
     

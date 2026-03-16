@@ -34,7 +34,7 @@ public class SecurityConfig {
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/api/auth/login","/ws/**", "/api/auth/migrate-passwords", "/v3/api-docs/**", "/swagger-ui/**", "/actuator/**").permitAll()
+                .requestMatchers("/api/auth/login","/ws/**", "/api/auth/migrate-passwords", "/v3/api-docs/**", "/swagger-ui/**", "/actuator/**", "/api/customer/phone", "/api/customer/save").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/file/**").permitAll()
                 .anyRequest().authenticated()
             );

@@ -14,7 +14,7 @@ public class DashboardService {
     @Autowired
     private WindowOrderMapper windowOrderMapper;
 
-    public Result<DashboardStats> getStats(Long userId, String role) {
+    public Result<DashboardStats> getStats(Long userId, String role, String startDate, String endDate) {
         DashboardStats stats = new DashboardStats();
         
         stats.setPendingOrders(windowOrderMapper.countPendingOrders(userId, role));
@@ -27,9 +27,17 @@ public class DashboardService {
         BigDecimal monthlyPaid = windowOrderMapper.sumMonthlyPaidAmount(userId, role);
         stats.setMonthlyPaidAmount(monthlyPaid != null ? monthlyPaid.toPlainString() : "0");
         
+        // Calculate sales for custom period if provided
+        if (startDate != null && endDate != null) {
+            BigDecimal customSales = windowOrderMapper.sumSalesByDateRange(userId, role, startDate, endDate);
+            stats.setCustomPeriodSales(customSales != null ? customSales.toPlainString() : "0");
+        }
+        
         stats.setOrderTrend(windowOrderMapper.getOrderTrend(userId, role));
         stats.setBrandDistribution(windowOrderMapper.getBrandDistribution(userId, role));
+        stats.setStatusDistribution(windowOrderMapper.getStatusDistribution(userId, role));
         stats.setSalesPerformance(windowOrderMapper.getMonthlySalesPerformance(userId, role));
+        stats.setRecentActivities(windowOrderMapper.getRecentActivities());
         
         if ("ADMIN".equals(role)) {
             stats.setTotalCustomers(windowOrderMapper.countTotalCustomers());
