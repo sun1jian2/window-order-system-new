@@ -205,6 +205,7 @@ public interface WindowOrderMapper {
     @Select("<script>" +
             "SELECT " +
             "CASE status " +
+            "  WHEN 'SUBMITTED' THEN '已提交' " +
             "  WHEN 'PENDING_MEASURE' THEN '待测量' " +
             "  WHEN 'PENDING_QUOTE' THEN '待报价' " +
             "  WHEN 'PENDING_CONFIRM' THEN '待确认' " +
