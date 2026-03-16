@@ -21,17 +21,6 @@
         </div>
       </div>
       <div class="hero-actions">
-        <el-date-picker
-          v-model="dateRange"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          size="large"
-          value-format="YYYY-MM-DD"
-          @change="handleDateChange"
-          class="date-picker-custom"
-        />
         <el-button type="primary" size="large" class="action-btn" @click="go('/orders')" round>
           <el-icon><List /></el-icon>
           管理订单
@@ -101,23 +90,6 @@
           </div>
           <div class="card-bg-icon">
             <el-icon><Money /></el-icon>
-          </div>
-        </div>
-
-        <!-- 筛选销售额 (仅在选择日期时显示) -->
-        <div v-if="dateRange && dateRange.length === 2" class="kpi-card pink-theme">
-          <div class="card-icon-wrapper">
-            <el-icon><Calendar /></el-icon>
-          </div>
-          <div class="card-info">
-            <div class="card-label">筛选期销售额</div>
-            <div class="card-value money">{{ formatMoney(stats.customPeriodSales) }}</div>
-            <div class="card-trend">
-              <span>{{ dateRange[0] }} 至 {{ dateRange[1] }}</span>
-            </div>
-          </div>
-          <div class="card-bg-icon">
-            <el-icon><Calendar /></el-icon>
           </div>
         </div>
 
@@ -256,6 +228,45 @@
 
         <!-- Recent Activities & Quick Actions -->
         <div class="right-column">
+          <!-- 日期筛选器 -->
+          <div class="chart-card filter-card">
+            <div class="card-header" style="margin-bottom: 12px;">
+              <div class="header-title" style="font-size: 16px;">
+                <el-icon><Calendar /></el-icon>
+                <span>统计周期</span>
+              </div>
+            </div>
+            <el-date-picker
+              v-model="dateRange"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              size="default"
+              value-format="YYYY-MM-DD"
+              @change="handleDateChange"
+              style="width: 100%"
+              :clearable="false"
+            />
+          </div>
+
+          <!-- 筛选销售额 (仅在选择日期时显示) -->
+          <div v-if="dateRange && dateRange.length === 2" class="kpi-card pink-theme" style="margin-bottom: 0;">
+            <div class="card-icon-wrapper">
+              <el-icon><Calendar /></el-icon>
+            </div>
+            <div class="card-info">
+              <div class="card-label">筛选期销售额</div>
+              <div class="card-value money">{{ formatMoney(stats.customPeriodSales) }}</div>
+              <div class="card-trend">
+                <span>{{ dateRange[0] }} 至 {{ dateRange[1] }}</span>
+              </div>
+            </div>
+            <div class="card-bg-icon">
+              <el-icon><Calendar /></el-icon>
+            </div>
+          </div>
+
           <!-- Recent Activities -->
           <div class="chart-card activity-card">
             <div class="card-header">
@@ -563,7 +574,23 @@ const initCharts = () => {
   }
 }
 
+const setDefaultDateRange = () => {
+  const end = new Date()
+  const start = new Date()
+  start.setFullYear(start.getFullYear() - 1) // Default to last 1 year
+  
+  const formatDate = (d) => {
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+  
+  dateRange.value = [formatDate(start), formatDate(end)]
+}
+
 onMounted(() => {
+  setDefaultDateRange()
   fetchStats()
 })
 </script>
@@ -808,11 +835,39 @@ onMounted(() => {
 .pink-theme .card-icon-wrapper { background: #fdf2f8; color: #db2777; }
 .pink-theme .card-trend { color: #db2777; font-size: 12px; }
 
-.date-picker-custom {
-  margin-right: 12px;
-  width: 260px !important;
-  border-radius: 20px !important;
-  box-shadow: 0 4px 12px rgba(148, 163, 184, 0.05);
+/* Filter Card */
+.filter-card {
+  padding: 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(241, 245, 249, 1);
+}
+
+.filter-card :deep(.el-date-editor) {
+  --el-date-editor-width: 100%;
+  box-shadow: none;
+  background-color: #f8fafc;
+  border: 1px solid transparent;
+  transition: all 0.3s;
+  padding: 18px 12px;
+  border-radius: 12px;
+}
+
+.filter-card :deep(.el-date-editor:hover) {
+  background-color: #fff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.filter-card :deep(.el-date-editor.is-active) {
+  background-color: #fff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.filter-card :deep(.el-range-separator) {
+  color: #94a3b8;
 }
 
 /* Charts Grid */
