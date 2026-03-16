@@ -257,9 +257,13 @@
             </div>
             <div class="card-info">
               <div class="card-label">筛选期数据</div>
-              <div class="card-value money">{{ formatMoney(stats.customPeriodSales) }}</div>
+              <div class="card-value money">
+                {{ formatMoney(stats.customPeriodSales) }}
+                <span style="font-size: 16px; margin-left: 12px; color: #64748b; font-weight: 600;">
+                  订单数：<span style="font-size: 26px; color: #db2777; font-weight: 800;">{{ formatNumber(stats.customPeriodOrderCount) }}</span> 单
+                </span>
+              </div>
               <div class="card-trend" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
-                 <span style="font-size: 13px; color: #64748b;">订单数：<span style="font-weight: 700; color: #db2777;">{{ formatNumber(stats.customPeriodOrderCount) }}</span> 单</span>
                  <span style="font-size: 12px; margin-top: 2px;">{{ dateRange[0] }} 至 {{ dateRange[1] }}</span>
               </div>
             </div>
