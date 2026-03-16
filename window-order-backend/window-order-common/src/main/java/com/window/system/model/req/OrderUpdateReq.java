@@ -1,6 +1,7 @@
 package com.window.system.model.req;
 
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,10 +25,10 @@ public class OrderUpdateReq {
     private BigDecimal price;
     private LocalDateTime orderTime;
     private LocalDateTime installTime;
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime scheduledInstallDate;
     
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime actualInstallEndDate;
     private String installProgress;
     private String productionProgress;

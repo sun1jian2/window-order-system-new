@@ -1,6 +1,7 @@
 package com.window.system.model.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.ExcelIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
@@ -12,7 +13,7 @@ public class SalesTarget {
     @ExcelProperty("ID")
     private Long id;
     
-    @com.alibaba.excel.annotation.ExcelIgnore
+    @ExcelIgnore
     private Long salespersonId;
     
     @ExcelProperty("月份")
@@ -21,14 +22,14 @@ public class SalesTarget {
     @ExcelProperty("目标金额")
     private BigDecimal targetAmount;
     
-    @com.alibaba.excel.annotation.ExcelIgnore
+    @ExcelIgnore
     private Long createBy;
     
     @ExcelProperty("创建时间")
     private LocalDateTime createTime;
     
-    @com.alibaba.excel.annotation.ExcelIgnore
+    @ExcelIgnore
     private Long updateBy;
-    @com.alibaba.excel.annotation.ExcelIgnore
+    @ExcelIgnore
     private LocalDateTime updateTime;
 }

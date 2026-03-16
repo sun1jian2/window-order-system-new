@@ -1,6 +1,7 @@
 package com.window.system.mapper;
 
 import com.window.system.model.entity.SysExportTask;
+import com.window.system.model.req.ExportTaskListReq;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface SysExportTaskMapper {
             "<if test='req.startTime != null'> AND t.create_time &gt;= #{req.startTime}</if> " +
             "<if test='req.endTime != null'> AND t.create_time &lt;= #{req.endTime}</if> " +
             "</script>")
-    long count(@Param("req") com.window.system.model.req.ExportTaskListReq req, @Param("userId") Long userId);
+    long count(@Param("req") ExportTaskListReq req, @Param("userId") Long userId);
 
     @Select("<script>" +
             "SELECT t.*, u.real_name as createByName " +
@@ -49,5 +50,5 @@ public interface SysExportTaskMapper {
             "ORDER BY t.create_time DESC " +
             "LIMIT #{req.startIndex}, #{req.pageSize}" +
             "</script>")
-    List<SysExportTask> list(@Param("req") com.window.system.model.req.ExportTaskListReq req, @Param("userId") Long userId);
+    List<SysExportTask> list(@Param("req") ExportTaskListReq req, @Param("userId") Long userId);
 }

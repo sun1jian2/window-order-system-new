@@ -1,10 +1,12 @@
 package com.window.system.model.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -25,23 +27,23 @@ public class Customer {
     @ExcelProperty("备注")
     private String remark;
     
-    @com.alibaba.excel.annotation.ExcelIgnore
+    @ExcelIgnore
     private Long createBy;
     
     @ExcelProperty("创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
     
-    @com.alibaba.excel.annotation.ExcelIgnore
+    @ExcelIgnore
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
     
-    @com.alibaba.excel.annotation.ExcelIgnore
+    @ExcelIgnore
     private Boolean isDeleted;
     
     // VO Fields
     @ExcelProperty("订单数")
     private Long orderCount;
     @ExcelProperty("总消费金额")
-    private java.math.BigDecimal totalSpent;
+    private BigDecimal totalSpent;
 }

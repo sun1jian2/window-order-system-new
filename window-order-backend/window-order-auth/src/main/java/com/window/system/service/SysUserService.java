@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ public class SysUserService {
             return Result.error("Invalid username or password");
         }
         // Issue JWT
-        Map<String, Object> claims = new java.util.HashMap<>();
+        Map<String, Object> claims = new HashMap<>();
         claims.put("id", user.getId());
         claims.put("username", user.getUsername());
         claims.put("role", user.getRole());
@@ -136,7 +137,7 @@ public class SysUserService {
             return Result.success(Collections.emptyMap());
         }
         List<SysUser> users = sysUserMapper.selectByIds(ids);
-        Map<Long, SysUser> map = new java.util.HashMap<>();
+        Map<Long, SysUser> map = new HashMap<>();
         for (SysUser u : users) {
             map.put(u.getId(), u);
         }

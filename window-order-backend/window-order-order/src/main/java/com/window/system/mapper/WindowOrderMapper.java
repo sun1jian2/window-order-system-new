@@ -4,6 +4,7 @@ import com.window.system.model.entity.WindowOrder;
 import com.window.system.model.req.OrderListReq;
 import org.apache.ibatis.annotations.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -145,7 +146,7 @@ public interface WindowOrderMapper {
             "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "</script>")
-    java.math.BigDecimal sumMonthlySales(@Param("userId") Long userId, @Param("role") String role);
+    BigDecimal sumMonthlySales(@Param("userId") Long userId, @Param("role") String role);
 
     @Select("<script>" +
             "SELECT IFNULL(SUM(p.amount), 0) " +
@@ -155,14 +156,14 @@ public interface WindowOrderMapper {
             "<if test='role == \"SALES\"'> AND o.salesperson_id = #{userId} </if> " +
             "<if test='role == \"INSTALLER\"'> AND o.installer_id = #{userId} </if> " +
             "</script>")
-    java.math.BigDecimal sumMonthlyPaidAmount(@Param("userId") Long userId, @Param("role") String role);
+    BigDecimal sumMonthlyPaidAmount(@Param("userId") Long userId, @Param("role") String role);
     
     @Select("<script>" +
             "SELECT IFNULL(SUM(price), 0) FROM window_order WHERE is_deleted = 0 AND DATE_FORMAT(create_time, '%Y%m%d') = DATE_FORMAT(CURDATE(), '%Y%m%d') " +
             "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "</script>")
-    java.math.BigDecimal sumTodaySales(@Param("userId") Long userId, @Param("role") String role);
+    BigDecimal sumTodaySales(@Param("userId") Long userId, @Param("role") String role);
 
     @Select("<script>" +
             "SELECT IFNULL(SUM(price), 0) FROM window_order WHERE is_deleted = 0 " +
@@ -171,7 +172,7 @@ public interface WindowOrderMapper {
             "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "</script>")
-    java.math.BigDecimal sumSalesByDateRange(@Param("userId") Long userId, @Param("role") String role, 
+    BigDecimal sumSalesByDateRange(@Param("userId") Long userId, @Param("role") String role, 
                                             @Param("startDate") String startDate, @Param("endDate") String endDate);
 
     @Select("<script>" +
@@ -209,7 +210,7 @@ public interface WindowOrderMapper {
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "GROUP BY brand" +
             "</script>")
-    List<java.util.Map<String, Object>> getBrandDistribution(@Param("userId") Long userId, @Param("role") String role);
+    List<Map<String, Object>> getBrandDistribution(@Param("userId") Long userId, @Param("role") String role);
     
     @Select("<script>" +
             "SELECT IFNULL(s.real_name, '未分配') as name, COUNT(1) as orderCount, IFNULL(SUM(o.price), 0) as amount " +
@@ -221,7 +222,7 @@ public interface WindowOrderMapper {
             "GROUP BY o.salesperson_id, s.real_name " +
             "ORDER BY amount DESC" +
             "</script>")
-    List<java.util.Map<String, Object>> getMonthlySalesPerformance(@Param("userId") Long userId, @Param("role") String role);
+    List<Map<String, Object>> getMonthlySalesPerformance(@Param("userId") Long userId, @Param("role") String role);
 
     @Select("<script>" +
             "SELECT CASE " +
@@ -246,12 +247,12 @@ public interface WindowOrderMapper {
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "GROUP BY name" +
             "</script>")
-    List<java.util.Map<String, Object>> getStatusDistribution(@Param("userId") Long userId, @Param("role") String role);
+    List<Map<String, Object>> getStatusDistribution(@Param("userId") Long userId, @Param("role") String role);
 
     @Select("<script>" +
             "SELECT module, operation, username, create_time as createTime " +
             "FROM sys_operation_log " +
             "ORDER BY create_time DESC LIMIT 10" +
             "</script>")
-    List<java.util.Map<String, Object>> getRecentActivities();
+    List<Map<String, Object>> getRecentActivities();
 }

@@ -2,6 +2,8 @@ package com.window.system.model.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.ExcelIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.window.system.common.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
@@ -55,35 +57,35 @@ public class WindowOrder {
     @ExcelProperty("已付金额")
     private BigDecimal paidAmount;
 
-    @ExcelProperty(value = "支付状态", converter = com.window.system.common.PaymentStatusConverter.class)
+    @ExcelProperty(value = "支付状态", converter = PaymentStatusConverter.class)
     private String paymentStatus;
     
     @ExcelProperty("下单时间")
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime orderTime;
     
     @ExcelProperty("安装时间")
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime installTime;
     
     @ExcelProperty("预约安装日期")
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime scheduledInstallDate;
     
     @ExcelProperty("实际安装完成日期")
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime actualInstallEndDate;
     
-    @ExcelProperty(value = "安装进度", converter = com.window.system.common.InstallProgressConverter.class)
+    @ExcelProperty(value = "安装进度", converter = InstallProgressConverter.class)
     private String installProgress;
     
-    @ExcelProperty(value = "制作进度", converter = com.window.system.common.ProductionProgressConverter.class)
+    @ExcelProperty(value = "制作进度", converter = ProductionProgressConverter.class)
     private String productionProgress;
 
-    @ExcelProperty(value = "物流状态", converter = com.window.system.common.LogisticsStatusConverter.class)
+    @ExcelProperty(value = "物流状态", converter = LogisticsStatusConverter.class)
     private String logisticsStatus;
     
-    @ExcelProperty(value = "状态", converter = com.window.system.common.OrderStatusConverter.class)
+    @ExcelProperty(value = "状态", converter = OrderStatusConverter.class)
     private String status; // DRAFT, SUBMITTED
     
     @ExcelIgnore
@@ -93,11 +95,11 @@ public class WindowOrder {
     private Long installerId;
     
     @ExcelProperty("创建时间")
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
     
     @ExcelIgnore
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
     
     // Structured Address

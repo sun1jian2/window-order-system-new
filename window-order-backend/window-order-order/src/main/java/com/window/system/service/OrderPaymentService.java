@@ -1,9 +1,11 @@
 package com.window.system.service;
 
 import com.window.system.common.Result;
+import com.window.system.mapper.OrderPaymentAttachmentMapper;
 import com.window.system.mapper.OrderPaymentMapper;
 import com.window.system.mapper.WindowOrderMapper;
 import com.window.system.model.entity.OrderPayment;
+import com.window.system.model.entity.OrderPaymentAttachment;
 import com.window.system.model.entity.WindowOrder;
 import com.window.system.model.req.PaymentCreateReq;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,7 +30,7 @@ public class OrderPaymentService {
     private WindowOrderMapper windowOrderMapper;
     
     @Autowired
-    private com.window.system.mapper.OrderPaymentAttachmentMapper orderPaymentAttachmentMapper;
+    private OrderPaymentAttachmentMapper orderPaymentAttachmentMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public Result<String> create(PaymentCreateReq req) {
@@ -59,7 +62,7 @@ public class OrderPaymentService {
         
         if (req.getAttachments() != null && !req.getAttachments().isEmpty()) {
             for (String url : req.getAttachments()) {
-                com.window.system.model.entity.OrderPaymentAttachment att = new com.window.system.model.entity.OrderPaymentAttachment();
+                OrderPaymentAttachment att = new OrderPaymentAttachment();
                 att.setPaymentId(payment.getId());
                 att.setUrl(url);
                 orderPaymentAttachmentMapper.insert(att);
@@ -103,10 +106,10 @@ public class OrderPaymentService {
     public Result<List<OrderPayment>> listByOrderId(Long orderId) {
         List<OrderPayment> list = orderPaymentMapper.getByOrderId(orderId);
         for (OrderPayment p : list) {
-            List<com.window.system.model.entity.OrderPaymentAttachment> atts = orderPaymentAttachmentMapper.getByPaymentId(p.getId());
+            List<OrderPaymentAttachment> atts = orderPaymentAttachmentMapper.getByPaymentId(p.getId());
             if (atts != null && !atts.isEmpty()) {
-                java.util.List<String> urls = new java.util.ArrayList<>();
-                for (com.window.system.model.entity.OrderPaymentAttachment a : atts) {
+                List<String> urls = new ArrayList<>();
+                for (OrderPaymentAttachment a : atts) {
                     urls.add(a.getUrl());
                 }
                 p.setAttachmentList(urls);
