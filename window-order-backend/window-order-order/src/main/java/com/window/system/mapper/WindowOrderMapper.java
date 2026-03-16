@@ -5,6 +5,7 @@ import com.window.system.model.req.OrderListReq;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface WindowOrderMapper {
@@ -173,6 +174,16 @@ public interface WindowOrderMapper {
     java.math.BigDecimal sumSalesByDateRange(@Param("userId") Long userId, @Param("role") String role, 
                                             @Param("startDate") String startDate, @Param("endDate") String endDate);
 
+    @Select("<script>" +
+            "SELECT count(1) FROM window_order WHERE is_deleted = 0 " +
+            "<if test='startDate != null'> AND create_time &gt;= #{startDate} </if> " +
+            "<if test='endDate != null'> AND create_time &lt;= CONCAT(#{endDate}, ' 23:59:59') </if> " +
+            "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
+            "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
+            "</script>")
+    long countOrdersByDateRange(@Param("userId") Long userId, @Param("role") String role,
+                                             @Param("startDate") String startDate, @Param("endDate") String endDate);
+
     @Select("SELECT count(1) FROM customer WHERE is_deleted = 0")
     long countTotalCustomers();
     
@@ -189,7 +200,7 @@ public interface WindowOrderMapper {
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "GROUP BY date ORDER BY date" +
             "</script>")
-    List<java.util.Map<String, Object>> getOrderTrend(@Param("userId") Long userId, @Param("role") String role);
+    List<Map<String, Object>> getOrderTrend(@Param("userId") Long userId, @Param("role") String role);
     
     @Select("<script>" +
             "SELECT brand as name, COUNT(1) as value FROM window_order " +

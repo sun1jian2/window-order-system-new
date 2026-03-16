@@ -31,6 +31,9 @@ public class DashboardService {
         if (startDate != null && endDate != null) {
             BigDecimal customSales = windowOrderMapper.sumSalesByDateRange(userId, role, startDate, endDate);
             stats.setCustomPeriodSales(customSales != null ? customSales.toPlainString() : "0");
+            
+            long customOrderCount = windowOrderMapper.countOrdersByDateRange(userId, role, startDate, endDate);
+            stats.setCustomPeriodOrderCount(customOrderCount);
         }
         
         stats.setOrderTrend(windowOrderMapper.getOrderTrend(userId, role));

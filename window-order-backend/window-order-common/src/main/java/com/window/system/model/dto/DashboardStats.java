@@ -16,6 +16,7 @@ public class DashboardStats {
     private String monthlySales;
     private String monthlyPaidAmount;
     private String customPeriodSales; // New field for filtered sales amount
+    private Long customPeriodOrderCount; // New field for filtered order count
     
     // Charts
     private List<Map<String, Object>> orderTrend; // date, count
