@@ -33,6 +33,15 @@ public class SysOperationLog {
     @ExcelProperty("IP地址")
     private String ip;
     
+    @ExcelProperty("状态")
+    private Integer status; // 1:成功 0:失败
+    
+    @ExcelProperty("错误信息")
+    private String errorMsg;
+    
+    @ExcelProperty("耗时(ms)")
+    private Long costTime;
+    
     @ExcelProperty("操作时间")
     @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;

@@ -11,8 +11,8 @@ import java.util.List;
 @Mapper
 public interface SysOperationLogMapper {
 
-    @Insert("INSERT INTO sys_operation_log(user_id, username, module, operation, method, params, ip, create_time) " +
-            "VALUES(#{userId}, #{username}, #{module}, #{operation}, #{method}, #{params}, #{ip}, NOW())")
+    @Insert("INSERT INTO sys_operation_log(user_id, username, module, operation, method, params, ip, status, error_msg, cost_time, create_time) " +
+            "VALUES(#{userId}, #{username}, #{module}, #{operation}, #{method}, #{params}, #{ip}, #{status}, #{errorMsg}, #{costTime}, NOW())")
     void insert(SysOperationLog log);
     
     @Select("<script>" +
@@ -27,7 +27,7 @@ public interface SysOperationLogMapper {
     long countList(LogListReq req);
     
     @Select("<script>" +
-            "SELECT id, user_id, username, module, operation, method, params, ip, create_time " +
+            "SELECT id, user_id, username, module, operation, method, params, ip, status, error_msg as errorMsg, cost_time as costTime, create_time as createTime " +
             "FROM sys_operation_log WHERE 1=1 " +
             "<if test='username != null and username != \"\"'> AND username LIKE CONCAT('%', #{username}, '%')</if> " +
             "<if test='module != null and module != \"\"'> AND module = #{module}</if> " +
@@ -41,7 +41,7 @@ public interface SysOperationLogMapper {
     List<SysOperationLog> selectList(LogListReq req);
 
     @Select("<script>" +
-            "SELECT id, user_id, username, module, operation, method, params, ip, create_time " +
+            "SELECT id, user_id, username, module, operation, method, params, ip, status, error_msg as errorMsg, cost_time as costTime, create_time as createTime " +
             "FROM sys_operation_log WHERE 1=1 " +
             "<if test='username != null and username != \"\"'> AND username LIKE CONCAT('%', #{username}, '%')</if> " +
             "<if test='module != null and module != \"\"'> AND module = #{module}</if> " +

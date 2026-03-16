@@ -8,6 +8,12 @@ spring:
     name: window-order-gateway
   codec:
     max-in-memory-size: 500MB
+  data:
+    redis:
+      host: 192.168.97.243
+      port: 6379
+      password: d6c0b13e7cb5
+      database: 0
   cloud:
     nacos:
       discovery:
@@ -46,3 +52,16 @@ spring:
           uri: lb://window-order-order
           predicates:
             - Path=/api/order/**, /api/payment/**, /api/remeasure/**, /api/after-sales/**, /api/sales-target/**, /api/dashboard/**, /api/export-task/**
+
+window:
+  cache:
+    ttl-seconds: 60
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
