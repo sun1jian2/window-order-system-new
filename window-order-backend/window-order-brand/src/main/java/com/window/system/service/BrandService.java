@@ -15,6 +15,9 @@ import com.window.system.security.AuthUser;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+
 @Service
 public class BrandService {
 
@@ -30,10 +33,12 @@ public class BrandService {
         return Result.success(PageResponse.of(list, count));
     }
     
+    @Cacheable(value = "brand_list", key = "'all'")
     public Result<List<Brand>> listAll() {
         return Result.success(brandMapper.selectAll());
     }
 
+    @CacheEvict(value = "brand_list", allEntries = true)
     public Result<String> save(BrandSaveReq req) {
         Brand brand = new Brand();
         BeanUtils.copyProperties(req, brand);
@@ -55,6 +60,7 @@ public class BrandService {
         return Result.success("Saved successfully");
     }
 
+    @CacheEvict(value = "brand_list", allEntries = true)
     public Result<String> delete(Long id) {
         brandMapper.delete(id);
         return Result.success("Deleted successfully");

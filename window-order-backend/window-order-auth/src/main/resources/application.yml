@@ -28,7 +28,7 @@ spring:
 
 window:
   cache:
-    ttl-seconds: 60
+    ttl-seconds: 600
   servlet:
     multipart:
       max-file-size: 500MB

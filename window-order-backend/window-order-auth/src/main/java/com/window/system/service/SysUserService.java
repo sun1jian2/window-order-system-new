@@ -19,6 +19,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+
 @Service
 public class SysUserService {
     
@@ -77,10 +80,12 @@ public class SysUserService {
         return Result.success(PageResponse.of(list, count));
     }
     
+    @Cacheable(value = "user_role_list", key = "#role")
     public Result<List<SysUser>> listByRole(String role) {
         return Result.success(sysUserMapper.selectByRole(role));
     }
 
+    @CacheEvict(value = "user_role_list", allEntries = true)
     public Result<String> save(UserSaveReq req) {
         SysUser user = new SysUser();
         BeanUtils.copyProperties(req, user);
@@ -138,6 +143,7 @@ public class SysUserService {
         return Result.success(map);
     }
 
+    @CacheEvict(value = "user_role_list", allEntries = true)
     public Result<String> delete(Long id) {
         sysUserMapper.delete(id);
         return Result.success("Deleted successfully");
