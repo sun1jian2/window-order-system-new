@@ -201,4 +201,32 @@ public interface WindowOrderMapper {
             "ORDER BY amount DESC" +
             "</script>")
     List<java.util.Map<String, Object>> getMonthlySalesPerformance(@Param("userId") Long userId, @Param("role") String role);
+
+    @Select("<script>" +
+            "SELECT " +
+            "CASE status " +
+            "  WHEN 'PENDING_MEASURE' THEN '待测量' " +
+            "  WHEN 'PENDING_QUOTE' THEN '待报价' " +
+            "  WHEN 'PENDING_CONFIRM' THEN '待确认' " +
+            "  WHEN 'PENDING_PRODUCTION' THEN '待排产' " +
+            "  WHEN 'PRODUCING' THEN '生产中' " +
+            "  WHEN 'PENDING_INSTALL' THEN '待安装' " +
+            "  WHEN 'INSTALLING' THEN '安装中' " +
+            "  WHEN 'FINISHED' THEN '已完成' " +
+            "  ELSE status " +
+            "END as name, " +
+            "COUNT(1) as value FROM window_order " +
+            "WHERE is_deleted = 0 " +
+            "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
+            "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
+            "GROUP BY status" +
+            "</script>")
+    List<java.util.Map<String, Object>> getStatusDistribution(@Param("userId") Long userId, @Param("role") String role);
+
+    @Select("<script>" +
+            "SELECT module, operation, username, create_time as createTime " +
+            "FROM sys_operation_log " +
+            "ORDER BY create_time DESC LIMIT 10" +
+            "</script>")
+    List<java.util.Map<String, Object>> getRecentActivities();
 }

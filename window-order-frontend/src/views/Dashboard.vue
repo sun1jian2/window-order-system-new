@@ -171,6 +171,19 @@
             <v-chart class="echart-instance" :option="pieOption" autoresize />
           </div>
         </div>
+
+        <!-- Status Distribution Chart -->
+        <div class="chart-card sub-chart">
+          <div class="card-header">
+            <div class="header-title">
+              <el-icon><PieChartIcon /></el-icon>
+              <span>订单状态</span>
+            </div>
+          </div>
+          <div class="chart-body">
+            <v-chart class="echart-instance" :option="statusPieOption" autoresize />
+          </div>
+        </div>
       </div>
 
       <!-- Bottom Section -->
@@ -213,39 +226,69 @@
           </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="chart-card quick-card">
-          <div class="card-header">
-            <div class="header-title">
-              <el-icon><Lightning /></el-icon>
-              <span>快捷入口</span>
+        <!-- Recent Activities & Quick Actions -->
+        <div class="right-column">
+          <!-- Recent Activities -->
+          <div class="chart-card activity-card">
+            <div class="card-header">
+              <div class="header-title">
+                <el-icon><Timer /></el-icon>
+                <span>最新动态</span>
+              </div>
+            </div>
+            <div class="activity-list">
+              <div v-for="(item, index) in stats.recentActivities" :key="index" class="activity-item">
+                <div class="activity-icon">
+                  <el-icon><User /></el-icon>
+                </div>
+                <div class="activity-content">
+                  <div class="activity-text">
+                    <span class="user-name">{{ item.username }}</span>
+                    <span class="action-text">{{ item.operation }}</span>
+                  </div>
+                  <div class="activity-time">{{ formatTime(item.createTime) }}</div>
+                </div>
+              </div>
+              <div v-if="!stats.recentActivities || stats.recentActivities.length === 0" class="empty-text">
+                暂无动态
+              </div>
             </div>
           </div>
-          <div class="quick-actions-grid">
-             <div class="quick-btn" @click="go('/orders')">
-                <div class="quick-icon-box blue">
-                   <el-icon><DocumentAdd /></el-icon>
-                </div>
-                <span>新增订单</span>
-             </div>
-             <div class="quick-btn" @click="go('/customers')">
-                <div class="quick-icon-box green">
-                   <el-icon><UserFilled /></el-icon>
-                </div>
-                <span>客户档案</span>
-             </div>
-             <div class="quick-btn" @click="go('/sales-targets')" v-if="isAdmin">
-                <div class="quick-icon-box purple">
-                   <el-icon><Aim /></el-icon>
-                </div>
-                <span>设定目标</span>
-             </div>
-             <div class="quick-btn" @click="go('/export-center')">
-                <div class="quick-icon-box orange">
-                   <el-icon><Download /></el-icon>
-                </div>
-                <span>导出中心</span>
-             </div>
+
+          <!-- Quick Actions -->
+          <div class="chart-card quick-card">
+            <div class="card-header">
+              <div class="header-title">
+                <el-icon><Lightning /></el-icon>
+                <span>快捷入口</span>
+              </div>
+            </div>
+            <div class="quick-actions-grid">
+               <div class="quick-btn" @click="go('/orders')">
+                  <div class="quick-icon-box blue">
+                     <el-icon><DocumentAdd /></el-icon>
+                  </div>
+                  <span>新增订单</span>
+               </div>
+               <div class="quick-btn" @click="go('/customers')">
+                  <div class="quick-icon-box green">
+                     <el-icon><UserFilled /></el-icon>
+                  </div>
+                  <span>客户档案</span>
+               </div>
+               <div class="quick-btn" @click="go('/sales-targets')" v-if="isAdmin">
+                  <div class="quick-icon-box purple">
+                     <el-icon><Aim /></el-icon>
+                  </div>
+                  <span>设定目标</span>
+               </div>
+               <div class="quick-btn" @click="go('/export-center')">
+                  <div class="quick-icon-box orange">
+                     <el-icon><Download /></el-icon>
+                  </div>
+                  <span>导出中心</span>
+               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -324,6 +367,8 @@ const stats = ref({
     monthlyPaidAmount: 0,
     orderTrend: [],
     brandDistribution: [],
+    statusDistribution: [],
+    recentActivities: [],
     salesPerformance: [],
     totalCustomers: 0,
     totalUsers: 0,
@@ -332,6 +377,25 @@ const stats = ref({
 
 const lineOption = ref({})
 const pieOption = ref({})
+const statusPieOption = ref({})
+
+const formatTime = (timeStr) => {
+  if (!timeStr) return ''
+  const date = new Date(timeStr)
+  const now = new Date()
+  const diff = now - date
+  
+  // Less than 1 minute
+  if (diff < 60000) return '刚刚'
+  // Less than 1 hour
+  if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前'
+  // Less than 24 hours
+  if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前'
+  // Yesterday
+  if (diff < 172800000) return '昨天'
+  
+  return date.toLocaleDateString()
+}
 
 const salesMaxAmount = computed(() => {
   const amounts = (stats.value.salesPerformance || []).map(item => Number(item.amount || 0))
@@ -416,6 +480,28 @@ const initCharts = () => {
       },
       label: { show: false },
       data: stats.value.brandDistribution,
+      emphasis: {
+        itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.2)' }
+      }
+    }]
+  }
+
+  // 状态分布图配置
+  statusPieOption.value = {
+    tooltip: { trigger: 'item' },
+    legend: { bottom: '0%', icon: 'circle', itemWidth: 8, itemHeight: 8 },
+    series: [{
+      name: '订单状态',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      center: ['50%', '45%'],
+      itemStyle: {
+        borderRadius: 8,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: { show: false },
+      data: stats.value.statusDistribution,
       emphasis: {
         itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.2)' }
       }
@@ -724,6 +810,72 @@ onMounted(async () => {
 
 @media (max-width: 1024px) {
   .bottom-grid { grid-template-columns: 1fr; }
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Activity List */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-text {
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.user-name {
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.empty-text {
+  text-align: center;
+  color: #94a3b8;
+  padding: 20px 0;
 }
 
 /* Rank Table */

@@ -19,6 +19,8 @@ public class DashboardStats {
     // Charts
     private List<Map<String, Object>> orderTrend; // date, count
     private List<Map<String, Object>> brandDistribution; // name, value
+    private List<Map<String, Object>> statusDistribution; // name, value
+    private List<Map<String, Object>> recentActivities; // log or order info
     
     // Sales Performance
     private List<Map<String, Object>> salesPerformance; // name, amount, orderCount
