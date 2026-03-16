@@ -203,24 +203,27 @@ public interface WindowOrderMapper {
     List<java.util.Map<String, Object>> getMonthlySalesPerformance(@Param("userId") Long userId, @Param("role") String role);
 
     @Select("<script>" +
-            "SELECT " +
-            "CASE status " +
-            "  WHEN 'SUBMITTED' THEN '已提交' " +
-            "  WHEN 'PENDING_MEASURE' THEN '待测量' " +
-            "  WHEN 'PENDING_QUOTE' THEN '待报价' " +
-            "  WHEN 'PENDING_CONFIRM' THEN '待确认' " +
-            "  WHEN 'PENDING_PRODUCTION' THEN '待排产' " +
-            "  WHEN 'PRODUCING' THEN '生产中' " +
-            "  WHEN 'PENDING_INSTALL' THEN '待安装' " +
-            "  WHEN 'INSTALLING' THEN '安装中' " +
-            "  WHEN 'FINISHED' THEN '已完成' " +
+            "SELECT CASE " +
+            "  WHEN status = 'FINISHED' THEN '已完成' " +
+            "  WHEN install_progress = 'INSTALLING' THEN '安装中' " +
+            "  WHEN install_progress = 'SCHEDULED' THEN '已预约安装' " +
+            "  WHEN logistics_status = 'SHIPPING' THEN '送货中' " +
+            "  WHEN logistics_status = 'OUTBOUND' THEN '已出库' " +
+            "  WHEN production_progress = 'FINISHED' THEN '制作完成' " +
+            "  WHEN production_progress = 'PRODUCING' THEN '制作中' " +
+            "  WHEN status = 'PENDING_PRODUCTION' THEN '待排产' " +
+            "  WHEN status = 'PENDING_CONFIRM' THEN '待确认' " +
+            "  WHEN status = 'PENDING_QUOTE' THEN '待报价' " +
+            "  WHEN status = 'PENDING_MEASURE' THEN '待测量' " +
+            "  WHEN status = 'DRAFT' THEN '草稿' " +
+            "  WHEN status = 'SUBMITTED' THEN '已提交' " +
             "  ELSE status " +
-            "END as name, " +
-            "COUNT(1) as value FROM window_order " +
+            "END as name, COUNT(1) as value " +
+            "FROM window_order " +
             "WHERE is_deleted = 0 " +
             "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
-            "GROUP BY status" +
+            "GROUP BY name" +
             "</script>")
     List<java.util.Map<String, Object>> getStatusDistribution(@Param("userId") Long userId, @Param("role") String role);
 
