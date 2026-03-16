@@ -106,7 +106,7 @@
                <span class="price-text" style="color: #67c23a">¥ {{ scope.row.paidAmount || 0 }}</span>
              </template>
           </el-table-column>
-          <el-table-column label="支付状态" width="90">
+          <el-table-column label="支付状态" width="100">
             <template #default="scope">
                <el-tag size="small" :type="getPaymentStatusType(scope.row.paymentStatus)" effect="light">
                   {{ getPaymentStatusLabel(scope.row.paymentStatus) }}
