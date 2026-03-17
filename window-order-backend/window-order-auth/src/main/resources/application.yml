@@ -26,13 +26,14 @@ spring:
       password: d6c0b13e7cb5
       database: 0
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 window:
   cache:
     ttl-seconds: 600
-  servlet:
-    multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml

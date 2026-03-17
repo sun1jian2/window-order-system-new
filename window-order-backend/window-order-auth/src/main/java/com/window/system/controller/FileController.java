@@ -2,17 +2,12 @@ package com.window.system.controller;
 
 import com.window.system.common.Result;
 import com.window.system.config.MinioConfig;
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.SetBucketPolicyArgs;
+import io.minio.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +15,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/file")
 public class FileController {
@@ -30,19 +26,24 @@ public class FileController {
     @Autowired
     private MinioConfig minioConfig;
 
+    private boolean bucketChecked = false;
+
     @PostMapping("/upload")
     public Result<String> upload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return Result.error("文件为空");
         }
         try {
-            // Check if bucket exists
-            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioConfig.getBucketName()).build());
-            if (!found) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioConfig.getBucketName()).build());
-                // Set public read policy
-                String policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::" + minioConfig.getBucketName() + "/*\"]}]}";
-                minioClient.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(minioConfig.getBucketName()).config(policy).build());
+            // Check if bucket exists (only once)
+            if (!bucketChecked) {
+                boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioConfig.getBucketName()).build());
+                if (!found) {
+                    minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioConfig.getBucketName()).build());
+                    // Set public read policy
+                    String policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::" + minioConfig.getBucketName() + "/*\"]}]}";
+                    minioClient.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(minioConfig.getBucketName()).config(policy).build());
+                }
+                bucketChecked = true;
             }
 
             String original = file.getOriginalFilename();
@@ -78,7 +79,7 @@ public class FileController {
             String url = minioConfig.getEndpoint() + "/" + minioConfig.getBucketName() + "/" + objectName;
             return Result.success(url);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("File upload failed", e);
             return Result.error("上传失败: " + e.getMessage());
         }
     }
@@ -107,6 +108,7 @@ public class FileController {
                     .header(HttpHeaders.CONTENT_TYPE, contentType)
                     .body(bytes);
         } catch (Exception e) {
+            log.error("File download failed: {}", e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
