@@ -15,7 +15,7 @@
             />
           </el-form-item>
           <el-form-item label="销售员">
-            <el-select v-model="querySalespersonId" placeholder="全部销售" clearable @change="fetchData">
+            <el-select v-model="querySalespersonId" placeholder="全部销售" clearable @change="fetchData" style="width: 200px">
               <el-option v-for="item in salesList" :key="item.id" :label="item.realName || item.username" :value="item.id" />
             </el-select>
           </el-form-item>
