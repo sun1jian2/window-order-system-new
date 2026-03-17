@@ -259,12 +259,13 @@
               <div class="card-label">筛选期数据</div>
               <div class="card-value money">
                 {{ formatMoney(stats.customPeriodSales) }}
-                <span style="font-size: 16px; margin-left: 12px; color: #64748b; font-weight: 600;">
-                  订单数：<span style="font-size: 26px; color: #db2777; font-weight: 800;">{{ formatNumber(stats.customPeriodOrderCount) }}</span> 单
+                <span class="custom-period-count">
+                  订单数：<span class="highlight-count">{{ formatNumber(stats.customPeriodOrderCount) }}</span> 单
                 </span>
               </div>
-              <div class="card-trend" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
-                 <span style="font-size: 12px; margin-top: 2px;">{{ dateRange[0] }} 至 {{ dateRange[1] }}</span>
+              <div class="card-trend">
+                 <el-icon><Calendar /></el-icon>
+                 <span>{{ dateRange[0] }} 至 {{ dateRange[1] }}</span>
               </div>
             </div>
             <div class="card-bg-icon">
@@ -677,14 +678,6 @@ onMounted(() => {
   border-color: #6366f1;
 }
 
-/* KPI Grid */
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-  margin-bottom: 24px;
-}
-
 /* Admin Stats Grid */
 .admin-stats-grid {
   display: grid;
@@ -776,6 +769,7 @@ onMounted(() => {
   justify-content: center;
   font-size: 28px;
   flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 
 .card-info {
@@ -785,14 +779,16 @@ onMounted(() => {
 
 .card-label {
   color: #64748b;
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
 }
 
 .card-value {
   color: #1e293b;
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -0.5px;
@@ -806,39 +802,33 @@ onMounted(() => {
 .card-trend {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  margin-top: 8px;
-  opacity: 0.8;
-  font-weight: 500;
+  gap: 6px;
+  font-size: 13px;
+  margin-top: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 4px 8px;
+  border-radius: 6px;
+  width: fit-content;
+  backdrop-filter: blur(4px);
 }
 
 .card-bg-icon {
   position: absolute;
   right: -20px;
   bottom: -20px;
-  font-size: 120px;
-  opacity: 0.06;
+  font-size: 140px;
+  opacity: 0.08;
   transform: rotate(-15deg);
   pointer-events: none;
   z-index: 1;
+  transition: all 0.3s ease;
 }
 
-/* Themes */
-.orange-theme .card-icon-wrapper { background: #fff7ed; color: #f97316; }
-.orange-theme .card-trend { color: #f97316; }
-
-.green-theme .card-icon-wrapper { background: #f0fdf4; color: #10b981; }
-.green-theme .card-trend { color: #10b981; }
-
-.purple-theme .card-icon-wrapper { background: #f5f3ff; color: #8b5cf6; }
-.purple-theme .card-trend { color: #8b5cf6; }
-
-.blue-theme .card-icon-wrapper { background: #eff6ff; color: #3b82f6; }
-.blue-theme .card-trend { color: #3b82f6; }
-
-.pink-theme .card-icon-wrapper { background: #fdf2f8; color: #db2777; }
-.pink-theme .card-trend { color: #db2777; font-size: 12px; }
+.kpi-card:hover .card-bg-icon {
+  transform: rotate(0deg) scale(1.1);
+  opacity: 0.12;
+}
 
 /* Filter Card */
 .filter-card {
@@ -893,6 +883,11 @@ onMounted(() => {
   padding: 24px;
   box-shadow: 0 4px 20px rgba(148, 163, 184, 0.08);
   border: 1px solid rgba(241, 245, 249, 1);
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+  box-shadow: 0 12px 30px rgba(148, 163, 184, 0.12);
 }
 
 .card-header {
@@ -900,15 +895,18 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .header-title {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 20px;
+  gap: 10px;
+  font-size: 18px;
   font-weight: 700;
   color: #1e293b;
+  letter-spacing: -0.5px;
 }
 
 .chart-body {
@@ -939,30 +937,67 @@ onMounted(() => {
   gap: 16px;
   height: 280px;
   overflow-y: auto;
-  padding-right: 4px;
+  padding-right: 8px;
+}
+
+/* Custom Scrollbar for Activity List */
+.activity-list::-webkit-scrollbar {
+  width: 6px;
+}
+.activity-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+.activity-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+.activity-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .activity-item {
   display: flex;
-  gap: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #f1f5f9;
+  gap: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  transition: background-color 0.2s;
+  position: relative;
 }
 
-.activity-item:last-child {
-  border-bottom: none;
+.activity-item:hover {
+  background-color: #f8fafc;
+}
+
+.activity-item::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 48px;
+  bottom: -20px;
+  width: 2px;
+  background-color: #f1f5f9;
+  z-index: 0;
+}
+
+.activity-item:last-child::before {
+  display: none;
 }
 
 .activity-icon {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #f1f5f9;
-  color: #64748b;
+  background: #eff6ff;
+  color: #3b82f6;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
 }
 
 .activity-content {
@@ -972,48 +1007,69 @@ onMounted(() => {
 .activity-text {
   font-size: 14px;
   color: #334155;
-  line-height: 1.4;
+  line-height: 1.5;
   margin-bottom: 4px;
 }
 
 .user-name {
-  font-weight: 600;
+  font-weight: 700;
+  color: #1e293b;
   margin-right: 6px;
 }
 
 .activity-time {
   font-size: 12px;
   color: #94a3b8;
+  font-weight: 500;
 }
 
 .empty-text {
   text-align: center;
   color: #94a3b8;
-  padding: 20px 0;
+  padding: 40px 0;
+  font-style: italic;
 }
 
 /* Rank Table */
 .rank-badge {
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: 8px;
   background: #f1f5f9;
   color: #64748b;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 14px;
+  font-family: 'Inter', sans-serif;
 }
 
-.rank-1 { background: #fff7ed; color: #f59e0b; border: 1px solid #fcd34d; }
-.rank-2 { background: #f8fafc; color: #94a3b8; border: 1px solid #cbd5e1; }
-.rank-3 { background: #fff1f2; color: #f43f5e; border: 1px solid #fda4af; }
+.rank-1 { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: white; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3); border: none; }
+.rank-2 { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); color: white; box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3); border: none; }
+.rank-3 { background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%); color: white; box-shadow: 0 2px 8px rgba(225, 29, 72, 0.3); border: none; }
 
 .money-font {
   font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Custom Period Stats */
+.custom-period-count {
+  font-size: 16px;
+  margin-left: 12px;
+  color: #64748b;
   font-weight: 600;
-  color: #334155;
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.highlight-count {
+  font-size: 28px;
+  color: #db2777;
+  font-weight: 800;
+  margin: 0 4px;
 }
 
 /* Quick Actions */
