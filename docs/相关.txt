@@ -2,11 +2,12 @@ minio访问地址：http://localhost:9001
  --console-address "127.0.0.1:9001" --address "127.0.0.1:9000"
 http://localhost:9000/sssjjj/ssjj33.jpg
 
-D:\document\minio
-
 set MINIO_ROOT_USER=minioadmin
-
 set MINIO_ROOT_PASSWORD=minioadmin
+
+-- 公司电脑里执行目录
+call "D:\document\minio\ִ执行.bat"
+call "D:\work\javaspace\window-order-system-git\window-order-frontend\ִ执行.bat"
 
 AccessKey: lkANXxJWqWDjNG9nECfG
 SecretKey: 6r9lidmuaHG5kABZe82WWS6S7TwCtMPrCZIKIBYJ
