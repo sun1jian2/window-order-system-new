@@ -131,6 +131,13 @@ public interface WindowOrderMapper {
     long countPendingOrders(@Param("userId") Long userId, @Param("role") String role);
     
     @Select("<script>" +
+            "SELECT count(1) FROM window_order WHERE is_deleted = 0 AND payment_status IN ('UNPAID', 'PARTIAL') " +
+            "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
+            "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
+            "</script>")
+    long countUnpaidOrders(@Param("userId") Long userId, @Param("role") String role);
+    
+    @Select("<script>" +
             "SELECT count(1) FROM window_order WHERE is_deleted = 0 AND install_progress = 'FINISHED' " +
             "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
@@ -143,6 +150,20 @@ public interface WindowOrderMapper {
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "</script>")
     long countTotalOrders(@Param("userId") Long userId, @Param("role") String role);
+    
+    @Select("<script>" +
+            "SELECT IFNULL(SUM(price), 0) FROM window_order WHERE is_deleted = 0 " +
+            "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
+            "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
+            "</script>")
+    BigDecimal sumTotalReceivable(@Param("userId") Long userId, @Param("role") String role);
+    
+    @Select("<script>" +
+            "SELECT IFNULL(SUM(paid_amount), 0) FROM window_order WHERE is_deleted = 0 " +
+            "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
+            "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
+            "</script>")
+    BigDecimal sumTotalCollected(@Param("userId") Long userId, @Param("role") String role);
     
     @Select("<script>" +
             "SELECT IFNULL(SUM(price), 0) FROM window_order WHERE is_deleted = 0 AND DATE_FORMAT(create_time, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') " +
@@ -214,6 +235,15 @@ public interface WindowOrderMapper {
             "GROUP BY brand" +
             "</script>")
     List<NameValueDto> getBrandDistribution(@Param("userId") Long userId, @Param("role") String role);
+    
+    @Select("<script>" +
+            "SELECT window_type as name, COUNT(1) as value FROM window_order " +
+            "WHERE is_deleted = 0 AND window_type IS NOT NULL AND window_type != '' " +
+            "<if test='role == \"SALES\"'> AND salesperson_id = #{userId} </if> " +
+            "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
+            "GROUP BY window_type" +
+            "</script>")
+    List<NameValueDto> getWindowTypeDistribution(@Param("userId") Long userId, @Param("role") String role);
     
     @Select("<script>" +
             "SELECT IFNULL(s.real_name, '未分配') as name, COUNT(1) as orderCount, IFNULL(SUM(o.price), 0) as amount " +

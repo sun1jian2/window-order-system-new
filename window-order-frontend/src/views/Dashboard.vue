@@ -110,6 +110,42 @@
             <el-icon><DataLine /></el-icon>
           </div>
         </div>
+
+        <!-- 待回款订单 -->
+        <div class="kpi-card red-theme">
+          <div class="card-icon-wrapper">
+            <el-icon><Warning /></el-icon>
+          </div>
+          <div class="card-info">
+            <div class="card-label">待回款订单</div>
+            <div class="card-value">{{ formatNumber(stats.unpaidOrdersCount) }}</div>
+            <div class="card-trend">
+              <span>需要收款</span>
+              <el-icon><ArrowRight /></el-icon>
+            </div>
+          </div>
+          <div class="card-bg-icon">
+            <el-icon><Warning /></el-icon>
+          </div>
+        </div>
+
+        <!-- 总欠款金额 -->
+        <div class="kpi-card pink-theme">
+          <div class="card-icon-wrapper">
+            <el-icon><Money /></el-icon>
+          </div>
+          <div class="card-info">
+            <div class="card-label">总欠款金额</div>
+            <div class="card-value money">{{ formatMoney(stats.totalOutstanding) }}</div>
+            <div class="card-trend">
+              <span>待收尾款</span>
+              <el-icon><ArrowRight /></el-icon>
+            </div>
+          </div>
+          <div class="card-bg-icon">
+            <el-icon><Money /></el-icon>
+          </div>
+        </div>
       </div>
 
       <!-- Admin Stats Section -->
@@ -182,6 +218,19 @@
           </div>
           <div class="chart-body">
             <v-chart class="echart-instance" :option="statusPieOption" autoresize />
+          </div>
+        </div>
+
+        <!-- Window Type Distribution Chart -->
+        <div class="chart-card sub-chart">
+          <div class="card-header">
+            <div class="header-title">
+              <el-icon><PieChartIcon /></el-icon>
+              <span>窗型分布</span>
+            </div>
+          </div>
+          <div class="chart-body">
+            <v-chart class="echart-instance" :option="windowTypeOption" autoresize />
           </div>
         </div>
       </div>
@@ -359,7 +408,7 @@ import {
 import {
   Sunny, List, User, Timer, CircleCheckFilled, Money, DataLine,
   ArrowRight, TrendCharts, DataAnalysis, PieChart as PieChartIcon,
-  Trophy, Lightning, DocumentAdd, UserFilled, Aim, Download, Avatar, Calendar
+  Trophy, Lightning, DocumentAdd, UserFilled, Aim, Download, Avatar, Calendar, Warning
 } from '@element-plus/icons-vue'
 
 use([
@@ -409,12 +458,17 @@ const stats = ref({
     pendingOrders: 0,
     finishedOrders: 0,
     totalOrders: 0,
+    unpaidOrdersCount: 0,
     monthlySales: 0,
     monthlyPaidAmount: 0,
+    totalReceivable: 0,
+    totalCollected: 0,
+    totalOutstanding: 0,
     customPeriodSales: 0,
     orderTrend: [],
     brandDistribution: [],
     statusDistribution: [],
+    windowTypeDistribution: [],
     recentActivities: [],
     salesPerformance: [],
     totalCustomers: 0,
@@ -449,6 +503,7 @@ const handleDateChange = () => {
 const lineOption = ref({})
 const pieOption = ref({})
 const statusPieOption = ref({})
+const windowTypeOption = ref({})
 
 const formatTime = (timeStr) => {
   if (!timeStr) return ''
@@ -485,8 +540,9 @@ const getProgressColor = (index) => {
 
 const initCharts = () => {
   // 折线图配置
-  const dates = stats.value.orderTrend.map(i => i.date)
-  const values = stats.value.orderTrend.map(i => i.count)
+  const trendData = stats.value.orderTrend || []
+  const dates = trendData.map(i => i.date)
+  const values = trendData.map(i => i.count)
   
   lineOption.value = {
     tooltip: {
@@ -550,7 +606,7 @@ const initCharts = () => {
         borderWidth: 2
       },
       label: { show: false },
-      data: stats.value.brandDistribution,
+      data: stats.value.brandDistribution || [],
       emphasis: {
         itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.2)' }
       }
@@ -572,7 +628,29 @@ const initCharts = () => {
         borderWidth: 2
       },
       label: { show: false },
-      data: stats.value.statusDistribution,
+      data: stats.value.statusDistribution || [],
+      emphasis: {
+        itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.2)' }
+      }
+    }]
+  }
+
+  // 窗型分布图配置
+  windowTypeOption.value = {
+    tooltip: { trigger: 'item' },
+    legend: { bottom: '0%', icon: 'circle', itemWidth: 8, itemHeight: 8 },
+    series: [{
+      name: '窗型分布',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      center: ['50%', '45%'],
+      itemStyle: {
+        borderRadius: 8,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: { show: false },
+      data: stats.value.windowTypeDistribution || [],
       emphasis: {
         itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.2)' }
       }
@@ -676,6 +754,26 @@ onMounted(() => {
   background: white;
   color: #6366f1;
   border-color: #6366f1;
+}
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Admin Stats Grid */
@@ -830,6 +928,25 @@ onMounted(() => {
   opacity: 0.12;
 }
 
+/* Theme Colors */
+.orange-theme .card-icon-wrapper { background: #fff7ed; color: #f97316; }
+.orange-theme .card-trend { color: #f97316; }
+
+.green-theme .card-icon-wrapper { background: #f0fdf4; color: #10b981; }
+.green-theme .card-trend { color: #10b981; }
+
+.purple-theme .card-icon-wrapper { background: #f5f3ff; color: #8b5cf6; }
+.purple-theme .card-trend { color: #8b5cf6; }
+
+.blue-theme .card-icon-wrapper { background: #eff6ff; color: #3b82f6; }
+.blue-theme .card-trend { color: #3b82f6; }
+
+.red-theme .card-icon-wrapper { background: #fef2f2; color: #ef4444; }
+.red-theme .card-trend { color: #ef4444; }
+
+.pink-theme .card-icon-wrapper { background: #fdf2f8; color: #ec4899; }
+.pink-theme .card-trend { color: #ec4899; }
+
 /* Filter Card */
 .filter-card {
   padding: 20px;
@@ -868,13 +985,18 @@ onMounted(() => {
 /* Charts Grid */
 .charts-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-bottom: 24px;
 }
 
+.main-chart {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 1024px) {
   .charts-grid { grid-template-columns: 1fr; }
+  .main-chart { grid-column: 1; }
 }
 
 .chart-card {
