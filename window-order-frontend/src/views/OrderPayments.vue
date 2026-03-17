@@ -6,7 +6,7 @@
           <span class="text-large font-600 mr-3"> 收款记录 </span>
         </template>
         <template #extra>
-            <el-button type="primary" @click="handlePayment">添加收款</el-button>
+            <el-button type="primary" @click="handlePayment" v-if="remainingAmount > 0.01">添加收款</el-button>
         </template>
       </el-page-header>
     </div>
@@ -29,7 +29,7 @@
                  <span class="price-text" style="color: #67c23a">¥ {{ order.paidAmount || 0 }}</span>
              </el-descriptions-item>
              <el-descriptions-item label="待付金额">
-                 <span class="price-text" style="color: #e6a23c">¥ {{ ((order.price || 0) - (order.paidAmount || 0)).toFixed(2) }}</span>
+                 <span class="price-text" style="color: #e6a23c">¥ {{ remainingAmount.toFixed(2) }}</span>
              </el-descriptions-item>
         </el-descriptions>
       </el-card>
@@ -130,7 +130,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import request from '@/utils/request'
 import { createPayment, listPayments } from '@/api/payment'
@@ -153,6 +153,12 @@ const uploadHeaders = ref({
   Authorization: `Bearer ${localStorage.getItem('token') || ''}`
 })
 const uploadFileList = ref([])
+
+const remainingAmount = computed(() => {
+    const price = Number(order.value.price || 0)
+    const paid = Number(order.value.paidAmount || 0)
+    return Math.max(0, price - paid)
+})
 
 onMounted(() => {
     const id = route.params.id

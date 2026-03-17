@@ -68,11 +68,18 @@ public class FileController {
             String filename = UUID.randomUUID().toString().replace("-", "") + ext;
             String objectName = dateDir + "/" + filename;
 
+            long objectSize = file.getSize();
+            long partSize = -1;
+            // If file size > 1GB, set part size to 100MB for better performance
+            if (objectSize > 1024 * 1024 * 1024) {
+                partSize = 100 * 1024 * 1024;
+            }
+
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(minioConfig.getBucketName())
                             .object(objectName)
-                            .stream(file.getInputStream(), file.getSize(), -1)
+                            .stream(file.getInputStream(), objectSize, partSize)
                             .contentType(file.getContentType())
                             .build());
 

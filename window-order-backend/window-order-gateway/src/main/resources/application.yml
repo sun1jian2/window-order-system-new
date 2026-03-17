@@ -7,7 +7,7 @@ spring:
   application:
     name: window-order-gateway
   codec:
-    max-in-memory-size: 500MB
+    max-in-memory-size: 10GB
   data:
     redis:
       host: 192.168.97.243
@@ -36,7 +36,7 @@ spring:
           filters:
             - name: RequestSize
               args:
-                maxSize: 500000000
+                maxSize: 10737418240
 
         - id: brand-service
           uri: lb://window-order-brand
