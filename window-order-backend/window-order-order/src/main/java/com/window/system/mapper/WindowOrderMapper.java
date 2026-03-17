@@ -2,11 +2,14 @@ package com.window.system.mapper;
 
 import com.window.system.model.entity.WindowOrder;
 import com.window.system.model.req.OrderListReq;
+import com.window.system.model.dto.NameValueDto;
+import com.window.system.model.dto.OrderTrendDto;
+import com.window.system.model.dto.RecentActivityDto;
+import com.window.system.model.dto.SalesPerformanceDto;
 import org.apache.ibatis.annotations.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface WindowOrderMapper {
@@ -201,7 +204,7 @@ public interface WindowOrderMapper {
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "GROUP BY date ORDER BY date" +
             "</script>")
-    List<Map<String, Object>> getOrderTrend(@Param("userId") Long userId, @Param("role") String role);
+    List<OrderTrendDto> getOrderTrend(@Param("userId") Long userId, @Param("role") String role);
     
     @Select("<script>" +
             "SELECT brand as name, COUNT(1) as value FROM window_order " +
@@ -210,7 +213,7 @@ public interface WindowOrderMapper {
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "GROUP BY brand" +
             "</script>")
-    List<Map<String, Object>> getBrandDistribution(@Param("userId") Long userId, @Param("role") String role);
+    List<NameValueDto> getBrandDistribution(@Param("userId") Long userId, @Param("role") String role);
     
     @Select("<script>" +
             "SELECT IFNULL(s.real_name, '未分配') as name, COUNT(1) as orderCount, IFNULL(SUM(o.price), 0) as amount " +
@@ -222,7 +225,7 @@ public interface WindowOrderMapper {
             "GROUP BY o.salesperson_id, s.real_name " +
             "ORDER BY amount DESC" +
             "</script>")
-    List<Map<String, Object>> getMonthlySalesPerformance(@Param("userId") Long userId, @Param("role") String role);
+    List<SalesPerformanceDto> getMonthlySalesPerformance(@Param("userId") Long userId, @Param("role") String role);
 
     @Select("<script>" +
             "SELECT CASE " +
@@ -247,12 +250,12 @@ public interface WindowOrderMapper {
             "<if test='role == \"INSTALLER\"'> AND installer_id = #{userId} </if> " +
             "GROUP BY name" +
             "</script>")
-    List<Map<String, Object>> getStatusDistribution(@Param("userId") Long userId, @Param("role") String role);
+    List<NameValueDto> getStatusDistribution(@Param("userId") Long userId, @Param("role") String role);
 
     @Select("<script>" +
             "SELECT module, operation, username, create_time as createTime " +
             "FROM sys_operation_log " +
             "ORDER BY create_time DESC LIMIT 10" +
             "</script>")
-    List<Map<String, Object>> getRecentActivities();
+    List<RecentActivityDto> getRecentActivities();
 }
