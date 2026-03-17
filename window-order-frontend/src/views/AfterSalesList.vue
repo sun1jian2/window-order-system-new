@@ -5,13 +5,13 @@
       <el-card class="search-card" shadow="hover">
         <el-form :inline="true" :model="queryForm" class="search-form">
           <el-form-item label="订单号">
-            <el-input v-model="queryForm.orderNo" placeholder="订单号" clearable />
+            <el-input v-model="queryForm.orderNo" placeholder="订单号" clearable style="width: 200px" />
           </el-form-item>
           <el-form-item label="工单号">
-            <el-input v-model="queryForm.ticketNo" placeholder="工单号" clearable />
+            <el-input v-model="queryForm.ticketNo" placeholder="工单号" clearable style="width: 200px" />
           </el-form-item>
           <el-form-item label="客户名">
-            <el-input v-model="queryForm.customerName" placeholder="客户名" clearable />
+            <el-input v-model="queryForm.customerName" placeholder="客户名" clearable style="width: 200px" />
           </el-form-item>
           <el-form-item label="状态">
             <el-select v-model="queryForm.status" placeholder="全部状态" clearable size="small" class="status-select">

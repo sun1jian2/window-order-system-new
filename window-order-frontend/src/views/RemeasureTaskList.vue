@@ -4,7 +4,7 @@
       <el-card class="search-card" shadow="hover">
         <el-form :inline="true">
           <el-form-item label="订单号">
-            <el-input v-model="orderNo" placeholder="订单号" clearable />
+            <el-input v-model="orderNo" placeholder="订单号" clearable style="width: 200px" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" :icon="Search" @click="handleSearch">查询</el-button>

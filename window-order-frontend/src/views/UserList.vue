@@ -4,10 +4,10 @@
       <el-card class="search-card" shadow="hover">
         <el-form :inline="true" :model="queryForm" class="search-form">
           <el-form-item label="用户名">
-            <el-input v-model="queryForm.username" placeholder="输入用户名" clearable :prefix-icon="User" />
+            <el-input v-model="queryForm.username" placeholder="输入用户名" clearable :prefix-icon="User" style="width: 200px" />
           </el-form-item>
           <el-form-item label="真实姓名">
-             <el-input v-model="queryForm.realName" placeholder="输入真实姓名" clearable :prefix-icon="User" />
+             <el-input v-model="queryForm.realName" placeholder="输入真实姓名" clearable :prefix-icon="User" style="width: 200px" />
           </el-form-item>
           <el-form-item class="search-actions">
             <el-button type="primary" @click="handleSearch" :icon="Search">查询</el-button>

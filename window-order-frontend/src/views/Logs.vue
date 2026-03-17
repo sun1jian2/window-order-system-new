@@ -8,16 +8,16 @@
       </template>
       <el-form :inline="true" :model="query" class="filter-form">
         <el-form-item label="用户名">
-          <el-input v-model="query.username" placeholder="用户名" clearable />
+          <el-input v-model="query.username" placeholder="用户名" clearable style="width: 200px" />
         </el-form-item>
         <el-form-item label="模块">
-          <el-input v-model="query.module" placeholder="模块" clearable />
+          <el-input v-model="query.module" placeholder="模块" clearable style="width: 200px" />
         </el-form-item>
         <el-form-item label="操作类型">
-          <el-input v-model="query.operation" placeholder="操作类型" clearable />
+          <el-input v-model="query.operation" placeholder="操作类型" clearable style="width: 200px" />
         </el-form-item>
         <el-form-item label="关键词">
-          <el-input v-model="query.keyword" placeholder="方法/参数关键词" clearable />
+          <el-input v-model="query.keyword" placeholder="方法/参数关键词" clearable style="width: 200px" />
         </el-form-item>
         <el-form-item label="时间范围">
           <el-date-picker
