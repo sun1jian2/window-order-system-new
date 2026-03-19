@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class OrderCreateReq {
     private String customerName;
     private String customerPhone;
+    private Long customerId;
     private String address;
     private String brand;
     private String windowType;

@@ -3,7 +3,7 @@
     <div class="main-content">
       <!-- Search -->
       <el-card class="search-card" shadow="hover">
-        <el-form :inline="true" :model="queryForm" class="search-form">
+        <el-form :inline="true" :model="queryForm" class="search-form" @keyup.enter="handleSearch">
           <el-row :gutter="20" style="width: 100%">
             <el-col :span="6">
               <el-form-item label="订单号" class="w-full">
@@ -12,24 +12,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="客户名" class="w-full">
-                <el-select
-                    v-model="queryForm.customerId"
-                    filterable
-                    remote
-                    reserve-keyword
-                    placeholder="输入姓名搜索"
-                    :remote-method="searchCustomers"
-                    :loading="customerLoading"
-                    clearable
-                    class="w-full"
-                >
-                    <el-option
-                        v-for="item in customerOptions"
-                        :key="item.id"
-                        :label="item.name + ' (' + item.phone + ')'"
-                        :value="item.id"
-                    />
-                </el-select>
+                <el-input v-model="queryForm.customerName" placeholder="输入姓名搜索" clearable />
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -180,14 +163,32 @@
       <el-form :model="form" label-width="100px" class="dialog-form">
         <div class="form-section-title">客户信息</div>
         <el-row :gutter="20">
+          <el-col :span="24">
+            <el-form-item label="选择客户">
+              <el-select 
+                v-model="form.customerId" 
+                placeholder="直接下拉选择，或输入姓名/手机号搜索" 
+                filterable 
+                clearable 
+                @change="handleCustomerSelect" 
+                style="width: 100%">
+                <el-option v-for="c in allCustomers" :key="c.id" :label="`${c.name} - ${c.phone}`" :value="c.id">
+                  <span style="float: left">{{ c.name }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ c.phone }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="客户姓名">
-              <el-input v-model="form.customerName" :prefix-icon="User" />
+            <el-form-item label="客户姓名" required>
+              <el-input v-model="form.customerName" :prefix-icon="User" placeholder="请输入姓名" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-             <el-form-item label="联系电话">
-              <el-input v-model="form.customerPhone" :prefix-icon="Phone" />
+             <el-form-item label="联系电话" required>
+              <el-input v-model="form.customerPhone" :prefix-icon="Phone" placeholder="请输入电话" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -499,8 +500,9 @@ const form = reactive({
   currentUserRole: ''
 })
 
+const allCustomers = ref([])
+
 onMounted(async () => {
-  console.log('OrderList mounted start')
   // Pinia has user, but check if logged in
   if (!userStore.currentUser?.id) {
     router.push('/login')
@@ -535,6 +537,12 @@ onMounted(async () => {
     console.error('Fetch products failed', e)
   }
   
+  try {
+    await fetchAllCustomers()
+  } catch (e) {
+    console.error('Fetch customers failed', e)
+  }
+  
   fetchData()
 })
 
@@ -542,25 +550,37 @@ const fetchCustomerDetail = async (id) => {
     try {
         const res = await getCustomerDetail(id)
         if (res.code === 200 && res.data) {
-            customerOptions.value = [{ id: res.data.id, name: res.data.name, phone: res.data.phone }]
+            // No longer needed for options, just for display if necessary
         }
     } catch(e) {}
 }
 
-const searchCustomers = async (query) => {
-    if (query !== '') {
-        customerLoading.value = true
-        try {
-            const res = await listCustomers({ name: query, pageNo: 1, pageSize: 20 })
-            if (res.code === 200) {
-                customerOptions.value = res.data.list
-            }
-        } finally {
-            customerLoading.value = false
+const fetchAllCustomers = async () => {
+    try {
+        // Fetch a large number of customers to populate the dropdown
+        const res = await listCustomers({ pageNo: 1, pageSize: 1000 })
+        if (res.code === 200) {
+            allCustomers.value = res.data.list
         }
-    } else {
-        customerOptions.value = []
+    } catch (e) {
+        console.error(e)
     }
+}
+
+const handleCustomerSelect = (val) => {
+  if (val) {
+    const customer = allCustomers.value.find(c => c.id === val)
+    if (customer) {
+      form.customerName = customer.name
+      form.customerPhone = customer.phone
+      if (customer.address) {
+         form.detailAddress = customer.address
+      }
+    }
+  } else {
+    form.customerName = ''
+    form.customerPhone = ''
+  }
 }
 
 const fetchBrands = async () => {
@@ -666,6 +686,7 @@ const handleCreate = () => {
   dialogType.value = 'create'
   Object.assign(form, {
     id: null,
+    customerId: null,
     customerName: '',
     customerPhone: '',
     address: '',
@@ -691,6 +712,12 @@ const handleCreate = () => {
     salespersonName: userStore.currentUser.realName || userStore.currentUser.username,
     installerId: null
   })
+  
+  // 提前加载客户列表用于下拉选择
+  if (allCustomers.value.length === 0) {
+      fetchAllCustomers() // 获取所有客户
+  }
+  
   dialogVisible.value = true
 }
 

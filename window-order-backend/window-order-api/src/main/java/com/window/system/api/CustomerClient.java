@@ -14,6 +14,9 @@ public interface CustomerClient {
     @GetMapping("/phone")
     Result<Customer> getByPhone(@RequestParam("phone") String phone);
     
+    @GetMapping("/detail/{id}")
+    Result<Customer> getById(@org.springframework.web.bind.annotation.PathVariable("id") Long id);
+    
     @PostMapping("/save")
     Result<String> save(@RequestBody Customer customer);
 }

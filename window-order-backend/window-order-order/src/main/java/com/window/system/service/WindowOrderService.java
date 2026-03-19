@@ -91,6 +91,15 @@ public class WindowOrderService {
     private void handleCustomerAssociation(OrderCreateReq req, WindowOrder order) {
         if (req.getCustomerPhone() == null) return;
         
+        // If customerId is provided directly from frontend
+        if (req.getCustomerId() != null) {
+            Result<Customer> res = customerClient.getById(req.getCustomerId());
+            if (res.getData() != null) {
+                order.setCustomerId(res.getData().getId());
+                return;
+            }
+        }
+        
         Result<Customer> res = customerClient.getByPhone(req.getCustomerPhone());
         Customer customer = res.getData();
         
