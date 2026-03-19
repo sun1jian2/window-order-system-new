@@ -7,6 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
+/**
+ * UserSaveReq 实体/请求/响应类
+ */
 public class UserSaveReq {
     private Long id;
     

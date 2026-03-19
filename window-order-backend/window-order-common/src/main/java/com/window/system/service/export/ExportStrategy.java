@@ -2,6 +2,9 @@ package com.window.system.service.export;
 
 import java.io.File;
 
+/**
+ * ExportStrategy 服务类/接口
+ */
 public interface ExportStrategy {
     /**
      * 获取策略类型

@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * OrderUpdateReq 实体/请求/响应类
+ */
 public class OrderUpdateReq {
     private Long id;
     private String customerName;

@@ -18,11 +18,17 @@ import java.util.List;
 @RequestMapping("/api/logs")
 @CrossOrigin(origins = "*")
 @lombok.extern.slf4j.Slf4j
+/**
+ * SysOperationLogController 控制器类
+ */
 public class SysOperationLogController {
 
     @Autowired
     private SysOperationLogMapper sysOperationLogMapper;
 
+        /**
+     * list 方法
+     */
     @PostMapping("/list")
     public Result<PageResponse<SysOperationLog>> list(@RequestBody LogListReq req) {
         log.info("Query sys operation logs: {}", req);
@@ -34,6 +40,9 @@ public class SysOperationLogController {
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * export 方法
+     */
     @PostMapping("/export")
     public Result<String> export(@RequestBody LogListReq req) {
         String params = JSONUtil.toJsonStr(req);

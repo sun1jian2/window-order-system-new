@@ -14,6 +14,9 @@ import java.io.File;
 import java.util.List;
 
 @Component
+/**
+ * CustomerExportStrategy 服务类/接口
+ */
 public class CustomerExportStrategy implements ExportStrategy {
 
     @Autowired
@@ -23,11 +26,17 @@ public class CustomerExportStrategy implements ExportStrategy {
     private SysExportTaskMapper sysExportTaskMapper;
 
     @Override
+    /**
+     * getType 方法
+     */
     public String getType() {
         return "CUSTOMER";
     }
 
     @Override
+    /**
+     * export 方法
+     */
     public File export(String params, Long taskId) throws Exception {
         CustomerListReq req = JSONUtil.toBean(params, CustomerListReq.class);
         

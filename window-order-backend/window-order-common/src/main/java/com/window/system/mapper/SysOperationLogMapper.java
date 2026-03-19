@@ -9,10 +9,16 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
+/**
+ * SysOperationLogMapper Mapper接口
+ */
 public interface SysOperationLogMapper {
 
     @Insert("INSERT INTO sys_operation_log(user_id, username, module, operation, method, params, ip, status, error_msg, cost_time, create_time) " +
             "VALUES(#{userId}, #{username}, #{module}, #{operation}, #{method}, #{params}, #{ip}, #{status}, #{errorMsg}, #{costTime}, NOW())")
+    /**
+     * insert 方法
+     */
     void insert(SysOperationLog log);
     
     @Select("<script>" +
@@ -24,6 +30,9 @@ public interface SysOperationLogMapper {
             "<if test='startTime != null and startTime != \"\"'> AND create_time &gt;= #{startTime}</if> " +
             "<if test='endTime != null and endTime != \"\"'> AND create_time &lt;= #{endTime}</if> " +
             "</script>")
+    /**
+     * countList 方法
+     */
     long countList(LogListReq req);
     
     @Select("<script>" +
@@ -38,6 +47,9 @@ public interface SysOperationLogMapper {
             "ORDER BY create_time DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
+    /**
+     * selectList 方法
+     */
     List<SysOperationLog> selectList(LogListReq req);
 
     @Select("<script>" +
@@ -51,5 +63,8 @@ public interface SysOperationLogMapper {
             "<if test='endTime != null and endTime != \"\"'> AND create_time &lt;= #{endTime}</if> " +
             "ORDER BY create_time DESC " +
             "</script>")
+    /**
+     * exportList 方法
+     */
     List<SysOperationLog> exportList(LogListReq req);
 }

@@ -75,6 +75,24 @@ const routes = [
         meta: { requiresAuth: true, role: 'ADMIN', title: '品牌管理' }
       },
       {
+        path: 'materials',
+        name: 'MaterialList',
+        component: () => import('../views/MaterialList.vue'),
+        meta: { requiresAuth: true, title: '材料管理' }
+      },
+      {
+        path: 'suppliers',
+        name: 'SupplierList',
+        component: () => import('../views/SupplierList.vue'),
+        meta: { requiresAuth: true, title: '供应商管理' }
+      },
+      {
+        path: 'purchase-orders',
+        name: 'PurchaseOrderList',
+        component: () => import('../views/PurchaseOrderList.vue'),
+        meta: { requiresAuth: true, title: '采购单管理' }
+      },
+      {
         path: 'users',
         name: 'UserList',
         component: UserList,
@@ -98,6 +116,12 @@ const routes = [
         name: 'RemeasureTaskList',
         component: RemeasureTaskList,
         meta: { requiresAuth: true, title: '复尺任务' }
+      },
+      {
+        path: 'financial-reports',
+        name: 'FinancialReportList',
+        component: () => import('../views/FinancialReportList.vue'),
+        meta: { requiresAuth: true, title: '财务报表' }
       },
       {
         path: 'sales-targets',

@@ -14,6 +14,9 @@ import java.io.File;
 import java.util.List;
 
 @Component
+/**
+ * AfterSalesExportStrategy 服务类/接口
+ */
 public class AfterSalesExportStrategy implements ExportStrategy {
 
     @Autowired
@@ -23,11 +26,17 @@ public class AfterSalesExportStrategy implements ExportStrategy {
     private SysExportTaskMapper sysExportTaskMapper;
 
     @Override
+    /**
+     * getType 方法
+     */
     public String getType() {
         return "AFTER_SALES";
     }
 
     @Override
+    /**
+     * export 方法
+     */
     public File export(String params, Long taskId) throws Exception {
         AfterSalesListReq req = JSONUtil.toBean(params, AfterSalesListReq.class);
         

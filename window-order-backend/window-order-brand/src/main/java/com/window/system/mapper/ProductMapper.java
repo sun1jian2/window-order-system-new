@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
+/**
+ * ProductMapper Mapper接口
+ */
 public interface ProductMapper {
 
     @Select("<script>" +
@@ -21,6 +24,9 @@ public interface ProductMapper {
             "ORDER BY p.id DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
+    /**
+     * selectList 方法
+     */
     List<Product> selectList(ProductListReq req);
 
     @Select("<script>" +
@@ -29,6 +35,9 @@ public interface ProductMapper {
             "<if test='brandId != null'> AND p.brand_id = #{brandId} </if> " +
             "<if test='keyword != null and keyword != \"\"'> AND (p.name LIKE CONCAT('%', #{keyword}, '%') OR p.code LIKE CONCAT('%', #{keyword}, '%')) </if> " +
             "</script>")
+    /**
+     * countList 方法
+     */
     long countList(ProductListReq req);
 
     @Select("SELECT p.*, c.name as category_name, b.name as brand_name FROM product p " +
@@ -38,17 +47,26 @@ public interface ProductMapper {
     Product getById(@Param("id") Long id);
 
     @Select("SELECT * FROM product WHERE is_deleted = 0 AND status = 'ACTIVE' ORDER BY id DESC")
+    /**
+     * listAllActive 方法
+     */
     List<Product> listAllActive();
 
     @Insert("INSERT INTO product (category_id, brand_id, name, code, base_price, color_options, glass_options, description, status, create_by) " +
             "VALUES (#{categoryId}, #{brandId}, #{name}, #{code}, #{basePrice}, #{colorOptions}, #{glassOptions}, #{description}, #{status}, #{createBy})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    /**
+     * insert 方法
+     */
     int insert(Product product);
 
     @Update("UPDATE product SET category_id = #{categoryId}, brand_id = #{brandId}, name = #{name}, code = #{code}, " +
             "base_price = #{basePrice}, color_options = #{colorOptions}, glass_options = #{glassOptions}, " +
             "description = #{description}, status = #{status}, update_by = #{updateBy} " +
             "WHERE id = #{id}")
+    /**
+     * update 方法
+     */
     int update(Product product);
 
     @Update("UPDATE product SET is_deleted = 1, update_by = #{updateBy} WHERE id = #{id}")

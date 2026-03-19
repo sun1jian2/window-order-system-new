@@ -156,6 +156,9 @@
                 <el-tooltip content="编辑" placement="top">
                   <el-button class="action-btn" circle size="small" type="primary" plain :icon="Edit" @click="handleEdit(scope.row)" />
                 </el-tooltip>
+                <el-tooltip content="成本核算" placement="top" v-if="scope.row.status !== 'DRAFT'">
+                  <el-button class="action-btn" circle size="small" type="success" plain :icon="Money" @click="handleCost(scope.row)" />
+                </el-tooltip>
                 <el-tooltip v-if="userStore.currentUser.role === 'ADMIN' || userStore.currentUser.role === 'SALES'" content="复尺" placement="top">
                   <el-button class="action-btn" circle size="small" type="warning" plain :icon="Tools" @click="handleAssignRemeasure(scope.row)" />
                 </el-tooltip>
@@ -394,6 +397,40 @@
         </span>
       </template>
     </el-dialog>
+    <!-- Cost Dialog -->
+    <el-dialog v-model="costDialogVisible" title="订单成本核算" width="500px" destroy-on-close>
+      <el-form :model="costForm" label-width="100px">
+        <el-form-item label="材料成本(元)">
+          <el-input-number v-model="costForm.materialCost" :min="0" :precision="2" :step="100" style="width: 100%" />
+        </el-form-item>
+        <el-form-item label="人工成本(元)">
+          <el-input-number v-model="costForm.laborCost" :min="0" :precision="2" :step="100" style="width: 100%" />
+        </el-form-item>
+        <el-form-item label="其他成本(元)">
+          <el-input-number v-model="costForm.otherCost" :min="0" :precision="2" :step="100" style="width: 100%" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="costForm.remark" type="textarea" :rows="2" />
+        </el-form-item>
+        <div v-if="costForm.orderAmount" style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 4px;">
+          <div style="margin-bottom: 10px;"><strong>订单收入: </strong><span style="color: #409EFF">¥ {{ costForm.orderAmount }}</span></div>
+          <div style="margin-bottom: 10px;"><strong>总成本: </strong><span style="color: #E6A23C">¥ {{ (costForm.materialCost + costForm.laborCost + costForm.otherCost).toFixed(2) }}</span></div>
+          <div>
+            <strong>毛利润: </strong>
+            <span :style="{color: costForm.orderAmount - (costForm.materialCost + costForm.laborCost + costForm.otherCost) >= 0 ? '#67C23A' : '#F56C6C', fontWeight: 'bold'}">
+              ¥ {{ (costForm.orderAmount - (costForm.materialCost + costForm.laborCost + costForm.otherCost)).toFixed(2) }}
+            </span>
+          </div>
+        </div>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="costDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submitCost">保存核算</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -401,7 +438,7 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Plus, Edit, Delete, User, Phone, Goods, House, SwitchButton, UserFilled, ArrowDown, View, Refresh, Download, Tools, InfoFilled } from '@element-plus/icons-vue'
+import { Search, Plus, Edit, Delete, User, Phone, Goods, House, SwitchButton, UserFilled, ArrowDown, View, Refresh, Download, Tools, InfoFilled, Money } from '@element-plus/icons-vue'
 import { regionData, codeToText } from 'element-china-area-data'
 import { listOrders, createOrder, updateOrder, deleteOrder } from '../api/order'
 import { assignRemeasureTask } from '../api/remeasure'
@@ -887,6 +924,17 @@ const assignForm = reactive({
     remark: ''
 })
 
+// Cost related
+const costDialogVisible = ref(false)
+const costForm = reactive({
+  orderId: null,
+  orderAmount: 0,
+  materialCost: 0,
+  laborCost: 0,
+  otherCost: 0,
+  remark: ''
+})
+
 const handleAssignRemeasure = (row) => {
     assignForm.orderId = row.id
     assignForm.assigneeId = null
@@ -973,6 +1021,43 @@ const getLogisticsStatusLabel = (status) => {
         'INBOUND': '已入库'
     }
     return map[status] || status
+}
+
+// Cost Methods
+const handleCost = async (row) => {
+  costForm.orderId = row.id
+  costForm.orderAmount = row.price || 0
+  costForm.materialCost = 0
+  costForm.laborCost = 0
+  costForm.otherCost = 0
+  costForm.remark = ''
+  
+  try {
+    const res = await request.get(`/inventory/cost/order/${row.id}`)
+    if (res.code === 200 && res.data) {
+      costForm.materialCost = res.data.materialCost || 0
+      costForm.laborCost = res.data.laborCost || 0
+      costForm.otherCost = res.data.otherCost || 0
+      costForm.remark = res.data.remark || ''
+    }
+  } catch (e) {}
+  
+  costDialogVisible.value = true
+}
+
+const submitCost = async () => {
+  try {
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
+    const res = await request.post(`/inventory/cost/save?currentUserId=${currentUser.id}`, costForm)
+    if (res.code === 200) {
+      ElMessage.success('成本核算保存成功')
+      costDialogVisible.value = false
+    } else {
+      ElMessage.error(res.message || '保存失败')
+    }
+  } catch (error) {
+    ElMessage.error('保存失败')
+  }
 }
 </script>
 

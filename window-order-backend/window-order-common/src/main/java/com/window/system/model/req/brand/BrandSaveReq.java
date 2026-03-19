@@ -6,6 +6,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
+/**
+ * BrandSaveReq 实体/请求/响应类
+ */
 public class BrandSaveReq {
     private Long id;
     
@@ -16,4 +19,9 @@ public class BrandSaveReq {
     
     // 操作人ID，用于审计字段
     private Long currentUserId;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

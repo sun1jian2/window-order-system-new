@@ -19,11 +19,17 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 @RestController
 @RequestMapping("/api/dashboard")
+/**
+ * DashboardController 控制器类
+ */
 public class DashboardController {
 
     @Autowired
     private DashboardService dashboardService;
 
+        /**
+     * getStats 方法
+     */
     @GetMapping("/stats")
     public Result<DashboardStats> getStats(
             @RequestParam(name = "startDate", required = false) String startDate,
@@ -40,6 +46,9 @@ public class DashboardController {
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * export 方法
+     */
     @PostMapping("/export")
     public Result<String> export(@RequestBody OrderListReq req) {
         String params = JSONUtil.toJsonStr(req);

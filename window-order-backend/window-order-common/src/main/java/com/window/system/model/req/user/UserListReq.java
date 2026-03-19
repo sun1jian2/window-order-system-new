@@ -9,6 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+/**
+ * UserListReq 实体/请求/响应类
+ */
 public class UserListReq extends BasePageReq {
     private String username;
     private String realName;

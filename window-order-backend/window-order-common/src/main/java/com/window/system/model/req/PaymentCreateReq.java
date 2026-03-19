@@ -10,6 +10,9 @@ import java.util.List;
 
 @Getter
 @Setter
+/**
+ * PaymentCreateReq 实体/请求/响应类
+ */
 public class PaymentCreateReq {
     private Long orderId;
     private BigDecimal amount;

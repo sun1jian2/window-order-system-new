@@ -11,11 +11,17 @@ import java.util.Map;
 
 @Slf4j
 @Service
+/**
+ * NotificationService 服务类/接口
+ */
 public class NotificationService {
     
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * notifyAdmins 方法
+     */
     public void notifyAdmins(String title, String message, String type) {
         try {
             Map<String, String> payload = new HashMap<>();

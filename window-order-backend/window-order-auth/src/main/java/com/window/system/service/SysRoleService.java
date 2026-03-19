@@ -9,11 +9,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+/**
+ * SysRoleService 服务类/接口
+ */
 public class SysRoleService {
     
     @Autowired
     private SysRoleMapper sysRoleMapper;
 
+    /**
+     * listAll 方法
+     */
     public Result<List<SysRole>> listAll() {
         return Result.success(sysRoleMapper.selectAll());
     }

@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
+/**
+ * OrderItemSaveReq 实体/请求/响应类
+ */
 public class OrderItemSaveReq {
     private Long id;
     
@@ -29,4 +32,9 @@ public class OrderItemSaveReq {
     private String color;
     private String glassSpec;
     private String remark;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+/**
+ * BasePageReq 实体/请求/响应类
+ */
 public class BasePageReq implements Serializable {
     private static final long serialVersionUID = 1L;
 

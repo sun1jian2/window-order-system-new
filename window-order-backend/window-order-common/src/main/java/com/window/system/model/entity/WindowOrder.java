@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * WindowOrder 实体/请求/响应类
+ */
 public class WindowOrder {
     @ExcelProperty("ID")
     private Long id;
@@ -132,4 +135,9 @@ public class WindowOrder {
     // Order Items
     @ExcelIgnore
     private java.util.List<OrderItem> items;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

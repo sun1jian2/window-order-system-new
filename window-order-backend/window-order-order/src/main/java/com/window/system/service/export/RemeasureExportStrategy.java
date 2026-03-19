@@ -14,6 +14,9 @@ import java.io.File;
 import java.util.List;
 
 @Component
+/**
+ * RemeasureExportStrategy 服务类/接口
+ */
 public class RemeasureExportStrategy implements ExportStrategy {
 
     @Autowired
@@ -23,11 +26,17 @@ public class RemeasureExportStrategy implements ExportStrategy {
     private SysExportTaskMapper sysExportTaskMapper;
 
     @Override
+    /**
+     * getType 方法
+     */
     public String getType() {
         return "REMEASURE";
     }
 
     @Override
+    /**
+     * export 方法
+     */
     public File export(String params, Long taskId) throws Exception {
         RemeasureTaskListReq req = JSONUtil.toBean(params, RemeasureTaskListReq.class);
         

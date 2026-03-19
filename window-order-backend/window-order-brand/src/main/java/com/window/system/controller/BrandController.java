@@ -21,22 +21,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/brand")
 @CrossOrigin(origins = "*")
+/**
+ * BrandController 控制器类
+ */
 public class BrandController {
 
     @Autowired
     private BrandService brandService;
 
+        /**
+     * list 方法
+     */
     @PostMapping("/list")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Result<PageResponse<Brand>> list(@RequestBody BrandListReq req) {
         return brandService.list(req);
     }
     
+        /**
+     * listAll 方法
+     */
     @GetMapping("/all")
     public Result<List<Brand>> listAll() {
         return brandService.listAll();
     }
 
+        /**
+     * save 方法
+     */
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Log(module = "品牌", operation = "保存品牌")
@@ -44,6 +56,9 @@ public class BrandController {
         return brandService.save(req);
     }
 
+        /**
+     * delete 方法
+     */
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Log(module = "品牌", operation = "删除品牌")
@@ -54,6 +69,9 @@ public class BrandController {
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * export 方法
+     */
     @PostMapping("/export")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Result<String> export(@RequestBody BrandListReq req) {

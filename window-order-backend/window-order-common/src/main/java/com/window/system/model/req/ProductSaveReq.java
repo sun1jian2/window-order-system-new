@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
+/**
+ * ProductSaveReq 实体/请求/响应类
+ */
 public class ProductSaveReq {
     private Long id;
     
@@ -29,4 +32,9 @@ public class ProductSaveReq {
     private String description;
     
     private String status;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

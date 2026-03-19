@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * ProductCategory 实体/请求/响应类
+ */
 public class ProductCategory {
     private Long id;
     private String name;
@@ -13,4 +16,9 @@ public class ProductCategory {
     private Boolean isDeleted;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * SysUser 实体/请求/响应类
+ */
 public class SysUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -41,4 +44,9 @@ public class SysUser implements Serializable {
     // Joined field
     @ExcelProperty("角色名称")
     private String roleName;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

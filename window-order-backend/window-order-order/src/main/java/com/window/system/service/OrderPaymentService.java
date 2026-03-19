@@ -21,6 +21,9 @@ import java.util.List;
 
 @Service
 @Slf4j
+/**
+ * OrderPaymentService 服务类/接口
+ */
 public class OrderPaymentService {
 
     @Autowired
@@ -33,6 +36,9 @@ public class OrderPaymentService {
     private OrderPaymentAttachmentMapper orderPaymentAttachmentMapper;
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * create 方法
+     */
     public Result<String> create(PaymentCreateReq req) {
         WindowOrder order = windowOrderMapper.getById(req.getOrderId());
         if (order == null) {
@@ -75,6 +81,9 @@ public class OrderPaymentService {
         return Result.success("Payment recorded successfully");
     }
     
+    /**
+     * updateOrderPaymentStatus 方法
+     */
     private void updateOrderPaymentStatus(WindowOrder order) {
         List<OrderPayment> payments = orderPaymentMapper.getByOrderId(order.getId());
         BigDecimal totalPaid = payments.stream()
@@ -103,6 +112,9 @@ public class OrderPaymentService {
         windowOrderMapper.update(order);
     }
 
+    /**
+     * listByOrderId 方法
+     */
     public Result<List<OrderPayment>> listByOrderId(Long orderId) {
         List<OrderPayment> list = orderPaymentMapper.getByOrderId(orderId);
         for (OrderPayment p : list) {

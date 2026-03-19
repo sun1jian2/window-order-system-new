@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Schema(description = "导出任务")
+/**
+ * SysExportTask 实体/请求/响应类
+ */
 public class SysExportTask {
 
     @Schema(description = "ID")
@@ -49,4 +52,9 @@ public class SysExportTask {
     @Schema(description = "完成时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime finishTime;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

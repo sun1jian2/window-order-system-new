@@ -23,6 +23,11 @@
         <template #title>订单管理</template>
       </el-menu-item>
 
+      <el-menu-item index="/financial-reports" v-if="userStore.currentUser.role === 'ADMIN'">
+        <el-icon><DataBoard /></el-icon>
+        <template #title>财务报表</template>
+      </el-menu-item>
+
       <el-menu-item index="/sales-targets" v-if="userStore.currentUser.role === 'ADMIN' || userStore.currentUser.role === 'SALES'">
         <el-icon><Trophy /></el-icon>
         <template #title>销售目标</template>
@@ -64,6 +69,16 @@
         <el-menu-item index="/product-categories">产品分类</el-menu-item>
         <el-menu-item index="/brands">品牌管理</el-menu-item>
       </el-sub-menu>
+
+      <el-sub-menu index="inventory" v-if="userStore.currentUser.role === 'ADMIN'">
+        <template #title>
+          <el-icon><Goods /></el-icon>
+          <span>库存与采购</span>
+        </template>
+        <el-menu-item index="/materials">材料与库存</el-menu-item>
+        <el-menu-item index="/suppliers">供应商管理</el-menu-item>
+        <el-menu-item index="/purchase-orders">采购单管理</el-menu-item>
+      </el-sub-menu>
       
       <el-menu-item index="/export-center">
         <el-icon><Download /></el-icon>
@@ -82,7 +97,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '../stores/user'
-import { House, Odometer, List, User, Goods, Document, Service, UserFilled, Tools, Trophy, Download, Menu } from '@element-plus/icons-vue'
+import { House, Odometer, List, User, Goods, Document, Service, UserFilled, Tools, Trophy, Download, Menu, DataBoard } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const userStore = useUserStore()

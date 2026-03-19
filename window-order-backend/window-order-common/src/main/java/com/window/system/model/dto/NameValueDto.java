@@ -9,7 +9,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * NameValueDto 实体/请求/响应类
+ */
 public class NameValueDto {
     private String name;
     private Long value;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

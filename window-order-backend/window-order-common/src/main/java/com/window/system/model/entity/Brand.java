@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * Brand 实体/请求/响应类
+ */
 public class Brand implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -30,4 +33,9 @@ public class Brand implements Serializable {
     private Long updateBy;
     @com.alibaba.excel.annotation.ExcelIgnore
     private Boolean isDeleted;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

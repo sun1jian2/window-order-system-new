@@ -19,11 +19,17 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 @Service
+/**
+ * BrandService 服务类/接口
+ */
 public class BrandService {
 
     @Autowired
     private BrandMapper brandMapper;
 
+    /**
+     * list 方法
+     */
     public Result<PageResponse<Brand>> list(BrandListReq req) {
         long count = brandMapper.countList(req);
         if (count == 0) {
@@ -34,11 +40,17 @@ public class BrandService {
     }
     
     @Cacheable(value = "brand_list", key = "'all'")
+    /**
+     * listAll 方法
+     */
     public Result<List<Brand>> listAll() {
         return Result.success(brandMapper.selectAll());
     }
 
     @CacheEvict(value = "brand_list", allEntries = true)
+    /**
+     * save 方法
+     */
     public Result<String> save(BrandSaveReq req) {
         Brand brand = new Brand();
         BeanUtils.copyProperties(req, brand);
@@ -61,6 +73,9 @@ public class BrandService {
     }
 
     @CacheEvict(value = "brand_list", allEntries = true)
+    /**
+     * delete 方法
+     */
     public Result<String> delete(Long id) {
         brandMapper.delete(id);
         return Result.success("Deleted successfully");

@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * RecentActivityDto 实体/请求/响应类
+ */
 public class RecentActivityDto {
     private String module;
     private String operation;
@@ -19,4 +22,9 @@ public class RecentActivityDto {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

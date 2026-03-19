@@ -24,6 +24,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 @Service
+/**
+ * SysUserService 服务类/接口
+ */
 public class SysUserService {
     
     @Autowired
@@ -32,6 +35,9 @@ public class SysUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * login 方法
+     */
     public Result<LoginResp> login(String username, String password) {
         if (sysUserMapper == null) {
             return Result.error("Internal Error: SysUserMapper not injected");
@@ -55,6 +61,9 @@ public class SysUserService {
         return Result.success(resp);
     }
 
+    /**
+     * migratePasswords 方法
+     */
     public Result<String> migratePasswords() {
         List<SysUser> users = sysUserMapper.selectAll();
         int count = 0;
@@ -72,6 +81,9 @@ public class SysUserService {
         return Result.success("Successfully migrated " + count + " users to BCrypt.");
     }
 
+    /**
+     * list 方法
+     */
     public Result<PageResponse<SysUser>> list(UserListReq req) {
         long count = sysUserMapper.countList(req);
         if (count == 0) {
@@ -82,11 +94,17 @@ public class SysUserService {
     }
     
     @Cacheable(value = "user_role_list", key = "#p0")
+    /**
+     * listByRole 方法
+     */
     public Result<List<SysUser>> listByRole(String role) {
         return Result.success(sysUserMapper.selectByRole(role));
     }
 
     @CacheEvict(value = "user_role_list", allEntries = true)
+    /**
+     * save 方法
+     */
     public Result<String> save(UserSaveReq req) {
         SysUser user = new SysUser();
         BeanUtils.copyProperties(req, user);
@@ -132,6 +150,9 @@ public class SysUserService {
         return Result.success("Saved successfully");
     }
 
+    /**
+     * getUsersByIds 方法
+     */
     public Result<Map<Long, SysUser>> getUsersByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return Result.success(Collections.emptyMap());
@@ -145,6 +166,9 @@ public class SysUserService {
     }
 
     @CacheEvict(value = "user_role_list", allEntries = true)
+    /**
+     * delete 方法
+     */
     public Result<String> delete(Long id) {
         sysUserMapper.delete(id);
         return Result.success("Deleted successfully");

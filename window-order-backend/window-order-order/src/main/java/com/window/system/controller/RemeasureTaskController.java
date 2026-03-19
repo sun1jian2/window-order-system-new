@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/remeasure")
 @CrossOrigin(origins = "*")
 @lombok.extern.slf4j.Slf4j
+/**
+ * RemeasureTaskController 控制器类
+ */
 public class RemeasureTaskController {
 
     @Autowired
@@ -31,6 +34,9 @@ public class RemeasureTaskController {
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * list 方法
+     */
     @PostMapping("/list")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
     public Result<PageResponse<RemeasureTask>> list(@RequestBody RemeasureTaskListReq req, @AuthenticationPrincipal AuthUser user) {
@@ -40,6 +46,9 @@ public class RemeasureTaskController {
         return remeasureTaskService.list(req);
     }
     
+        /**
+     * export 方法
+     */
     @PostMapping("/export")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
     public Result<String> export(@RequestBody RemeasureTaskListReq req, @AuthenticationPrincipal AuthUser user) {
@@ -52,6 +61,9 @@ public class RemeasureTaskController {
         return Result.success("导出任务已创建，请前往【导出中心】查看进度");
     }
 
+        /**
+     * assign 方法
+     */
     @PostMapping("/assign")
     @Log(module = "复尺任务", operation = "指派复尺")
     @PreAuthorize("hasAnyRole('SALES','ADMIN')")
@@ -60,6 +72,9 @@ public class RemeasureTaskController {
         return remeasureTaskService.assign(req, user);
     }
 
+        /**
+     * submit 方法
+     */
     @PostMapping("/submit")
     @Log(module = "复尺任务", operation = "提交复尺结果")
     @PreAuthorize("hasAnyRole('INSTALLER','ADMIN')")
@@ -68,6 +83,9 @@ public class RemeasureTaskController {
         return remeasureTaskService.submit(req, user);
     }
     
+        /**
+     * get 方法
+     */
     @GetMapping("/detail/{id}")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
     public Result<RemeasureTask> get(@PathVariable("id") Long id, @AuthenticationPrincipal AuthUser user) {
@@ -75,6 +93,9 @@ public class RemeasureTaskController {
         return remeasureTaskService.get(id, user);
     }
 
+        /**
+     * getByOrderId 方法
+     */
     @GetMapping("/order/{orderId}")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
     public Result<RemeasureTask> getByOrderId(@PathVariable("orderId") Long orderId, @AuthenticationPrincipal AuthUser user) {

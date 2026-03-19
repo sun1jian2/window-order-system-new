@@ -8,6 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+/**
+ * OrderListReq 实体/请求/响应类
+ */
 public class OrderListReq extends BasePageReq {
     private String orderNo;
     private Long customerId;

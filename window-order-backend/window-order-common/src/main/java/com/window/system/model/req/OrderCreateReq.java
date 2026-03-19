@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * OrderCreateReq 实体/请求/响应类
+ */
 public class OrderCreateReq {
     private String customerName;
     private String customerPhone;

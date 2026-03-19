@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * AfterSalesUpdateReq 实体/请求/响应类
+ */
 public class AfterSalesUpdateReq {
     private Long id;
     private String status;

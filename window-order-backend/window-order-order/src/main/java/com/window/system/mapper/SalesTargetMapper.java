@@ -7,14 +7,23 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
+/**
+ * SalesTargetMapper Mapper接口
+ */
 public interface SalesTargetMapper {
 
     @Insert("INSERT INTO sales_target (salesperson_id, target_month, target_amount, create_by, create_time, update_by, update_time) " +
             "VALUES (#{salespersonId}, #{targetMonth}, #{targetAmount}, #{createBy}, NOW(), #{updateBy}, NOW())")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    /**
+     * insert 方法
+     */
     int insert(SalesTarget salesTarget);
 
     @Update("UPDATE sales_target SET target_amount = #{targetAmount}, update_by = #{updateBy}, update_time = NOW() WHERE id = #{id}")
+    /**
+     * update 方法
+     */
     int update(SalesTarget salesTarget);
 
     @Select("SELECT * FROM sales_target WHERE salesperson_id = #{salespersonId} AND target_month = #{targetMonth}")

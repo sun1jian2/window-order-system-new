@@ -8,6 +8,9 @@ import java.util.List;
 
 @Getter
 @Setter
+/**
+ * DashboardStats 实体/请求/响应类
+ */
 public class DashboardStats {
     private Long pendingOrders; // Waiting Install or Producing
     private Long finishedOrders;

@@ -15,12 +15,18 @@ import java.math.RoundingMode;
 import java.util.List;
 
 @Service
+/**
+ * SalesTargetService 服务类/接口
+ */
 public class SalesTargetService {
 
     @Autowired
     private SalesTargetMapper salesTargetMapper;
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * setTarget 方法
+     */
     public Result<String> setTarget(SalesTargetReq req) {
         SalesTarget existing = salesTargetMapper.getBySalespersonAndMonth(req.getSalespersonId(), req.getTargetMonth());
         if (existing != null) {
@@ -37,6 +43,9 @@ public class SalesTargetService {
         return Result.success("设置成功");
     }
 
+    /**
+     * list 方法
+     */
     public Result<List<SalesTargetResp>> list(String month, Long salespersonId) {
         List<SalesTargetResp> list = salesTargetMapper.list(month, salespersonId);
         for (SalesTargetResp resp : list) {

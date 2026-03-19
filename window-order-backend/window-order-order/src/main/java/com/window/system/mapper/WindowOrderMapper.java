@@ -12,11 +12,17 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
+/**
+ * WindowOrderMapper Mapper接口
+ */
 public interface WindowOrderMapper {
 
     @Insert("INSERT INTO window_order (order_no, customer_id, customer_name, customer_phone, address, region_codes, province, city, district, detail_address, brand, window_type, color, glass_spec, width, height, price, paid_amount, payment_status, order_time, scheduled_install_date, actual_install_end_date, salesperson_id, installer_id, install_progress, production_progress, logistics_status, status, create_time, create_by, update_by, is_deleted) " +
             "VALUES (#{orderNo}, #{customerId}, #{customerName}, #{customerPhone}, #{address}, #{regionCodes}, #{province}, #{city}, #{district}, #{detailAddress}, #{brand}, #{windowType}, #{color}, #{glassSpec}, #{width}, #{height}, #{price}, #{paidAmount}, #{paymentStatus}, #{orderTime}, #{scheduledInstallDate}, #{actualInstallEndDate}, #{salespersonId}, #{installerId}, #{installProgress}, #{productionProgress}, #{logisticsStatus}, #{status}, NOW(), #{createBy}, #{updateBy}, 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    /**
+     * insert 方法
+     */
     int insert(WindowOrder order);
 
     @Update("<script>" +
@@ -51,9 +57,15 @@ public interface WindowOrderMapper {
             "<if test='updateBy != null'>, update_by = #{updateBy}</if> " +
             "WHERE id = #{id}" +
             "</script>")
+    /**
+     * update 方法
+     */
     int update(WindowOrder order);
 
     @Update("UPDATE window_order SET is_deleted = 1, update_time = NOW() WHERE id = #{id}")
+    /**
+     * delete 方法
+     */
     int delete(Long id);
 
     @Select("SELECT o.*, s.real_name as salesperson_name, i.real_name as installer_name " +
@@ -61,6 +73,9 @@ public interface WindowOrderMapper {
             "LEFT JOIN sys_user s ON o.salesperson_id = s.id " +
             "LEFT JOIN sys_user i ON o.installer_id = i.id " +
             "WHERE o.id = #{id} AND o.is_deleted = 0")
+    /**
+     * getById 方法
+     */
     WindowOrder getById(Long id);
 
     @Select("<script>" +
@@ -77,6 +92,9 @@ public interface WindowOrderMapper {
             "<if test='currentUserRole == \"SALES\"'> AND salesperson_id = #{currentUserId}</if> " +
             "<if test='currentUserRole == \"INSTALLER\"'> AND installer_id = #{currentUserId}</if> " +
             "</script>")
+    /**
+     * countList 方法
+     */
     long countList(OrderListReq req);
 
     @Select("<script>" +
@@ -100,6 +118,9 @@ public interface WindowOrderMapper {
             "ORDER BY o.create_time DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
+    /**
+     * selectList 方法
+     */
     List<WindowOrder> selectList(OrderListReq req);
 
     @Select("<script>" +
@@ -121,6 +142,9 @@ public interface WindowOrderMapper {
             "<if test='currentUserRole == \"INSTALLER\"'> AND o.installer_id = #{currentUserId}</if> " +
             "ORDER BY o.create_time DESC " +
             "</script>")
+    /**
+     * exportList 方法
+     */
     List<WindowOrder> exportList(OrderListReq req);
     
     @Select("<script>" +
@@ -210,12 +234,21 @@ public interface WindowOrderMapper {
                                              @Param("startDate") String startDate, @Param("endDate") String endDate);
 
     @Select("SELECT count(1) FROM customer WHERE is_deleted = 0")
+    /**
+     * countTotalCustomers 方法
+     */
     long countTotalCustomers();
     
     @Select("SELECT count(1) FROM sys_user WHERE is_deleted = 0")
+    /**
+     * countTotalUsers 方法
+     */
     long countTotalUsers();
 
     @Select("SELECT * FROM window_order WHERE is_deleted = 0 ORDER BY create_time DESC")
+    /**
+     * selectAll 方法
+     */
     List<WindowOrder> selectAll();
     
     @Select("<script>" +
@@ -287,5 +320,8 @@ public interface WindowOrderMapper {
             "FROM sys_operation_log " +
             "ORDER BY create_time DESC LIMIT 10" +
             "</script>")
+    /**
+     * getRecentActivities 方法
+     */
     List<RecentActivityDto> getRecentActivities();
 }

@@ -18,6 +18,9 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/api/file")
+/**
+ * FileController 控制器类
+ */
 public class FileController {
 
     @Autowired
@@ -28,6 +31,9 @@ public class FileController {
 
     private boolean bucketChecked = false;
 
+        /**
+     * upload 方法
+     */
     @PostMapping("/upload")
     public Result<String> upload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -91,6 +97,9 @@ public class FileController {
         }
     }
 
+        /**
+     * get 方法
+     */
     @GetMapping("/{date}/{filename}")
     public ResponseEntity<byte[]> get(@PathVariable("date") String date, @PathVariable("filename") String filename) {
         try {

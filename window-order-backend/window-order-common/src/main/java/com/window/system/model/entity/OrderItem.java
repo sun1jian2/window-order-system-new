@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * OrderItem 实体/请求/响应类
+ */
 public class OrderItem {
     private Long id;
     private Long orderId;
@@ -27,4 +30,9 @@ public class OrderItem {
     // VO fields
     private String productName;
     private String productCode;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

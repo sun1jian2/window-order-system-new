@@ -26,11 +26,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
+/**
+ * SysUserController 控制器类
+ */
 public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
 
+        /**
+     * login 方法
+     */
     @PostMapping("/login")
     public Result<LoginResp> login(@RequestBody Map<String, String> params) {
         String username = params.get("username");
@@ -38,6 +44,9 @@ public class SysUserController {
         return sysUserService.login(username, password);
     }
 
+        /**
+     * migratePasswords 方法
+     */
     @GetMapping("/migrate-passwords")
     public Result<String> migratePasswords() {
         return sysUserService.migratePasswords();
@@ -54,18 +63,27 @@ public class SysUserController {
         return Result.success(info);
     }
 
+        /**
+     * list 方法
+     */
     @PostMapping("/list")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
     public Result<PageResponse<SysUser>> list(@RequestBody UserListReq req) {
         return sysUserService.list(req);
     }
     
+        /**
+     * listByRole 方法
+     */
     @GetMapping("/role/{role}")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
     public Result<List<SysUser>> listByRole(@PathVariable("role") String role) {
         return sysUserService.listByRole(role);
     }
 
+        /**
+     * save 方法
+     */
     @PostMapping("/save")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Log(module = "账号", operation = "保存账号")
@@ -73,6 +91,9 @@ public class SysUserController {
         return sysUserService.save(req);
     }
 
+        /**
+     * delete 方法
+     */
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Log(module = "账号", operation = "删除账号")
@@ -88,6 +109,9 @@ public class SysUserController {
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * export 方法
+     */
     @PostMapping("/export")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public Result<String> export(@RequestBody UserListReq req) {

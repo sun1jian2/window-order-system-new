@@ -19,6 +19,9 @@ import java.util.List;
 
 @Service
 @lombok.extern.slf4j.Slf4j
+/**
+ * RemeasureTaskService 服务类/接口
+ */
 public class RemeasureTaskService {
 
     @Autowired
@@ -30,6 +33,9 @@ public class RemeasureTaskService {
     @Autowired
     private NotificationService notificationService;
 
+    /**
+     * list 方法
+     */
     public Result<PageResponse<RemeasureTask>> list(RemeasureTaskListReq req) {
         long count = remeasureTaskMapper.countList(req);
         if (count == 0) {
@@ -40,6 +46,9 @@ public class RemeasureTaskService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * assign 方法
+     */
     public Result<String> assign(RemeasureTaskAssignReq req, AuthUser user) {
         WindowOrder order = windowOrderMapper.getById(req.getOrderId());
         if (order == null) {
@@ -69,6 +78,9 @@ public class RemeasureTaskService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * submit 方法
+     */
     public Result<String> submit(RemeasureTaskSubmitReq req, AuthUser user) {
         RemeasureTask task = remeasureTaskMapper.getById(req.getId());
         if (task == null) {
@@ -108,6 +120,9 @@ public class RemeasureTaskService {
         return Result.success("Re-measurement submitted successfully");
     }
 
+    /**
+     * get 方法
+     */
     public Result<RemeasureTask> get(Long id, AuthUser user) {
         RemeasureTask task = remeasureTaskMapper.getById(id);
         if (task == null) {
@@ -120,6 +135,9 @@ public class RemeasureTaskService {
         return Result.success(task);
     }
     
+    /**
+     * getByOrderId 方法
+     */
     public Result<RemeasureTask> getByOrderId(Long orderId, AuthUser user) {
         RemeasureTask task = remeasureTaskMapper.getByOrderId(orderId);
         if (task == null) {
@@ -132,6 +150,9 @@ public class RemeasureTaskService {
         return Result.success(task);
     }
 
+    /**
+     * validatePermission 方法
+     */
     private Result<String> validatePermission(RemeasureTask task, AuthUser user) {
         if ("ADMIN".equals(user.getRole())) {
             return null;

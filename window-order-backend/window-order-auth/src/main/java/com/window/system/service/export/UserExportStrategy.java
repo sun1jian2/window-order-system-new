@@ -14,6 +14,9 @@ import java.io.File;
 import java.util.List;
 
 @Component
+/**
+ * UserExportStrategy 服务类/接口
+ */
 public class UserExportStrategy implements ExportStrategy {
 
     @Autowired
@@ -23,11 +26,17 @@ public class UserExportStrategy implements ExportStrategy {
     private SysExportTaskMapper sysExportTaskMapper;
 
     @Override
+    /**
+     * getType 方法
+     */
     public String getType() {
         return "USER";
     }
 
     @Override
+    /**
+     * export 方法
+     */
     public File export(String params, Long taskId) throws Exception {
         UserListReq req = JSONUtil.toBean(params, UserListReq.class);
         

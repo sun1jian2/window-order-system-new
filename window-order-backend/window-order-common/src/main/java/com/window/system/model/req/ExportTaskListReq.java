@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 @Data
+/**
+ * ExportTaskListReq 实体/请求/响应类
+ */
 public class ExportTaskListReq {
     private Integer pageNo = 1;
     private Integer pageSize = 10;
@@ -23,5 +26,10 @@ public class ExportTaskListReq {
     
     public int getStartIndex() {
         return (pageNo - 1) * pageSize;
+    }
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
     }
 }

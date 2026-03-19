@@ -14,12 +14,18 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+/**
+ * ProductServiceImpl 服务类/接口
+ */
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductMapper productMapper;
 
     @Override
+    /**
+     * list 方法
+     */
     public Result<PageResponse<Product>> list(ProductListReq req) {
         long total = productMapper.countList(req);
         if (total == 0) {
@@ -30,11 +36,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    /**
+     * listAllActive 方法
+     */
     public Result<List<Product>> listAllActive() {
         return Result.success(productMapper.listAllActive());
     }
 
     @Override
+    /**
+     * save 方法
+     */
     public Result<String> save(ProductSaveReq req, Long currentUserId) {
         Product product = new Product();
         product.setId(req.getId());
@@ -59,12 +71,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    /**
+     * delete 方法
+     */
     public Result<String> delete(Long id, Long currentUserId) {
         productMapper.delete(id, currentUserId);
         return Result.success("删除成功");
     }
 
     @Override
+    /**
+     * getById 方法
+     */
     public Result<Product> getById(Long id) {
         return Result.success(productMapper.getById(id));
     }

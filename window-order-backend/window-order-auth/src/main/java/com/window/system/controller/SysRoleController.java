@@ -12,11 +12,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/role")
 @CrossOrigin(origins = "*")
+/**
+ * SysRoleController 控制器类
+ */
 public class SysRoleController {
 
     @Autowired
     private SysRoleService sysRoleService;
 
+        /**
+     * listAll 方法
+     */
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public Result<List<SysRole>> listAll() {

@@ -10,6 +10,9 @@ import java.util.List;
 
 @Getter
 @Setter
+/**
+ * OrderPayment 实体/请求/响应类
+ */
 public class OrderPayment {
     private Long id;
     
@@ -36,4 +39,9 @@ public class OrderPayment {
     
     // VO attachments
     private List<String> attachmentList;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

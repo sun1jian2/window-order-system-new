@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * SysOperationLog 实体/请求/响应类
+ */
 public class SysOperationLog {
     @ExcelProperty("ID")
     private Long id;
@@ -45,4 +48,9 @@ public class SysOperationLog {
     @ExcelProperty("操作时间")
     @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

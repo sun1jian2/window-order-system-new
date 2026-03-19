@@ -9,7 +9,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * OrderTrendDto 实体/请求/响应类
+ */
 public class OrderTrendDto {
     private String date;
     private Long count;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

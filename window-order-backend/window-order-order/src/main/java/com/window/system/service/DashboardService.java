@@ -9,11 +9,17 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
+/**
+ * DashboardService 服务类/接口
+ */
 public class DashboardService {
 
     @Autowired
     private WindowOrderMapper windowOrderMapper;
 
+    /**
+     * getStats 方法
+     */
     public Result<DashboardStats> getStats(Long userId, String role, String startDate, String endDate) {
         DashboardStats stats = new DashboardStats();
         

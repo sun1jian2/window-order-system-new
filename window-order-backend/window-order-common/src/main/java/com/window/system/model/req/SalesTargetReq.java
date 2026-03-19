@@ -5,6 +5,9 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
+/**
+ * SalesTargetReq 实体/请求/响应类
+ */
 public class SalesTargetReq {
     private Long id;
     
@@ -18,4 +21,9 @@ public class SalesTargetReq {
     private BigDecimal targetAmount;
     
     private Long currentUserId;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

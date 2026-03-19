@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 
 @Getter
 @Setter
+/**
+ * RemeasureTaskSubmitReq 实体/请求/响应类
+ */
 public class RemeasureTaskSubmitReq {
     @NotNull(message = "Task ID cannot be null")
     private Long id;
@@ -22,4 +25,9 @@ public class RemeasureTaskSubmitReq {
     private String sitePhotos; // JSON array string
     
     private String remark;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

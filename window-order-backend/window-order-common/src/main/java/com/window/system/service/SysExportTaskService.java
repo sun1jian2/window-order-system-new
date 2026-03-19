@@ -25,6 +25,9 @@ import java.util.function.Supplier;
 
 @Service
 @Slf4j
+/**
+ * SysExportTaskService 服务类/接口
+ */
 public class SysExportTaskService {
 
     @Autowired
@@ -58,6 +61,9 @@ public class SysExportTaskService {
     }
 
 
+    /**
+     * createTask 方法
+     */
     public Long createTask(String taskName, String exportType, String exportParams) {
         AuthUser user = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SysExportTask task = new SysExportTask();
@@ -77,6 +83,9 @@ public class SysExportTaskService {
     }
 
     @Async("taskExecutor")
+    /**
+     * executeTask 方法
+     */
     public void executeTask(Long taskId, String exportType, String exportParams) {
         log.info("executeTask start {}，exportType {}", taskId, exportType);
         ExportStrategy strategy = exportStrategyFactory.getStrategy(exportType);
@@ -101,6 +110,9 @@ public class SysExportTaskService {
     }
 
     @Async("taskExecutor")
+    /**
+     * executeExport 方法
+     */
     public void executeExport(Long taskId, Supplier<File> exportLogic) {
         log.info("executeExport start {}", taskId);
 
@@ -112,6 +124,9 @@ public class SysExportTaskService {
         try {
             File file = exportLogic.get();
             if (file == null || !file.exists()) {
+                /**
+                 * RuntimeException 方法
+                 */
                 throw new RuntimeException("Export file not found or generation failed");
             }
 

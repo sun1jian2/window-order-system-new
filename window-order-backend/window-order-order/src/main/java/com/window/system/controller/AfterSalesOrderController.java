@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/after-sales")
 @Tag(name = "After Sales Management")
+/**
+ * AfterSalesOrderController 控制器类
+ */
 public class AfterSalesOrderController {
 
     @Autowired
@@ -29,6 +32,9 @@ public class AfterSalesOrderController {
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * list 方法
+     */
     @PostMapping("/list")
     @Operation(summary = "List after sales orders")
     public Result<PageResponse<AfterSalesOrder>> list(@RequestBody AfterSalesListReq req, @AuthenticationPrincipal AuthUser user) {
@@ -37,6 +43,9 @@ public class AfterSalesOrderController {
         return afterSalesOrderService.list(req);
     }
     
+        /**
+     * export 方法
+     */
     @PostMapping("/export")
     @Operation(summary = "Export after sales orders")
     public Result<String> export(@RequestBody AfterSalesListReq req, @AuthenticationPrincipal AuthUser user) {
@@ -49,6 +58,9 @@ public class AfterSalesOrderController {
         return Result.success("导出任务已创建，请前往【导出中心】查看进度");
     }
 
+        /**
+     * create 方法
+     */
     @PostMapping("/create")
     @Operation(summary = "Create after sales order")
     public Result<String> create(@RequestBody AfterSalesCreateReq req, @AuthenticationPrincipal AuthUser user) {
@@ -57,6 +69,9 @@ public class AfterSalesOrderController {
         return afterSalesOrderService.create(req);
     }
 
+        /**
+     * update 方法
+     */
     @PostMapping("/update")
     @Operation(summary = "Update after sales order")
     public Result<String> update(@RequestBody AfterSalesUpdateReq req, @AuthenticationPrincipal AuthUser user) {
@@ -65,12 +80,18 @@ public class AfterSalesOrderController {
         return afterSalesOrderService.update(req);
     }
     
+        /**
+     * detail 方法
+     */
     @GetMapping("/detail/{id}")
     @Operation(summary = "Get detail")
     public Result<AfterSalesOrder> detail(@PathVariable("id") Long id, @AuthenticationPrincipal AuthUser user) {
         return afterSalesOrderService.getDetail(id, user);
     }
     
+        /**
+     * delete 方法
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete order")
     public Result<String> delete(@PathVariable("id") Long id, @AuthenticationPrincipal AuthUser user) {

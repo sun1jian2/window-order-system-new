@@ -8,6 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+/**
+ * LogListReq 实体/请求/响应类
+ */
 public class LogListReq extends BasePageReq {
     private String username;
     private String module;

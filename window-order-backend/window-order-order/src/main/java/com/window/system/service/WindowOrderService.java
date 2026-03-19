@@ -24,6 +24,9 @@ import java.util.List;
 
 @Service
 @lombok.extern.slf4j.Slf4j
+/**
+ * WindowOrderService 服务类/接口
+ */
 public class WindowOrderService {
 
     @Autowired
@@ -38,6 +41,9 @@ public class WindowOrderService {
     @Autowired
     private CustomerClient customerClient;
 
+    /**
+     * list 方法
+     */
     public Result<PageResponse<WindowOrder>> list(OrderListReq req) {
         long count = windowOrderMapper.countList(req);
         if (count == 0) {
@@ -48,6 +54,9 @@ public class WindowOrderService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * create 方法
+     */
     public Result<String> create(OrderCreateReq req) {
         WindowOrder order = new WindowOrder();
         BeanUtils.copyProperties(req, order);
@@ -76,6 +85,9 @@ public class WindowOrderService {
         return Result.success("Order created successfully");
     }
 
+    /**
+     * handleCustomerAssociation 方法
+     */
     private void handleCustomerAssociation(OrderCreateReq req, WindowOrder order) {
         if (req.getCustomerPhone() == null) return;
         
@@ -109,6 +121,9 @@ public class WindowOrderService {
         }
     }
 
+    /**
+     * initializeOrder 方法
+     */
     private void initializeOrder(WindowOrder order) {
         order.setOrderNo(IdUtil.getSnowflake(1, 1).nextIdStr());
         if (order.getStatus() == null || order.getStatus().isEmpty()) {
@@ -125,6 +140,9 @@ public class WindowOrderService {
         order.setPaymentStatus("UNPAID");
     }
 
+    /**
+     * notifyNewOrder 方法
+     */
     private void notifyNewOrder(OrderCreateReq req, WindowOrder order) {
         if ("SALES".equals(req.getCurrentUserRole())) {
              notificationService.notifyAdmins("新订单提醒", "销售人员创建了新订单：" + order.getOrderNo(), "info");
@@ -153,6 +171,9 @@ public class WindowOrderService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * update 方法
+     */
     public Result<String> update(OrderUpdateReq req) {
         WindowOrder oldOrder = windowOrderMapper.getById(req.getId());
         if (oldOrder == null) {
@@ -192,6 +213,9 @@ public class WindowOrderService {
         return Result.success("Order updated successfully");
     }
 
+    /**
+     * checkUpdatePermissionAndStatus 方法
+     */
     private Result<String> checkUpdatePermissionAndStatus(OrderUpdateReq req, WindowOrder oldOrder) {
         if ("SALES".equals(req.getCurrentUserRole())) {
             if (!oldOrder.getSalespersonId().equals(req.getCurrentUserId())) {
@@ -216,6 +240,9 @@ public class WindowOrderService {
         return Result.success();
     }
 
+    /**
+     * sendProgressNotification 方法
+     */
     private void sendProgressNotification(OrderUpdateReq req, WindowOrder oldOrder) {
         boolean installChanged = req.getInstallProgress() != null && !req.getInstallProgress().equals(oldOrder.getInstallProgress());
         boolean productionChanged = req.getProductionProgress() != null && !req.getProductionProgress().equals(oldOrder.getProductionProgress());
@@ -230,6 +257,9 @@ public class WindowOrderService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * delete 方法
+     */
     public Result<String> delete(Long id, Long currentUserId, String currentUserRole) {
          // Check permission
         if ("SALES".equals(currentUserRole)) {
@@ -245,6 +275,9 @@ public class WindowOrderService {
         return Result.success("Order deleted successfully");
     }
     
+    /**
+     * get 方法
+     */
     public Result<WindowOrder> get(Long id) {
         WindowOrder order = windowOrderMapper.getById(id);
         if (order != null) {

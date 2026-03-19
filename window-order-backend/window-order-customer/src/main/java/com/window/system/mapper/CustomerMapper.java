@@ -6,11 +6,17 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
+/**
+ * CustomerMapper Mapper接口
+ */
 public interface CustomerMapper {
 
     @Insert("INSERT INTO customer (name, phone, address, remark, create_by, create_time, is_deleted) " +
             "VALUES (#{name}, #{phone}, #{address}, #{remark}, #{createBy}, NOW(), 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    /**
+     * insert 方法
+     */
     int insert(Customer customer);
 
     @Update("<script>" +
@@ -21,12 +27,21 @@ public interface CustomerMapper {
             "<if test='remark != null'>, remark = #{remark}</if> " +
             "WHERE id = #{id}" +
             "</script>")
+    /**
+     * update 方法
+     */
     int update(Customer customer);
 
     @Select("SELECT * FROM customer WHERE phone = #{phone} AND is_deleted = 0 LIMIT 1")
+    /**
+     * getByPhone 方法
+     */
     Customer getByPhone(String phone);
 
     @Select("SELECT * FROM customer WHERE id = #{id} AND is_deleted = 0")
+    /**
+     * getById 方法
+     */
     Customer getById(Long id);
 
     @Select("<script>" +

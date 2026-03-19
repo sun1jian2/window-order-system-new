@@ -16,11 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/export-task")
 @Tag(name = "导出任务管理")
+/**
+ * SysExportTaskController 控制器类
+ */
 public class SysExportTaskController {
 
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * list 方法
+     */
     @PostMapping("/list")
     @Operation(summary = "获取导出任务列表")
     public Result<PageResponse<SysExportTask>> list(@RequestBody ExportTaskListReq req) {

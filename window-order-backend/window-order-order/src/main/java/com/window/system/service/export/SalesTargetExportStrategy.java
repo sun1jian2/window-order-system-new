@@ -16,6 +16,9 @@ import java.math.RoundingMode;
 import java.util.List;
 
 @Component
+/**
+ * SalesTargetExportStrategy 服务类/接口
+ */
 public class SalesTargetExportStrategy implements ExportStrategy {
 
     @Autowired
@@ -25,11 +28,17 @@ public class SalesTargetExportStrategy implements ExportStrategy {
     private SysExportTaskMapper sysExportTaskMapper;
 
     @Override
+    /**
+     * getType 方法
+     */
     public String getType() {
         return "SALES_TARGET";
     }
 
     @Override
+    /**
+     * export 方法
+     */
     public File export(String params, Long taskId) throws Exception {
         SalesTargetListReq req = JSONUtil.toBean(params, SalesTargetListReq.class);
         

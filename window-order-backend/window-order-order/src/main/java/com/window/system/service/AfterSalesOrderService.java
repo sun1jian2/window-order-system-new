@@ -23,6 +23,9 @@ import java.util.List;
 
 @Service
 @Slf4j
+/**
+ * AfterSalesOrderService 服务类/接口
+ */
 public class AfterSalesOrderService {
 
     @Autowired
@@ -31,6 +34,9 @@ public class AfterSalesOrderService {
     @Autowired
     private WindowOrderMapper windowOrderMapper;
 
+    /**
+     * list 方法
+     */
     public Result<PageResponse<AfterSalesOrder>> list(AfterSalesListReq req) {
         long count = afterSalesOrderMapper.countList(req);
         if (count == 0) {
@@ -41,6 +47,9 @@ public class AfterSalesOrderService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * create 方法
+     */
     public Result<String> create(AfterSalesCreateReq req) {
         if ("SALES".equals(req.getCurrentUserRole())) {
             WindowOrder sourceOrder = windowOrderMapper.getById(req.getOrderId());
@@ -70,6 +79,9 @@ public class AfterSalesOrderService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * update 方法
+     */
     public Result<String> update(AfterSalesUpdateReq req) {
         AfterSalesOrder oldOrder = afterSalesOrderMapper.getById(req.getId());
         if (oldOrder == null) {
@@ -93,6 +105,9 @@ public class AfterSalesOrderService {
         return Result.success("更新成功");
     }
     
+    /**
+     * getDetail 方法
+     */
     public Result<AfterSalesOrder> getDetail(Long id, AuthUser user) {
         AfterSalesOrder order = afterSalesOrderMapper.getById(id);
         if (order == null) {
@@ -105,6 +120,9 @@ public class AfterSalesOrderService {
         return Result.success(order);
     }
     
+    /**
+     * delete 方法
+     */
     public Result<String> delete(Long id, AuthUser user) {
         AfterSalesOrder order = afterSalesOrderMapper.getById(id);
         if (order == null) {
@@ -118,6 +136,9 @@ public class AfterSalesOrderService {
         return Result.success("删除成功");
     }
 
+    /**
+     * validatePermission 方法
+     */
     private Result<String> validatePermission(AfterSalesOrder order, Long userId, String role) {
         if ("ADMIN".equals(role)) {
             return null;

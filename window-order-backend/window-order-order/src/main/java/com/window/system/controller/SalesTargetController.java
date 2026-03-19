@@ -17,6 +17,9 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/api/sales-target")
+/**
+ * SalesTargetController 控制器类
+ */
 public class SalesTargetController {
 
     @Autowired
@@ -25,17 +28,26 @@ public class SalesTargetController {
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * setTarget 方法
+     */
     @PostMapping("/set")
     public Result<String> setTarget(@RequestBody SalesTargetReq req) {
         return salesTargetService.setTarget(req);
     }
 
+        /**
+     * list 方法
+     */
     @GetMapping("/list")
     public Result<List<SalesTargetResp>> list(@RequestParam(name = "month", required = false) String month,
                                               @RequestParam(name = "salespersonId", required = false) Long salespersonId) {
         return salesTargetService.list(month, salespersonId);
     }
 
+        /**
+     * export 方法
+     */
     @PostMapping("/export")
     public Result<String> export(@RequestBody SalesTargetListReq req) {
         String params = JSONUtil.toJsonStr(req);

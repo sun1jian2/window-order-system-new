@@ -14,6 +14,9 @@ import java.io.File;
 import java.util.List;
 
 @Component
+/**
+ * LogExportStrategy 服务类/接口
+ */
 public class LogExportStrategy implements ExportStrategy {
 
     @Autowired
@@ -23,11 +26,17 @@ public class LogExportStrategy implements ExportStrategy {
     private SysExportTaskMapper sysExportTaskMapper;
 
     @Override
+    /**
+     * getType 方法
+     */
     public String getType() {
         return "LOG";
     }
 
     @Override
+    /**
+     * export 方法
+     */
     public File export(String params, Long taskId) throws Exception {
         LogListReq req = JSONUtil.toBean(params, LogListReq.class);
         

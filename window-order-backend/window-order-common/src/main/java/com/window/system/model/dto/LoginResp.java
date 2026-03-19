@@ -7,6 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
+/**
+ * LoginResp 实体/请求/响应类
+ */
 public class LoginResp {
     private String token;
     private SysUser user;

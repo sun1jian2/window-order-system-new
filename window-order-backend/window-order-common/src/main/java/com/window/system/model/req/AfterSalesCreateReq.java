@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * AfterSalesCreateReq 实体/请求/响应类
+ */
 public class AfterSalesCreateReq {
     private Long orderId;
     private String customerName;

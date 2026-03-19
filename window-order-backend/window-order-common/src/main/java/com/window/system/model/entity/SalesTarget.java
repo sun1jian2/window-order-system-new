@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * SalesTarget 实体/请求/响应类
+ */
 public class SalesTarget {
     @ExcelProperty("ID")
     private Long id;
@@ -32,4 +35,9 @@ public class SalesTarget {
     private Long updateBy;
     @ExcelIgnore
     private LocalDateTime updateTime;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

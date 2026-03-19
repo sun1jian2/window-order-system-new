@@ -14,6 +14,9 @@ import java.io.File;
 import java.util.List;
 
 @Component
+/**
+ * OrderExportStrategy 服务类/接口
+ */
 public class OrderExportStrategy implements ExportStrategy {
 
     @Autowired
@@ -23,11 +26,17 @@ public class OrderExportStrategy implements ExportStrategy {
     private SysExportTaskMapper sysExportTaskMapper;
 
     @Override
+    /**
+     * getType 方法
+     */
     public String getType() {
         return "ORDER";
     }
 
     @Override
+    /**
+     * export 方法
+     */
     public File export(String params, Long taskId) throws Exception {
         OrderListReq req = JSONUtil.toBean(params, OrderListReq.class);
         

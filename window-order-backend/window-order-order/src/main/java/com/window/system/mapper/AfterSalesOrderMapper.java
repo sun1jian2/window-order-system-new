@@ -7,11 +7,17 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
+/**
+ * AfterSalesOrderMapper Mapper接口
+ */
 public interface AfterSalesOrderMapper {
 
     @Insert("INSERT INTO after_sales_order (ticket_no, order_id, customer_name, customer_phone, address, issue_description, status, handler_id, appointment_time, create_by, create_time, is_deleted) " +
             "VALUES (#{ticketNo}, #{orderId}, #{customerName}, #{customerPhone}, #{address}, #{issueDescription}, #{status}, #{handlerId}, #{appointmentTime}, #{createBy}, NOW(), 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    /**
+     * insert 方法
+     */
     int insert(AfterSalesOrder order);
 
     @Update("<script>" +
@@ -24,6 +30,9 @@ public interface AfterSalesOrderMapper {
             "<if test='fee != null'>, fee = #{fee}</if> " +
             "WHERE id = #{id}" +
             "</script>")
+    /**
+     * update 方法
+     */
     int update(AfterSalesOrder order);
 
     @Select("SELECT aso.*, u.real_name as handler_name, wo.order_no " +
@@ -31,6 +40,9 @@ public interface AfterSalesOrderMapper {
             "LEFT JOIN sys_user u ON aso.handler_id = u.id " +
             "LEFT JOIN window_order wo ON aso.order_id = wo.id " +
             "WHERE aso.id = #{id} AND aso.is_deleted = 0")
+    /**
+     * getById 方法
+     */
     AfterSalesOrder getById(Long id);
     
     @Select("<script>" +
@@ -45,6 +57,9 @@ public interface AfterSalesOrderMapper {
             "<if test='currentUserRole == \"SALES\"'> AND wo.salesperson_id = #{currentUserId}</if> " +
             "<if test='currentUserRole == \"INSTALLER\"'> AND aso.handler_id = #{currentUserId}</if> " +
             "</script>")
+    /**
+     * countList 方法
+     */
     long countList(AfterSalesListReq req);
 
     @Select("<script>" +
@@ -63,6 +78,9 @@ public interface AfterSalesOrderMapper {
             "ORDER BY aso.create_time DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
+    /**
+     * selectList 方法
+     */
     List<AfterSalesOrder> selectList(AfterSalesListReq req);
     
     @Select("<script>" +
@@ -80,8 +98,14 @@ public interface AfterSalesOrderMapper {
             "<if test='currentUserRole == \"INSTALLER\"'> AND aso.handler_id = #{currentUserId}</if> " +
             "ORDER BY aso.create_time DESC " +
             "</script>")
+    /**
+     * exportList 方法
+     */
     List<AfterSalesOrder> exportList(AfterSalesListReq req);
     
     @Update("UPDATE after_sales_order SET is_deleted = 1 WHERE id = #{id}")
+    /**
+     * delete 方法
+     */
     int delete(Long id);
 }

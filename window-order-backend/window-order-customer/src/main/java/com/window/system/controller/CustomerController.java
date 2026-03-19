@@ -21,6 +21,9 @@ import java.time.format.DateTimeFormatter;
 @RestController
 @RequestMapping("/api/customer")
 @Tag(name = "Customer Management")
+/**
+ * CustomerController 控制器类
+ */
 public class CustomerController {
 
     @Autowired
@@ -29,6 +32,9 @@ public class CustomerController {
     @Autowired
     private SysExportTaskService sysExportTaskService;
 
+        /**
+     * list 方法
+     */
     @GetMapping("/list")
     @Operation(summary = "List customers")
     public Result<PageResponse<Customer>> list(
@@ -47,6 +53,9 @@ public class CustomerController {
         return Result.success(PageResponse.of(list, count));
     }
 
+        /**
+     * save 方法
+     */
     @PostMapping("/save")
     public Result<String> save(@RequestBody Customer customer) {
         if (customer.getId() == null) {
@@ -57,11 +66,17 @@ public class CustomerController {
         return Result.success("Saved");
     }
     
+        /**
+     * getByPhone 方法
+     */
     @GetMapping("/phone")
     public Result<Customer> getByPhone(@RequestParam("phone") String phone) {
         return Result.success(customerMapper.getByPhone(phone));
     }
 
+        /**
+     * export 方法
+     */
     @PostMapping("/export")
     public Result<String> export(@RequestBody CustomerListReq req) {
         String params = JSONUtil.toJsonStr(req);
@@ -71,6 +86,9 @@ public class CustomerController {
         return Result.success("导出任务已创建，请前往【导出中心】查看进度");
     }
     
+        /**
+     * getDetail 方法
+     */
     @GetMapping("/detail/{id}")
     @Operation(summary = "Get customer detail")
     public Result<Customer> getDetail(@PathVariable("id") Long id) {

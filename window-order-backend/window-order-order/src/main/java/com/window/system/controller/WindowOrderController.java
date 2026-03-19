@@ -17,11 +17,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RequestMapping("/api/order")
 @CrossOrigin(origins = "*")
 @lombok.extern.slf4j.Slf4j
+/**
+ * WindowOrderController 控制器类
+ */
 public class WindowOrderController {
 
     @Autowired
     private WindowOrderService windowOrderService;
 
+        /**
+     * list 方法
+     */
     @PostMapping("/list")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
     public Result<PageResponse<WindowOrder>> list(@RequestBody OrderListReq req) {
@@ -29,6 +35,9 @@ public class WindowOrderController {
         return windowOrderService.list(req);
     }
 
+        /**
+     * create 方法
+     */
     @PostMapping("/create")
     @Log(module = "订单", operation = "创建订单")
     @PreAuthorize("hasAnyRole('SALES','ADMIN')")
@@ -37,6 +46,9 @@ public class WindowOrderController {
         return windowOrderService.create(req);
     }
 
+        /**
+     * update 方法
+     */
     @PostMapping("/update")
     @Log(module = "订单", operation = "更新订单")
     @PreAuthorize("hasAnyRole('SALES','ADMIN')")
@@ -45,6 +57,9 @@ public class WindowOrderController {
         return windowOrderService.update(req);
     }
 
+        /**
+     * delete 方法
+     */
     @DeleteMapping("/{id}")
     @Log(module = "订单", operation = "删除订单")
     @PreAuthorize("hasAnyRole('SALES','ADMIN','INSTALLER')")
@@ -55,6 +70,9 @@ public class WindowOrderController {
         return windowOrderService.delete(id, currentUserId, currentUserRole);
     }
     
+        /**
+     * get 方法
+     */
     @GetMapping("/detail/{id}")
     public Result<WindowOrder> get(@PathVariable("id") Long id) {
         log.info("Get order detail id: {}", id);

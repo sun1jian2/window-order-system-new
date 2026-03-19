@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * AfterSalesOrder 实体/请求/响应类
+ */
 public class AfterSalesOrder {
     @ExcelProperty("ID")
     private Long id;
@@ -72,4 +75,9 @@ public class AfterSalesOrder {
     private String handlerName;
     @ExcelProperty("关联订单号")
     private String orderNo; // from WindowOrder
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

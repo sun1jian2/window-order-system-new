@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * RemeasureTask 实体/请求/响应类
+ */
 public class RemeasureTask {
     @ExcelProperty("ID")
     private Long id;
@@ -54,4 +57,9 @@ public class RemeasureTask {
     private String address;
     @ExcelProperty("复尺人员")
     private String assigneeName;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

@@ -4,6 +4,9 @@ import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
+/**
+ * ProductCategorySaveReq 实体/请求/响应类
+ */
 public class ProductCategorySaveReq {
     private Long id;
     
@@ -11,4 +14,9 @@ public class ProductCategorySaveReq {
     private String name;
     
     private Integer sort;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

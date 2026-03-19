@@ -11,16 +11,25 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
+/**
+ * ExportStrategyFactory 服务类/接口
+ */
 public class ExportStrategyFactory {
 
     private final Map<String, ExportStrategy> strategyMap;
 
     @Autowired
+    /**
+     * ExportStrategyFactory 方法
+     */
     public ExportStrategyFactory(List<ExportStrategy> strategies) {
         strategyMap = strategies.stream()
                 .collect(Collectors.toMap(ExportStrategy::getType, Function.identity()));
     }
 
+    /**
+     * getStrategy 方法
+     */
     public ExportStrategy getStrategy(String type) {
         return strategyMap.get(type);
     }

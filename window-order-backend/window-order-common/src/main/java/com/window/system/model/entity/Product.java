@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+/**
+ * Product 实体/请求/响应类
+ */
 public class Product {
     private Long id;
     private Long categoryId;
@@ -27,4 +30,9 @@ public class Product {
     // VO fields
     private String categoryName;
     private String brandName;
+
+    @Override
+    public String toString() {
+        return com.window.system.util.JsonUtils.toJson(this);
+    }
 }

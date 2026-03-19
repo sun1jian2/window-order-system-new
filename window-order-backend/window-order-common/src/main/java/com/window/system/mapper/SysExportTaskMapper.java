@@ -7,11 +7,17 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
+/**
+ * SysExportTaskMapper Mapper接口
+ */
 public interface SysExportTaskMapper {
 
     @Insert("INSERT INTO sys_export_task(task_name, status, file_url, file_name, error_msg, export_type, export_params, create_by, create_time) " +
             "VALUES(#{taskName}, #{status}, #{fileUrl}, #{fileName}, #{errorMsg}, #{exportType}, #{exportParams}, #{createBy}, NOW())")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    /**
+     * insert 方法
+     */
     int insert(SysExportTask task);
 
     @Update("<script>" +
@@ -22,9 +28,15 @@ public interface SysExportTaskMapper {
             "<if test='finishTime != null'>, finish_time = #{finishTime}</if> " +
             "WHERE id = #{id}" +
             "</script>")
+    /**
+     * update 方法
+     */
     int update(SysExportTask task);
 
     @Select("SELECT * FROM sys_export_task WHERE id = #{id}")
+    /**
+     * getById 方法
+     */
     SysExportTask getById(Long id);
 
     @Select("<script>" +
