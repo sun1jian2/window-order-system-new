@@ -78,7 +78,7 @@ const routes = [
         path: 'materials',
         name: 'MaterialList',
         component: () => import('../views/MaterialList.vue'),
-        meta: { requiresAuth: true, title: '材料管理' }
+        meta: { requiresAuth: true, title: '材料库存' }
       },
       {
         path: 'suppliers',
