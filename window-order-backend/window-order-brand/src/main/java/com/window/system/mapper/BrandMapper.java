@@ -9,10 +9,10 @@ import java.util.List;
 @Mapper
 public interface BrandMapper {
 
-    @Insert("INSERT INTO brand (name, create_by, create_time, is_deleted) VALUES (#{name}, #{createBy}, NOW(), 0)")
+    @Insert("INSERT INTO brand (name, description, create_by, create_time, is_deleted) VALUES (#{name}, #{description}, #{createBy}, NOW(), 0)")
     int insert(Brand brand);
 
-    @Update("UPDATE brand SET name = #{name}, update_by = #{updateBy} WHERE id = #{id}")
+    @Update("UPDATE brand SET name = #{name}, description = #{description}, update_by = #{updateBy} WHERE id = #{id}")
     int update(Brand brand);
 
     @Update("UPDATE brand SET is_deleted = 1, name = CONCAT(name, '_del_', #{id}) WHERE id = #{id}")

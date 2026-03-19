@@ -17,6 +17,9 @@ public class Brand implements Serializable {
     @ExcelProperty("品牌名称")
     private String name;
     
+    @ExcelProperty("品牌描述")
+    private String description;
+    
     @ExcelProperty("创建时间")
     @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;

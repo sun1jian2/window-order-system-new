@@ -16,8 +16,9 @@
       </el-card>
 
       <el-card class="table-card" shadow="hover">
-        <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
+        <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading" :header-cell-style="{background:'#f5f7fa', color:'#606266'}">
           <el-table-column prop="name" label="品牌名称" />
+          <el-table-column prop="description" label="品牌描述" min-width="150" show-overflow-tooltip />
           <el-table-column prop="createTime" label="创建时间">
             <template #default="scope">
               {{ scope.row.createTime ? scope.row.createTime.replace('T', ' ') : '' }}
@@ -51,6 +52,9 @@
       <el-form :model="form" label-width="80px">
         <el-form-item label="品牌名称">
           <el-input v-model="form.name" :disabled="dialogType === 'detail'" />
+        </el-form-item>
+        <el-form-item label="品牌描述">
+          <el-input v-model="form.description" type="textarea" :rows="3" placeholder="请输入品牌描述" :disabled="dialogType === 'detail'" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -89,7 +93,8 @@ const queryForm = reactive({
 
 const form = reactive({
   id: null,
-  name: ''
+  name: '',
+  description: ''
 })
 
 onMounted(() => {
@@ -160,6 +165,7 @@ const handleCreate = () => {
   dialogType.value = 'create'
   form.id = null
   form.name = ''
+  form.description = ''
   dialogVisible.value = true
 }
 
@@ -167,6 +173,7 @@ const handleEdit = (row) => {
   dialogType.value = 'edit'
   form.id = row.id
   form.name = row.name
+  form.description = row.description
   dialogVisible.value = true
 }
 
@@ -174,6 +181,7 @@ const handleDetail = (row) => {
   dialogType.value = 'detail'
   form.id = row.id
   form.name = row.name
+  form.description = row.description
   dialogVisible.value = true
 }
 

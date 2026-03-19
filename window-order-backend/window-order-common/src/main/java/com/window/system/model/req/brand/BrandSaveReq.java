@@ -12,6 +12,8 @@ public class BrandSaveReq {
     @NotBlank(message = "Brand name cannot be empty")
     private String name;
     
+    private String description;
+    
     // 操作人ID，用于审计字段
     private Long currentUserId;
 }
