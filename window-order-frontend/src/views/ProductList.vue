@@ -36,14 +36,14 @@
 
       <el-card class="table-card" shadow="hover">
         <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
-          <el-table-column prop="categoryName" label="分类" width="160" show-overflow-tooltip />
-          <el-table-column prop="name" label="产品名称" min-width="120" show-overflow-tooltip />
-          <el-table-column prop="code" label="产品编码" width="120" />
-          <el-table-column prop="brandName" label="品牌" width="100" />
-          <el-table-column prop="basePrice" label="基础单价(元/㎡)" width="140" align="right">
+          <el-table-column prop="categoryName" label="分类" width="200" align="center" show-overflow-tooltip />
+          <el-table-column prop="name" label="产品名称" min-width="100" align="center" show-overflow-tooltip />
+          <el-table-column prop="code" label="产品编码" width="180" align="center" />
+          <el-table-column prop="brandName" label="品牌" width="160" align="center" />
+          <el-table-column prop="basePrice" label="基础单价(元/㎡)" width="180" align="center">
              <template #default="scope">¥ {{ scope.row.basePrice }}</template>
           </el-table-column>
-          <el-table-column prop="status" label="状态" width="100">
+          <el-table-column prop="status" label="状态" width="100" align="center">
             <template #default="scope">
               <el-tag :type="scope.row.status === 'ACTIVE' ? 'success' : 'danger'">
                 {{ scope.row.status === 'ACTIVE' ? '上架' : '下架' }}

@@ -211,10 +211,10 @@
           <el-input v-model="form.detailAddress" type="textarea" :rows="2" placeholder="请输入街道、小区、楼号等详细信息" />
         </el-form-item>
 
-        <div class="form-section-title">窗户详情</div>
+        <div class="form-section-title">产品详情</div>
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-table :data="form.items" border style="width: 100%; margin-bottom: 15px;" size="small" :header-cell-style="{background:'#f7f9fc', color:'#606266'}">
+            <el-table :data="form.items" border style="width: 100%; margin-bottom: 15px;" size="default" :header-cell-style="{background:'#f7f9fc', color:'#606266', height: '45px'}">
               <el-table-column label="产品" min-width="180">
                 <template #default="scope">
                   <el-select v-model="scope.row.productId" placeholder="选择产品" style="width: 100%" filterable @change="(val) => handleProductChange(val, scope.row)">
@@ -982,6 +982,14 @@ const getLogisticsStatusLabel = (status) => {
   background-color: transparent;
   display: flex;
   flex-direction: column;
+}
+
+/* 产品明细表格行高优化 */
+:deep(.el-table .el-table__row) {
+  height: 55px;
+}
+:deep(.el-table .cell) {
+  line-height: normal;
 }
 
 .main-content {

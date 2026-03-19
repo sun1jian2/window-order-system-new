@@ -58,7 +58,7 @@
       <el-sub-menu index="catalog" v-if="userStore.currentUser.role === 'ADMIN'">
         <template #title>
           <el-icon><Menu /></el-icon>
-          <span>产品目录</span>
+          <span>产品品牌</span>
         </template>
         <el-menu-item index="/products">产品列表</el-menu-item>
         <el-menu-item index="/product-categories">产品分类</el-menu-item>
