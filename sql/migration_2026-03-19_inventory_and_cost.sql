@@ -131,11 +131,3 @@ CREATE TABLE `order_cost` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_order` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单成本核算表';
-
--- 插入一些测试分类数据
-INSERT INTO `material_category` (`id`, `name`, `sort`) VALUES
-(1, '铝型材', 1),
-(2, '玻璃', 2),
-(3, '五金配件', 3),
-(4, '密封胶条', 4),
-(5, '包装耗材', 5);
