@@ -73,9 +73,9 @@
       <el-sub-menu index="inventory" v-if="userStore.currentUser.role === 'ADMIN'">
         <template #title>
           <el-icon><Goods /></el-icon>
-          <span>库存与采购</span>
+          <span>库存采购</span>
         </template>
-        <el-menu-item index="/materials">材料与库存</el-menu-item>
+        <el-menu-item index="/materials">材料库存</el-menu-item>
         <el-menu-item index="/suppliers">供应商管理</el-menu-item>
         <el-menu-item index="/purchase-orders">采购单管理</el-menu-item>
       </el-sub-menu>
