@@ -1,7 +1,6 @@
 -- 门窗行业常见供应商数据初始化 SQL
 INSERT INTO supplier (name, contact_person, phone, address, account_balance, remark, create_by,
-                      create_time, is_deleted)
-VALUES
+                      create_time, is_deleted) VALUES
 -- 1. 铝型材供应商 (国内头部铝材厂)
 ('广东凤铝铝业有限公司', '张建国', '13800138001', '广东省佛山市南海区大沥镇', 0.00,
  '主营：断桥铝型材、系统窗型材', 1, NOW(), 0),
