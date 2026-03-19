@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface CustomerMapper {
 
-    @Insert("INSERT INTO customer (name, phone, address, remark, create_by, create_time, is_deleted) " +
-            "VALUES (#{name}, #{phone}, #{address}, #{remark}, #{createBy}, NOW(), 0)")
+    @Insert("INSERT INTO customer (name, phone, address, remark, source, create_by, create_time, is_deleted) " +
+            "VALUES (#{name}, #{phone}, #{address}, #{remark}, #{source}, #{createBy}, NOW(), 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     /**
      * insert 方法

@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.window.system.model.req.CustomerListReq;
+import com.window.system.model.req.CustomerSaveReq;
 import com.window.system.service.SysExportTaskService;
 import cn.hutool.json.JSONUtil;
 import java.time.LocalDateTime;
@@ -57,8 +58,16 @@ public class CustomerController {
      * save 方法
      */
     @PostMapping("/save")
-    public Result<String> save(@RequestBody Customer customer) {
+    public Result<String> save(@RequestBody CustomerSaveReq req) {
+        Customer customer = new Customer();
+        customer.setId(req.getId());
+        customer.setName(req.getName());
+        customer.setPhone(req.getPhone());
+        customer.setAddress(req.getAddress());
+        customer.setRemark(req.getRemark());
+        
         if (customer.getId() == null) {
+            customer.setSource("MANUAL"); // 手动添加
             customerMapper.insert(customer);
         } else {
             customerMapper.update(customer);

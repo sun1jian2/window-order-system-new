@@ -13,6 +13,7 @@
           <el-form-item>
             <el-button type="primary" @click="handleSearch" :icon="Search">查询</el-button>
             <el-button @click="handleReset" :icon="Refresh">重置</el-button>
+            <el-button type="success" @click="handleCreate" :icon="Plus">新建客户</el-button>
             <el-button type="warning" @click="handleExport" :icon="Download">导出</el-button>
           </el-form-item>
         </el-form>
@@ -28,12 +29,20 @@
           <el-table-column prop="totalSpent" label="总消费" min-width="120" align="right" sortable>
               <template #default="scope">¥ {{ scope.row.totalSpent }}</template>
           </el-table-column>
+          <el-table-column prop="source" label="客户来源" min-width="120" align="center">
+            <template #default="scope">
+              <el-tag :type="scope.row.source === 'MANUAL' ? 'success' : 'info'">
+                {{ scope.row.source === 'MANUAL' ? '手动添加' : '订单自动生成' }}
+              </el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="createTime" label="首次录入" min-width="160" align="center">
               <template #default="scope">{{ scope.row.createTime ? scope.row.createTime.replace('T', ' ') : '' }}</template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" width="100" align="center">
+          <el-table-column label="操作" fixed="right" width="150" align="center">
             <template #default="scope">
               <el-button link type="primary" @click="handleDetail(scope.row)">详情</el-button>
+              <el-button link type="primary" :icon="Edit" @click="handleEdit(scope.row)" v-if="scope.row.source === 'MANUAL'">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -50,20 +59,47 @@
         </div>
       </el-card>
     </div>
+    <!-- Dialog -->
+    <el-dialog v-model="dialogVisible" :title="dialogType === 'create' ? '新建客户' : '编辑客户'" width="500px" destroy-on-close>
+      <el-form :model="form" :rules="rules" ref="formRef" label-width="80px">
+        <el-form-item label="客户名" prop="name">
+          <el-input v-model="form.name" placeholder="请输入客户名" />
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="form.phone" placeholder="请输入电话号码" />
+        </el-form-item>
+        <el-form-item label="地址" prop="address">
+          <el-input v-model="form.address" placeholder="请输入详细地址" />
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注信息" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Search, Refresh, Download } from '@element-plus/icons-vue'
+import { Search, Refresh, Download, Plus, Edit } from '@element-plus/icons-vue'
 import { listCustomers, exportCustomers } from '@/api/customer'
+import request from '@/utils/request'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 const loading = ref(false)
 const tableData = ref([])
 const total = ref(0)
+const dialogVisible = ref(false)
+const dialogType = ref('create')
+const formRef = ref(null)
 
 const queryForm = reactive({
     pageNo: 1,
@@ -71,6 +107,19 @@ const queryForm = reactive({
     name: '',
     phone: ''
 })
+
+const form = reactive({
+  id: null,
+  name: '',
+  phone: '',
+  address: '',
+  remark: ''
+})
+
+const rules = {
+  name: [{ required: true, message: '请输入客户名', trigger: 'blur' }],
+  phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }]
+}
 
 onMounted(() => {
     fetchData()
@@ -127,6 +176,46 @@ const handleDetail = (row) => {
     // Navigate to customer detail (to be implemented, reusing order list with filter?)
     // For now, let's just go to order list filtered by phone
     router.push({ path: '/orders', query: { customerId: row.id } })
+}
+
+const handleCreate = () => {
+  dialogType.value = 'create'
+  form.id = null
+  form.name = ''
+  form.phone = ''
+  form.address = ''
+  form.remark = ''
+  dialogVisible.value = true
+}
+
+const handleEdit = (row) => {
+  dialogType.value = 'edit'
+  form.id = row.id
+  form.name = row.name
+  form.phone = row.phone
+  form.address = row.address
+  form.remark = row.remark
+  dialogVisible.value = true
+}
+
+const submitForm = async () => {
+  if (!formRef.value) return
+  await formRef.value.validate(async (valid) => {
+    if (valid) {
+      try {
+        const res = await request.post('/customer/save', form)
+        if (res.code === 200) {
+          ElMessage.success('保存成功')
+          dialogVisible.value = false
+          fetchData()
+        } else {
+          ElMessage.error(res.msg || '保存失败')
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  })
 }
 </script>
 

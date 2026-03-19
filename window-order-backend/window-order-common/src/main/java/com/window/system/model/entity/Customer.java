@@ -45,6 +45,9 @@ public class Customer {
     @ExcelIgnore
     private Boolean isDeleted;
 
+    @ExcelProperty("来源")
+    private String source; // ORDER, MANUAL
+
     // VO Fields
     @ExcelProperty("订单数")
     private Long orderCount;
