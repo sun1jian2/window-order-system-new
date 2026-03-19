@@ -28,16 +28,16 @@
     </el-card>
 
     <el-table :data="tasks" v-loading="loading" border style="width: 100%; margin-top: 20px;">
-      <el-table-column prop="taskName" label="任务名称" />
-      <el-table-column prop="status" label="状态" width="120">
+      <el-table-column prop="taskName" label="任务名称" min-width="200" align="center" />
+      <el-table-column prop="status" label="状态" min-width="120" align="center">
         <template #default="scope">
           <el-tag :type="getStatusType(scope.row.status)">{{ getStatusText(scope.row.status) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createByName" label="创建人" width="150" />
-      <el-table-column prop="createTime" label="创建时间" width="180" />
-      <el-table-column prop="finishTime" label="完成时间" width="180" />
-      <el-table-column label="操作" width="150">
+      <el-table-column prop="createByName" label="创建人" min-width="120" align="center" />
+      <el-table-column prop="createTime" label="创建时间" min-width="180" align="center" />
+      <el-table-column prop="finishTime" label="完成时间" min-width="180" align="center" />
+      <el-table-column label="操作" min-width="150" align="center">
         <template #default="scope">
           <el-button 
             v-if="scope.row.status === 'COMPLETED' && scope.row.fileUrl" 

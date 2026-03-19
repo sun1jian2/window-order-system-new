@@ -20,14 +20,14 @@
 
       <el-card class="table-card" shadow="hover">
         <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
-          <el-table-column prop="username" label="用户名" />
-          <el-table-column prop="realName" label="真实姓名" />
-          <el-table-column prop="role" label="角色">
+          <el-table-column prop="username" label="用户名" min-width="120" align="center" />
+          <el-table-column prop="realName" label="真实姓名" min-width="120" align="center" />
+          <el-table-column prop="role" label="角色" min-width="120" align="center">
              <template #default="scope">
                 <el-tag :type="scope.row.role === 'ADMIN' ? 'danger' : 'primary'">{{ scope.row.roleName || scope.row.role }}</el-tag>
              </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建时间">
+          <el-table-column prop="createTime" label="创建时间" min-width="180" align="center">
             <template #default="scope">
               {{ scope.row.createTime ? scope.row.createTime.replace('T', ' ') : '' }}
             </template>

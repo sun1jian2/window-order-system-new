@@ -11,9 +11,9 @@
 
       <el-card class="table-card" shadow="hover">
         <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
-          <el-table-column prop="name" label="分类名称" />
-          <el-table-column prop="sort" label="排序" />
-          <el-table-column prop="createTime" label="创建时间">
+          <el-table-column prop="name" label="分类名称" min-width="150" align="center" />
+          <el-table-column prop="sort" label="排序" min-width="100" align="center" />
+          <el-table-column prop="createTime" label="创建时间" min-width="180" align="center">
             <template #default="scope">
               {{ scope.row.createTime ? scope.row.createTime.replace('T', ' ') : '' }}
             </template>

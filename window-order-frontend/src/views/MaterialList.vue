@@ -37,22 +37,22 @@
 
       <el-card class="table-card" shadow="hover">
         <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
-          <el-table-column prop="categoryName" label="分类" width="120" align="center" show-overflow-tooltip />
+          <el-table-column prop="categoryName" label="材料分类" min-width="120" align="center" />
           <el-table-column prop="name" label="材料名称" min-width="150" align="center" show-overflow-tooltip />
-          <el-table-column prop="code" label="材料编码" width="120" align="center" />
-          <el-table-column prop="spec" label="规格型号" width="120" align="center" />
-          <el-table-column prop="unit" label="单位" width="80" align="center" />
-          <el-table-column prop="unitPrice" label="参考单价" width="100" align="right">
-             <template #default="scope">¥ {{ scope.row.unitPrice }}</template>
+          <el-table-column prop="code" label="材料编码" min-width="120" align="center" />
+          <el-table-column prop="spec" label="规格型号" min-width="120" align="center" show-overflow-tooltip />
+          <el-table-column prop="unitPrice" label="参考单价" min-width="100" align="center">
+            <template #default="scope">¥ {{ scope.row.unitPrice }}</template>
           </el-table-column>
-          <el-table-column prop="stockQuantity" label="当前库存" width="100" align="center">
+          <el-table-column prop="unit" label="单位" min-width="80" align="center" />
+          <el-table-column prop="stockQuantity" label="当前库存" min-width="100" align="center">
             <template #default="scope">
               <span :style="{ color: scope.row.stockQuantity <= scope.row.warningQuantity ? '#f56c6c' : '#67c23a', fontWeight: 'bold' }">
                 {{ scope.row.stockQuantity }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="warningQuantity" label="预警阈值" width="100" align="center" />
+          <el-table-column prop="warningQuantity" label="预警阈值" min-width="100" align="center" />
           <el-table-column label="操作" fixed="right" width="180" align="center">
             <template #default="scope">
               <el-button link type="primary" :icon="Edit" @click="handleEdit(scope.row)">编辑</el-button>

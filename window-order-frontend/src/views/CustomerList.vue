@@ -21,14 +21,14 @@
       <!-- Table -->
       <el-card class="table-card" shadow="hover">
         <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
-          <el-table-column prop="name" label="客户名" width="120" />
-          <el-table-column prop="phone" label="电话" width="150" />
-          <el-table-column prop="address" label="默认地址" show-overflow-tooltip />
-          <el-table-column prop="orderCount" label="订单数" width="100" align="center" sortable />
-          <el-table-column prop="totalSpent" label="总消费" width="120" align="right" sortable>
+          <el-table-column prop="name" label="客户名" min-width="120" align="center" />
+          <el-table-column prop="phone" label="电话" min-width="150" align="center" />
+          <el-table-column prop="address" label="默认地址" min-width="200" show-overflow-tooltip align="center" />
+          <el-table-column prop="orderCount" label="订单数" min-width="100" align="center" sortable />
+          <el-table-column prop="totalSpent" label="总消费" min-width="120" align="right" sortable>
               <template #default="scope">¥ {{ scope.row.totalSpent }}</template>
           </el-table-column>
-          <el-table-column prop="createTime" label="首次录入" width="160">
+          <el-table-column prop="createTime" label="首次录入" min-width="160" align="center">
               <template #default="scope">{{ scope.row.createTime ? scope.row.createTime.replace('T', ' ') : '' }}</template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="100" align="center">
