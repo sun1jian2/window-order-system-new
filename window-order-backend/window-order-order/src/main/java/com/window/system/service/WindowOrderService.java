@@ -104,12 +104,11 @@ public class WindowOrderService {
         Customer customer = res.getData();
         
         if (customer == null) {
-            customer = new Customer();
-            customer.setName(req.getCustomerName());
-            customer.setPhone(req.getCustomerPhone());
-            customer.setAddress(req.getAddress()); // Use full address as default
-            customer.setCreateBy(req.getCurrentUserId());
-            customerClient.save(customer);
+            com.window.system.model.req.CustomerSaveReq saveReq = new com.window.system.model.req.CustomerSaveReq();
+            saveReq.setName(req.getCustomerName());
+            saveReq.setPhone(req.getCustomerPhone());
+            saveReq.setAddress(req.getAddress()); // Use full address as default
+            customerClient.save(saveReq);
             // Fetch again to get ID? Or save returns ID?
             // save API returns String "Saved". It doesn't return ID.
             // But if I create it, I need the ID.
@@ -123,8 +122,12 @@ public class WindowOrderService {
         } else {
             // Optional: Update address if changed? Let's just update if empty
             if (customer.getAddress() == null || customer.getAddress().isEmpty()) {
-                customer.setAddress(req.getAddress());
-                customerClient.save(customer);
+                com.window.system.model.req.CustomerSaveReq saveReq = new com.window.system.model.req.CustomerSaveReq();
+                saveReq.setId(customer.getId());
+                saveReq.setName(customer.getName());
+                saveReq.setPhone(customer.getPhone());
+                saveReq.setAddress(req.getAddress());
+                customerClient.save(saveReq);
             }
             order.setCustomerId(customer.getId());
         }

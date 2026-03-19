@@ -18,5 +18,5 @@ public interface CustomerClient {
     Result<Customer> getById(@org.springframework.web.bind.annotation.PathVariable("id") Long id);
     
     @PostMapping("/save")
-    Result<String> save(@RequestBody Customer customer);
+    Result<String> save(@RequestBody com.window.system.model.req.CustomerSaveReq req);
 }
