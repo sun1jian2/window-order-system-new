@@ -41,7 +41,7 @@ spring:
         - id: brand-service
           uri: lb://window-order-brand
           predicates:
-            - Path=/api/brand/**
+            - Path=/api/brand/**, /api/product/**, /api/product/category/**
 
         - id: customer-service
           uri: lb://window-order-customer
@@ -51,7 +51,7 @@ spring:
         - id: order-service
           uri: lb://window-order-order
           predicates:
-            - Path=/api/order/**, /api/payment/**, /api/remeasure/**, /api/after-sales/**, /api/sales-target/**, /api/dashboard/**, /api/export-task/**, /api/product/**, /api/product/category/**
+            - Path=/api/order/**, /api/payment/**, /api/remeasure/**, /api/after-sales/**, /api/sales-target/**, /api/dashboard/**, /api/export-task/**
 
 window:
   cache:
