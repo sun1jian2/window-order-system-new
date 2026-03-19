@@ -128,4 +128,8 @@ public class WindowOrder {
     private Long updateBy;
     @ExcelIgnore
     private Boolean isDeleted;
+    
+    // Order Items
+    @ExcelIgnore
+    private java.util.List<OrderItem> items;
 }

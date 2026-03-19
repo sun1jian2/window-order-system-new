@@ -51,7 +51,7 @@ spring:
         - id: order-service
           uri: lb://window-order-order
           predicates:
-            - Path=/api/order/**, /api/payment/**, /api/remeasure/**, /api/after-sales/**, /api/sales-target/**, /api/dashboard/**, /api/export-task/**
+            - Path=/api/order/**, /api/payment/**, /api/remeasure/**, /api/after-sales/**, /api/sales-target/**, /api/dashboard/**, /api/export-task/**, /api/product/**, /api/product/category/**
 
 window:
   cache:

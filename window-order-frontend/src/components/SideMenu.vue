@@ -55,10 +55,15 @@
         <template #title>账号管理</template>
       </el-menu-item>
       
-      <el-menu-item index="/brands" v-if="userStore.currentUser.role === 'ADMIN'">
-        <el-icon><Goods /></el-icon>
-        <template #title>品牌管理</template>
-      </el-menu-item>
+      <el-sub-menu index="catalog" v-if="userStore.currentUser.role === 'ADMIN'">
+        <template #title>
+          <el-icon><Menu /></el-icon>
+          <span>产品目录</span>
+        </template>
+        <el-menu-item index="/products">产品管理</el-menu-item>
+        <el-menu-item index="/product-categories">产品分类</el-menu-item>
+        <el-menu-item index="/brands">品牌管理</el-menu-item>
+      </el-sub-menu>
       
       <el-menu-item index="/export-center">
         <el-icon><Download /></el-icon>
@@ -77,7 +82,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '../stores/user'
-import { House, Odometer, List, User, Goods, Document, Service, UserFilled, Tools, Trophy, Download } from '@element-plus/icons-vue'
+import { House, Odometer, List, User, Goods, Document, Service, UserFilled, Tools, Trophy, Download, Menu } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const userStore = useUserStore()

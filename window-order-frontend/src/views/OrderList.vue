@@ -85,7 +85,6 @@
           <el-table-column prop="orderNo" label="订单号" width="190" show-overflow-tooltip />
           <el-table-column prop="customerName" label="客户名" width="90" />
           <el-table-column prop="customerPhone" label="电话" width="120" />
-          <el-table-column prop="brand" label="品牌" width="90" />
           <el-table-column label="安装地址" min-width="150" show-overflow-tooltip>
              <template #default="scope">
                 {{ scope.row.address }}
@@ -184,7 +183,7 @@
     </div>
 
     <!-- Dialog -->
-    <el-dialog v-model="dialogVisible" :title="dialogType === 'create' ? '新建订单' : '编辑订单'" width="800px" destroy-on-close>
+    <el-dialog v-model="dialogVisible" :title="dialogType === 'create' ? '新建订单' : '编辑订单'" width="800px" top="5vh" destroy-on-close>
       <el-form :model="form" label-width="100px" class="dialog-form">
         <div class="form-section-title">客户信息</div>
         <el-row :gutter="20">
@@ -214,53 +213,68 @@
 
         <div class="form-section-title">窗户详情</div>
         <el-row :gutter="20">
-          <el-col :span="8">
-             <el-form-item label="品牌">
-              <el-select v-model="form.brand" placeholder="选择品牌" style="width: 100%">
-                <el-option v-for="item in brandList" :key="item.id" :label="item.name" :value="item.name" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-             <el-form-item label="窗型">
-               <el-select v-model="form.windowType" placeholder="选择/输入" style="width: 100%" allow-create filterable default-first-option>
-                 <el-option label="推拉窗" value="推拉窗" />
-                 <el-option label="平开窗" value="平开窗" />
-                 <el-option label="内倒窗" value="内倒窗" />
-                 <el-option label="固定窗" value="固定窗" />
-               </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="颜色">
-               <el-input v-model="form.color" placeholder="如：白色" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <el-form-item label="宽度(mm)">
-              <el-input-number v-model="form.width" controls-position="right" style="width: 100%" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="高度(mm)">
-              <el-input-number v-model="form.height" controls-position="right" style="width: 100%" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="玻璃规格">
-               <el-input v-model="form.glassSpec" placeholder="如：5+12A+5" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="订单价格">
-              <el-input-number v-model="form.price" :precision="2" :step="1" :min="0" controls-position="right" style="width: 100%">
-                 <template #prefix>￥</template>
-              </el-input-number>
-            </el-form-item>
+          <el-col :span="24">
+            <el-table :data="form.items" border style="width: 100%; margin-bottom: 15px;" size="small" :header-cell-style="{background:'#f7f9fc', color:'#606266'}">
+              <el-table-column label="产品" min-width="180">
+                <template #default="scope">
+                  <el-select v-model="scope.row.productId" placeholder="选择产品" style="width: 100%" filterable @change="(val) => handleProductChange(val, scope.row)">
+                    <el-option v-for="p in productList" :key="p.id" :label="p.name" :value="p.id" />
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column label="宽(mm)" width="110">
+                <template #default="scope">
+                  <el-input-number v-model="scope.row.width" :min="0" :controls="false" placeholder="宽度" style="width: 100%" @change="calculateItemPrice(scope.row)" />
+                </template>
+              </el-table-column>
+              <el-table-column label="高(mm)" width="110">
+                <template #default="scope">
+                  <el-input-number v-model="scope.row.height" :min="0" :controls="false" placeholder="高度" style="width: 100%" @change="calculateItemPrice(scope.row)" />
+                </template>
+              </el-table-column>
+              <el-table-column label="面积(㎡)" width="90" align="center">
+                <template #default="scope">
+                  <span style="color: #409EFF; font-weight: bold;">{{ scope.row.area ? scope.row.area.toFixed(2) : '0.00' }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="数量" width="100">
+                <template #default="scope">
+                  <el-input-number v-model="scope.row.quantity" :min="1" :controls="false" style="width: 100%" @change="calculateItemPrice(scope.row)" />
+                </template>
+              </el-table-column>
+              <el-table-column label="单价(元/㎡)" width="110">
+                <template #default="scope">
+                  <el-input-number v-model="scope.row.unitPrice" :min="0" :controls="false" placeholder="单价" style="width: 100%" @change="calculateItemPrice(scope.row)" />
+                </template>
+              </el-table-column>
+              <el-table-column label="小计" width="120" align="right">
+                <template #default="scope">
+                  <span style="color: #f56c6c; font-weight: bold; font-size: 14px;">¥ {{ scope.row.totalPrice ? scope.row.totalPrice.toFixed(2) : '0.00' }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="60" align="center" fixed="right">
+                <template #default="scope">
+                  <el-button type="danger" :icon="Delete" link @click="removeOrderItem(scope.$index)" />
+                </template>
+              </el-table-column>
+              <template #empty>
+                <el-empty description="暂无产品明细，请点击下方按钮添加" :image-size="60" />
+              </template>
+            </el-table>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background-color: #f8f9fa; padding: 10px 15px; border-radius: 6px; border: 1px dashed #dcdfe6;">
+              <el-button type="primary" plain :icon="Plus" @click="addOrderItem">添加产品明细</el-button>
+              <div style="display: flex; align-items: center;">
+                <span style="margin-right: 15px; color: #606266; font-size: 14px;">合计面积: <strong style="color: #409EFF">{{ totalAreaText }} ㎡</strong></span>
+                <span style="color: #606266; font-size: 14px; margin-right: 10px;">订单总价:</span>
+                <el-input-number v-model="form.price" :precision="2" :step="100" :min="0" controls-position="right" style="width: 150px" class="total-price-input">
+                   <template #prefix>￥</template>
+                </el-input-number>
+                <el-tooltip content="系统已根据明细自动计算，您也可以手动修改以打折或抹零" placement="top">
+                  <el-icon style="margin-left: 8px; color: #909399; cursor: help;"><InfoFilled /></el-icon>
+                </el-tooltip>
+              </div>
+            </div>
           </el-col>
         </el-row>
 
@@ -384,10 +398,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Plus, Edit, Delete, User, Phone, Goods, House, SwitchButton, UserFilled, ArrowDown, View, Refresh, Download, Tools } from '@element-plus/icons-vue'
+import { Search, Plus, Edit, Delete, User, Phone, Goods, House, SwitchButton, UserFilled, ArrowDown, View, Refresh, Download, Tools, InfoFilled } from '@element-plus/icons-vue'
 import { regionData, codeToText } from 'element-china-area-data'
 import { listOrders, createOrder, updateOrder, deleteOrder } from '../api/order'
 import { assignRemeasureTask } from '../api/remeasure'
@@ -404,6 +418,7 @@ const route = useRoute()
 const loading = ref(false)
 const tableData = ref([])
 const brandList = ref([])
+const productList = ref([])
 const salesList = ref([])
 const installerList = ref([])
 const customerOptions = ref([])
@@ -445,6 +460,7 @@ const form = reactive({
   width: 0,
   height: 0,
   price: 0,
+  items: [],
   installProgress: 'WAITING',
   productionProgress: 'WAITING',
   scheduledInstallDate: null,
@@ -486,6 +502,12 @@ onMounted(async () => {
     console.error('Fetch users failed', e)
   }
   
+  try {
+    await fetchProducts()
+  } catch (e) {
+    console.error('Fetch products failed', e)
+  }
+  
   fetchData()
 })
 
@@ -519,6 +541,17 @@ const fetchBrands = async () => {
         const res = await request.get('/brand/all')
         if (res.code === 200) {
             brandList.value = res.data
+        }
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+const fetchProducts = async () => {
+    try {
+        const res = await request.get('/product/listAllActive')
+        if (res.code === 200) {
+            productList.value = res.data
         }
     } catch (e) {
         console.error(e)
@@ -621,6 +654,7 @@ const handleCreate = () => {
     width: 0,
     height: 0,
     price: 0,
+    items: [],
     installProgress: INSTALL_PROGRESS.WAITING,
     productionProgress: PRODUCTION_PROGRESS.WAITING,
     scheduledInstallDate: null,
@@ -633,13 +667,28 @@ const handleCreate = () => {
   dialogVisible.value = true
 }
 
-const handleEdit = (row) => {
+const handleEdit = async (row) => {
   if (userStore.currentUser.role === 'SALES' && row.salespersonId !== userStore.currentUser.id) {
       ElMessage.warning('您只能修改自己的订单')
       return
   }
   dialogType.value = 'edit'
-  Object.assign(form, row)
+  
+  // Fetch full order details including items
+  try {
+    const res = await request.get(`/order/detail/${row.id}`)
+    if (res.code === 200) {
+      Object.assign(form, res.data)
+      if (!form.items) form.items = []
+    } else {
+      Object.assign(form, row)
+      if (!form.items) form.items = []
+    }
+  } catch (e) {
+    Object.assign(form, row)
+    if (!form.items) form.items = []
+  }
+
   if (!form.salespersonId) {
       form.salespersonId = userStore.currentUser.id
   }
@@ -716,6 +765,73 @@ const handleStatusChange = (val) => {
         form.productionProgress = PRODUCTION_PROGRESS.WAITING
     }
 }
+
+// Product Items Methods
+const addOrderItem = () => {
+  form.items.push({
+    productId: null,
+    width: 0,
+    height: 0,
+    area: 0,
+    quantity: 1,
+    unitPrice: 0,
+    totalPrice: 0,
+    color: '',
+    glassSpec: ''
+  })
+}
+
+const removeOrderItem = (index) => {
+  form.items.splice(index, 1)
+  recalculateTotal()
+}
+
+const handleProductChange = (productId, row) => {
+  const product = productList.value.find(p => p.id === productId)
+  if (product) {
+    row.unitPrice = product.basePrice
+    row.color = product.colorOptions ? product.colorOptions.split(',')[0] : ''
+    row.glassSpec = product.glassOptions ? product.glassOptions.split(',')[0] : ''
+    calculateItemPrice(row)
+  }
+}
+
+const calculateItemPrice = (row) => {
+  if (row.width && row.height) {
+    row.area = (row.width / 1000) * (row.height / 1000)
+  } else {
+    row.area = 0
+  }
+  
+  if (row.area && row.unitPrice && row.quantity) {
+    row.totalPrice = row.area * row.unitPrice * row.quantity
+  } else {
+    row.totalPrice = 0
+  }
+  
+  recalculateTotal()
+}
+
+const recalculateTotal = () => {
+  let total = 0
+  form.items.forEach(item => {
+    total += Number(item.totalPrice || 0)
+  })
+  
+  if (total > 0) {
+    form.price = Number(total.toFixed(2))
+  }
+}
+
+const totalAreaText = computed(() => {
+  let totalArea = 0
+  if (form.items && form.items.length > 0) {
+    form.items.forEach(item => {
+      totalArea += Number(item.area || 0) * Number(item.quantity || 1)
+    })
+  }
+  return totalArea.toFixed(2)
+})
 
 const submitForm = async () => {
   // Attach auth info
@@ -976,5 +1092,11 @@ const getLogisticsStatusLabel = (status) => {
 :deep(.el-dialog__footer) {
   border-top: 1px solid #EBEEF5;
   padding: 20px;
+}
+
+.total-price-input :deep(.el-input__inner) {
+  color: #f56c6c;
+  font-weight: bold;
+  font-size: 16px;
 }
 </style>

@@ -4,12 +4,15 @@ import cn.hutool.core.util.IdUtil;
 import com.window.system.api.CustomerClient;
 import com.window.system.common.Result;
 import com.window.system.mapper.WindowOrderMapper;
+import com.window.system.mapper.OrderItemMapper;
 import com.window.system.model.dto.PageResponse;
 import com.window.system.model.entity.WindowOrder;
+import com.window.system.model.entity.OrderItem;
 import com.window.system.model.entity.Customer;
 import com.window.system.model.req.OrderCreateReq;
 import com.window.system.model.req.OrderListReq;
 import com.window.system.model.req.OrderUpdateReq;
+import com.window.system.model.req.OrderItemSaveReq;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,9 @@ public class WindowOrderService {
 
     @Autowired
     private WindowOrderMapper windowOrderMapper;
+    
+    @Autowired
+    private OrderItemMapper orderItemMapper;
     
     @Autowired
     private NotificationService notificationService;
@@ -52,6 +58,17 @@ public class WindowOrderService {
         initializeOrder(order);
         
         windowOrderMapper.insert(order);
+        
+        // Handle order items
+        if (req.getItems() != null && !req.getItems().isEmpty()) {
+            for (OrderItemSaveReq itemReq : req.getItems()) {
+                OrderItem item = new OrderItem();
+                BeanUtils.copyProperties(itemReq, item);
+                item.setOrderId(order.getId());
+                orderItemMapper.insert(item);
+            }
+        }
+        
         log.info("Order created: {}", order.getOrderNo());
         
         notifyNewOrder(req, order);
@@ -159,6 +176,18 @@ public class WindowOrderService {
         sendProgressNotification(req, oldOrder);
         
         windowOrderMapper.update(order);
+        
+        // Handle order items (simple delete and insert)
+        if (req.getItems() != null) {
+            orderItemMapper.deleteByOrderId(order.getId());
+            for (OrderItemSaveReq itemReq : req.getItems()) {
+                OrderItem item = new OrderItem();
+                BeanUtils.copyProperties(itemReq, item);
+                item.setOrderId(order.getId());
+                orderItemMapper.insert(item);
+            }
+        }
+        
         log.info("Order updated: {}", order.getId());
         return Result.success("Order updated successfully");
     }
@@ -217,6 +246,10 @@ public class WindowOrderService {
     }
     
     public Result<WindowOrder> get(Long id) {
-        return Result.success(windowOrderMapper.getById(id));
+        WindowOrder order = windowOrderMapper.getById(id);
+        if (order != null) {
+            order.setItems(orderItemMapper.listByOrderId(id));
+        }
+        return Result.success(order);
     }
 }

@@ -47,6 +47,10 @@ public class OrderUpdateReq {
     private String city;
     private String district;
     private String detailAddress;
+    
+    // Order items (Smart Pricing)
+    @jakarta.validation.Valid
+    private java.util.List<OrderItemSaveReq> items;
 
 
     @Override

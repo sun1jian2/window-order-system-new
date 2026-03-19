@@ -57,6 +57,18 @@ const routes = [
         meta: { requiresAuth: true, title: '支付详情' }
       },
       {
+        path: 'products',
+        name: 'ProductList',
+        component: () => import('../views/ProductList.vue'),
+        meta: { requiresAuth: true, title: '产品管理' }
+      },
+      {
+        path: 'product-categories',
+        name: 'ProductCategoryList',
+        component: () => import('../views/ProductCategoryList.vue'),
+        meta: { requiresAuth: true, title: '产品分类' }
+      },
+      {
         path: 'brands',
         name: 'BrandList',
         component: BrandList,

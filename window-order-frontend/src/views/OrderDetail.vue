@@ -47,7 +47,26 @@
         </el-descriptions>
       </el-card>
 
-      <el-card class="box-card mt-4" shadow="never">
+      <el-card class="box-card mt-4" shadow="never" v-if="order.items && order.items.length > 0">
+        <template #header>
+          <div class="card-header">
+            <span>产品明细</span>
+          </div>
+        </template>
+        <el-table :data="order.items" border style="width: 100%">
+          <el-table-column prop="productName" label="产品名称" />
+          <el-table-column prop="width" label="宽(mm)" width="100" />
+          <el-table-column prop="height" label="高(mm)" width="100" />
+          <el-table-column prop="area" label="面积(㎡)" width="100" />
+          <el-table-column prop="quantity" label="数量" width="80" />
+          <el-table-column prop="unitPrice" label="单价(元/㎡)" width="120" />
+          <el-table-column prop="totalPrice" label="小计" width="120">
+             <template #default="scope">¥{{ scope.row.totalPrice }}</template>
+          </el-table-column>
+        </el-table>
+      </el-card>
+
+      <el-card class="box-card mt-4" shadow="never" v-if="!order.items || order.items.length === 0">
         <template #header>
           <div class="card-header">
             <span>窗户规格</span>
