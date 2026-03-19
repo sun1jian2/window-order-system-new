@@ -21,7 +21,7 @@ public class Supplier implements Serializable {
     private Date createTime;
     private Long updateBy;
     private Date updateTime;
-    private Integer isDeleted;
+    private Boolean isDeleted;
 
     @Override
     public String toString() {

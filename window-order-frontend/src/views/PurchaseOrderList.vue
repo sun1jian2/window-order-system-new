@@ -23,17 +23,17 @@
 
       <el-card class="table-card" shadow="hover">
         <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
-          <el-table-column prop="orderNo" label="采购单号" width="180" align="center" />
+          <el-table-column prop="orderNo" label="采购单号" min-width="220" align="center" />
           <el-table-column prop="supplierName" label="供应商" min-width="150" align="center" />
-          <el-table-column prop="totalAmount" label="订单总金额" width="120" align="right">
+          <el-table-column prop="totalAmount" label="订单总金额" min-width="120" align="right">
              <template #default="scope">
                <span style="color: #f56c6c; font-weight: bold;">¥ {{ scope.row.totalAmount }}</span>
              </template>
           </el-table-column>
-          <el-table-column prop="purchaseDate" label="采购日期" width="120" align="center">
+          <el-table-column prop="purchaseDate" label="采购日期" min-width="120" align="center">
             <template #default="scope">{{ scope.row.purchaseDate ? scope.row.purchaseDate.substring(0, 10) : '' }}</template>
           </el-table-column>
-          <el-table-column prop="status" label="状态" width="100" align="center">
+          <el-table-column prop="status" label="状态" min-width="100" align="center">
             <template #default="scope">
               <el-tag :type="getStatusType(scope.row.status)">{{ getStatusText(scope.row.status) }}</el-tag>
             </template>

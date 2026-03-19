@@ -13,7 +13,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception e) {
         log.error("System Error", e);
-        return Result.error("System Error: " + e.getMessage());
+        String errorMsg = e.getMessage();
+        if (errorMsg == null || errorMsg.isEmpty()) {
+            errorMsg = e.getClass().getSimpleName() + " occurred";
+            if (e.getCause() != null) {
+                errorMsg += ": " + e.getCause().getMessage();
+            }
+        }
+        return Result.error("System Error: " + errorMsg);
     }
 
     @ExceptionHandler(BindException.class)

@@ -24,7 +24,7 @@ public class Material implements Serializable {
     private Date createTime;
     private Long updateBy;
     private Date updateTime;
-    private Integer isDeleted;
+    private Boolean isDeleted;
     
     // Transient fields
     private String categoryName;
