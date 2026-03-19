@@ -82,50 +82,40 @@
       <!-- Table -->
       <el-card class="table-card" shadow="hover">
         <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading" :header-cell-style="{background:'#f5f7fa', color:'#606266'}">
-          <el-table-column prop="orderNo" label="订单号" width="190" show-overflow-tooltip />
-          <el-table-column prop="customerName" label="客户名" width="90" />
-          <el-table-column prop="customerPhone" label="电话" width="120" />
-          <el-table-column label="安装地址" min-width="150" show-overflow-tooltip>
-             <template #default="scope">
-                {{ scope.row.address }}
-             </template>
-          </el-table-column>
-          <el-table-column label="尺寸 (宽x高)" width="140">
-            <template #default="scope">
-              <el-tag type="info" size="small">{{ scope.row.width }}mm x {{ scope.row.height }}mm</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="price" label="价格" width="100">
+          <el-table-column prop="orderNo" label="订单号" min-width="190" show-overflow-tooltip />
+          <el-table-column prop="customerName" label="客户名" min-width="100" />
+          <el-table-column prop="customerPhone" label="电话" min-width="130" />
+          <el-table-column prop="price" label="价格" min-width="110">
              <template #default="scope">
                <span class="price-text">¥ {{ scope.row.price }}</span>
              </template>
           </el-table-column>
-          <el-table-column prop="paidAmount" label="已付" width="100">
+          <el-table-column prop="paidAmount" label="已付" min-width="110">
              <template #default="scope">
                <span class="price-text" style="color: #67c23a">¥ {{ scope.row.paidAmount || 0 }}</span>
              </template>
           </el-table-column>
-          <el-table-column label="支付状态" width="100">
+          <el-table-column label="支付状态" min-width="110">
             <template #default="scope">
                <el-tag size="small" :type="getPaymentStatusType(scope.row.paymentStatus)" effect="light">
                   {{ getPaymentStatusLabel(scope.row.paymentStatus) }}
                 </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="状态" width="90">
+          <el-table-column label="状态" min-width="100">
             <template #default="scope">
                <el-tag v-if="scope.row.status === 'DRAFT'" type="info" effect="plain">草稿</el-tag>
                <el-tag v-else type="success" effect="plain">已提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="制作进度" width="100">
+          <el-table-column label="制作进度" min-width="110">
             <template #default="scope">
                <el-tag size="small" :type="getProgressType(scope.row.productionProgress)" effect="light">
                   {{ getProgressLabel(scope.row.productionProgress) }}
                 </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="物流状态" width="100">
+          <el-table-column label="物流状态" min-width="110">
             <template #default="scope">
                <el-tag v-if="scope.row.logisticsStatus" size="small" :type="getLogisticsStatusType(scope.row.logisticsStatus)" effect="light">
                   {{ getLogisticsStatusLabel(scope.row.logisticsStatus) }}
@@ -133,21 +123,21 @@
                 <span v-else class="text-placeholder">-</span>
             </template>
           </el-table-column>
-          <el-table-column label="安装进度" width="100">
+          <el-table-column label="安装进度" min-width="110">
             <template #default="scope">
                <el-tag size="small" :type="getProgressType(scope.row.installProgress)" effect="light">
                   {{ getProgressLabel(scope.row.installProgress) }}
                 </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="salespersonName" label="销售员" width="90" />
-          <el-table-column prop="installerName" label="安装师傅" width="90">
+          <el-table-column prop="salespersonName" label="销售员" min-width="100" />
+          <el-table-column prop="installerName" label="安装师傅" min-width="100">
             <template #default="scope">
               <span v-if="scope.row.installerName">{{ scope.row.installerName }}</span>
               <span v-else class="text-placeholder">未分配</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" width="190" align="center">
+          <el-table-column label="操作" fixed="right" width="220" align="center">
             <template #default="scope">
               <div class="action-cell">
                 <el-tooltip content="详情" placement="top">
@@ -156,7 +146,7 @@
                 <el-tooltip content="编辑" placement="top">
                   <el-button class="action-btn" circle size="small" type="primary" plain :icon="Edit" @click="handleEdit(scope.row)" />
                 </el-tooltip>
-                <el-tooltip content="成本核算" placement="top" v-if="scope.row.status !== 'DRAFT'">
+                <el-tooltip content="成本核算" placement="top" v-if="scope.row.status !== 'DRAFT' && userStore.currentUser.role === 'ADMIN'">
                   <el-button class="action-btn" circle size="small" type="success" plain :icon="Money" @click="handleCost(scope.row)" />
                 </el-tooltip>
                 <el-tooltip v-if="userStore.currentUser.role === 'ADMIN' || userStore.currentUser.role === 'SALES'" content="复尺" placement="top">
