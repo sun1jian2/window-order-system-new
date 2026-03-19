@@ -60,7 +60,7 @@
           <el-icon><Menu /></el-icon>
           <span>产品目录</span>
         </template>
-        <el-menu-item index="/products">产品管理</el-menu-item>
+        <el-menu-item index="/products">产品列表</el-menu-item>
         <el-menu-item index="/product-categories">产品分类</el-menu-item>
         <el-menu-item index="/brands">品牌管理</el-menu-item>
       </el-sub-menu>

@@ -21,330 +21,383 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for after_sales_order
 -- ----------------------------
 DROP TABLE IF EXISTS `after_sales_order`;
-CREATE TABLE `after_sales_order`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `ticket_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '工单编号',
-  `order_id` bigint NOT NULL COMMENT '关联原订单ID',
-  `customer_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '客户姓名',
-  `customer_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联系电话',
-  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '上门地址',
-  `issue_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '问题描述',
-  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'PENDING' COMMENT '状态：PENDING(待处理), ASSIGNED(已指派), PROCESSING(处理中), COMPLETED(已完成), CANCELLED(已取消)',
-  `handler_id` bigint NULL DEFAULT NULL COMMENT '处理人ID（通常是安装师傅）',
-  `appointment_time` datetime NULL DEFAULT NULL COMMENT '预约上门时间',
-  `completion_time` datetime NULL DEFAULT NULL COMMENT '完成时间',
-  `solution` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '解决方案/维修结果',
-  `fee` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '维修费用',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '逻辑删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_ticket_no`(`ticket_no` ASC) USING BTREE,
-  INDEX `idx_order_id`(`order_id` ASC) USING BTREE,
-  INDEX `idx_handler_id`(`handler_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '售后工单表' ROW_FORMAT = Dynamic;
+CREATE TABLE `after_sales_order`
+(
+    `id`                bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `ticket_no`         varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '工单编号',
+    `order_id`          bigint                                                        NOT NULL COMMENT '关联原订单ID',
+    `customer_name`     varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '客户姓名',
+    `customer_phone`    varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '联系电话',
+    `address`           varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '上门地址',
+    `issue_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci         NULL COMMENT '问题描述',
+    `status`            varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT 'PENDING' COMMENT '状态：PENDING(待处理), ASSIGNED(已指派), PROCESSING(处理中), COMPLETED(已完成), CANCELLED(已取消)',
+    `handler_id`        bigint                                                        NULL DEFAULT NULL COMMENT '处理人ID（通常是安装师傅）',
+    `appointment_time`  datetime                                                      NULL DEFAULT NULL COMMENT '预约上门时间',
+    `completion_time`   datetime                                                      NULL DEFAULT NULL COMMENT '完成时间',
+    `solution`          text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci         NULL COMMENT '解决方案/维修结果',
+    `fee`               decimal(10, 2)                                                NULL DEFAULT 0.00 COMMENT '维修费用',
+    `create_by`         bigint                                                        NULL DEFAULT NULL COMMENT '创建人ID',
+    `create_time`       datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`       datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_deleted`        tinyint(1)                                                    NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_ticket_no` (`ticket_no` ASC) USING BTREE,
+    INDEX `idx_order_id` (`order_id` ASC) USING BTREE,
+    INDEX `idx_handler_id` (`handler_id` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '售后工单表'
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for brand
 -- ----------------------------
 DROP TABLE IF EXISTS `brand`;
-CREATE TABLE `brand`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '品牌名称',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '品牌描述',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人ID',
-  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除（0：否，1：是）',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_name`(`name` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '窗户品牌表' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `brand`
+(
+    `id`          bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`        varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '品牌名称',
+    `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '品牌描述',
+    `create_by`   bigint                                                        NULL DEFAULT NULL COMMENT '创建人ID',
+    `update_by`   bigint                                                        NULL DEFAULT NULL COMMENT '更新人ID',
+    `is_deleted`  tinyint(1)                                                    NULL DEFAULT 0 COMMENT '是否删除（0：否，1：是）',
+    `create_time` datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_name` (`name` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 11
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '窗户品牌表'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for customer
 -- ----------------------------
 DROP TABLE IF EXISTS `customer`;
-CREATE TABLE `customer`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '客户姓名',
-  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '联系电话',
-  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '默认地址',
-  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注（如：客户偏好、性格等）',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '逻辑删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_phone`(`phone` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '客户档案表' ROW_FORMAT = Dynamic;
+CREATE TABLE `customer`
+(
+    `id`          bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`        varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '客户姓名',
+    `phone`       varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '联系电话',
+    `address`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '默认地址',
+    `remark`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注（如：客户偏好、性格等）',
+    `create_by`   bigint                                                        NULL DEFAULT NULL COMMENT '创建人ID',
+    `create_time` datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_deleted`  tinyint(1)                                                    NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_phone` (`phone` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 6
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '客户档案表'
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for order_item
 -- ----------------------------
 DROP TABLE IF EXISTS `order_item`;
-CREATE TABLE `order_item`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '??ID',
-  `order_id` bigint NOT NULL COMMENT '??ID',
-  `product_id` bigint NOT NULL COMMENT '??ID',
-  `width` decimal(10, 2) NOT NULL COMMENT '??(mm)',
-  `height` decimal(10, 2) NOT NULL COMMENT '??(mm)',
-  `area` decimal(10, 4) NOT NULL COMMENT '??(??)',
-  `quantity` int NOT NULL DEFAULT 1 COMMENT '??',
-  `unit_price` decimal(10, 2) NOT NULL COMMENT '????(?/??)',
-  `total_price` decimal(10, 2) NOT NULL COMMENT '??',
-  `color` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '?????',
-  `glass_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '???????',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??',
-  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '????',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '????',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '????',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '???????' ROW_FORMAT = Dynamic;
+CREATE TABLE `order_item`
+(
+    `id`          bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '??ID',
+    `order_id`    bigint                                                        NOT NULL COMMENT '??ID',
+    `product_id`  bigint                                                        NOT NULL COMMENT '??ID',
+    `width`       decimal(10, 2)                                                NOT NULL COMMENT '??(mm)',
+    `height`      decimal(10, 2)                                                NOT NULL COMMENT '??(mm)',
+    `area`        decimal(10, 4)                                                NOT NULL COMMENT '??(??)',
+    `quantity`    int                                                           NOT NULL DEFAULT 1 COMMENT '??',
+    `unit_price`  decimal(10, 2)                                                NOT NULL COMMENT '????(?/??)',
+    `total_price` decimal(10, 2)                                                NOT NULL COMMENT '??',
+    `color`       varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL     DEFAULT NULL COMMENT '?????',
+    `glass_spec`  varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL     DEFAULT NULL COMMENT '???????',
+    `remark`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL     DEFAULT NULL COMMENT '??',
+    `is_deleted`  tinyint(1)                                                    NULL     DEFAULT 0 COMMENT '????',
+    `create_time` datetime                                                      NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '????',
+    `update_time` datetime                                                      NULL     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '????',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '???????'
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for order_payment
 -- ----------------------------
 DROP TABLE IF EXISTS `order_payment`;
-CREATE TABLE `order_payment`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `order_id` bigint NOT NULL COMMENT '订单ID',
-  `amount` decimal(10, 2) NOT NULL COMMENT '收款金额',
-  `pay_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '收款时间',
-  `pay_method` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '支付方式（微信、支付宝、现金、转账）',
-  `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '操作人ID',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_order_id`(`order_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '订单收款记录表' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `order_payment`
+(
+    `id`          bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `order_id`    bigint                                                        NOT NULL COMMENT '订单ID',
+    `amount`      decimal(10, 2)                                                NOT NULL COMMENT '收款金额',
+    `pay_time`    datetime                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '收款时间',
+    `pay_method`  varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL     DEFAULT NULL COMMENT '支付方式（微信、支付宝、现金、转账）',
+    `remark`      varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL     DEFAULT NULL COMMENT '备注',
+    `create_by`   bigint                                                        NULL     DEFAULT NULL COMMENT '操作人ID',
+    `create_time` datetime                                                      NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_order_id` (`order_id` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 19
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '订单收款记录表'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for order_payment_attachment
 -- ----------------------------
 DROP TABLE IF EXISTS `order_payment_attachment`;
-CREATE TABLE `order_payment_attachment`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `payment_id` bigint NOT NULL COMMENT '支付记录ID',
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '附件URL',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_payment_id`(`payment_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '订单支付附件表' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `order_payment_attachment`
+(
+    `id`          bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `payment_id`  bigint                                                        NOT NULL COMMENT '支付记录ID',
+    `url`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '附件URL',
+    `create_time` datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_payment_id` (`payment_id` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 23
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '订单支付附件表'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for product
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
-CREATE TABLE `product`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '??ID',
-  `category_id` bigint NOT NULL COMMENT '??ID',
-  `brand_id` bigint NULL DEFAULT NULL COMMENT '??ID',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '?????????70???????',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '????',
-  `base_price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '??????/???',
-  `color_options` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??????????',
-  `glass_options` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??????????',
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '????',
-  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'ACTIVE' COMMENT '???ACTIVE, INACTIVE',
-  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '????',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '???ID',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '???ID',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '????',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '????',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '???' ROW_FORMAT = Dynamic;
+CREATE TABLE `product`
+(
+    `id`            bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '??ID',
+    `category_id`   bigint                                                        NOT NULL COMMENT '??ID',
+    `brand_id`      bigint                                                        NULL     DEFAULT NULL COMMENT '??ID',
+    `name`          varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '?????????70???????',
+    `code`          varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL     DEFAULT NULL COMMENT '????',
+    `base_price`    decimal(10, 2)                                                NOT NULL DEFAULT 0.00 COMMENT '??????/???',
+    `color_options` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL     DEFAULT NULL COMMENT '??????????',
+    `glass_options` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL     DEFAULT NULL COMMENT '??????????',
+    `description`   text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci         NULL COMMENT '????',
+    `status`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL     DEFAULT 'ACTIVE' COMMENT '???ACTIVE, INACTIVE',
+    `is_deleted`    tinyint(1)                                                    NULL     DEFAULT 0 COMMENT '????',
+    `create_by`     bigint                                                        NULL     DEFAULT NULL COMMENT '???ID',
+    `update_by`     bigint                                                        NULL     DEFAULT NULL COMMENT '???ID',
+    `create_time`   datetime                                                      NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '????',
+    `update_time`   datetime                                                      NULL     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '????',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '???'
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for product_category
 -- ----------------------------
 DROP TABLE IF EXISTS `product_category`;
-CREATE TABLE `product_category`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '??ID',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '????????????????????',
-  `sort` int NULL DEFAULT 0 COMMENT '??',
-  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '????',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '????',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '????',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '?????' ROW_FORMAT = Dynamic;
+CREATE TABLE `product_category`
+(
+    `id`          bigint                                                       NOT NULL AUTO_INCREMENT COMMENT '??ID',
+    `name`        varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '????????????????????',
+    `sort`        int                                                          NULL DEFAULT 0 COMMENT '??',
+    `is_deleted`  tinyint(1)                                                   NULL DEFAULT 0 COMMENT '????',
+    `create_time` datetime                                                     NULL DEFAULT CURRENT_TIMESTAMP COMMENT '????',
+    `update_time` datetime                                                     NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '????',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '?????'
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for remeasure_task
 -- ----------------------------
 DROP TABLE IF EXISTS `remeasure_task`;
-CREATE TABLE `remeasure_task`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `order_id` bigint NOT NULL COMMENT '订单ID',
-  `assignee_id` bigint NOT NULL COMMENT '指派师傅ID',
-  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'PENDING' COMMENT '状态：PENDING（待复尺）、COMPLETED（已完成）',
-  `precise_width` double NULL DEFAULT NULL COMMENT '精确宽度',
-  `precise_height` double NULL DEFAULT NULL COMMENT '精确高度',
-  `sketch_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手绘图URL',
-  `site_photos` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '现场图URL列表（JSON）',
-  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_order_id`(`order_id` ASC) USING BTREE,
-  INDEX `idx_assignee_id`(`assignee_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '复尺任务表' ROW_FORMAT = Dynamic;
+CREATE TABLE `remeasure_task`
+(
+    `id`             bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `order_id`       bigint                                                        NOT NULL COMMENT '订单ID',
+    `assignee_id`    bigint                                                        NOT NULL COMMENT '指派师傅ID',
+    `status`         varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL DEFAULT 'PENDING' COMMENT '状态：PENDING（待复尺）、COMPLETED（已完成）',
+    `precise_width`  double                                                        NULL     DEFAULT NULL COMMENT '精确宽度',
+    `precise_height` double                                                        NULL     DEFAULT NULL COMMENT '精确高度',
+    `sketch_url`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL     DEFAULT NULL COMMENT '手绘图URL',
+    `site_photos`    text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci         NULL COMMENT '现场图URL列表（JSON）',
+    `remark`         varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL     DEFAULT NULL COMMENT '备注',
+    `create_time`    datetime                                                      NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`    datetime                                                      NULL     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_order_id` (`order_id` ASC) USING BTREE,
+    INDEX `idx_assignee_id` (`assignee_id` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '复尺任务表'
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sales_target
 -- ----------------------------
 DROP TABLE IF EXISTS `sales_target`;
-CREATE TABLE `sales_target`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `salesperson_id` bigint NOT NULL COMMENT '销售员ID',
-  `target_month` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '目标月份，格式：YYYY-MM',
-  `target_amount` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '目标销售额',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人ID',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_sales_month`(`salesperson_id` ASC, `target_month` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售目标表' ROW_FORMAT = Dynamic;
+CREATE TABLE `sales_target`
+(
+    `id`             bigint                                                      NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `salesperson_id` bigint                                                      NOT NULL COMMENT '销售员ID',
+    `target_month`   varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '目标月份，格式：YYYY-MM',
+    `target_amount`  decimal(10, 2)                                              NOT NULL DEFAULT 0.00 COMMENT '目标销售额',
+    `create_by`      bigint                                                      NULL     DEFAULT NULL COMMENT '创建人ID',
+    `create_time`    datetime                                                    NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`      bigint                                                      NULL     DEFAULT NULL COMMENT '更新人ID',
+    `update_time`    datetime                                                    NULL     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_sales_month` (`salesperson_id` ASC, `target_month` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 6
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售目标表'
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_export_task
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_export_task`;
-CREATE TABLE `sys_export_task`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `task_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '任务名称',
-  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '状态: PENDING-待处理, PROCESSING-处理中, COMPLETED-完成, FAILED-失败',
-  `file_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件下载地址',
-  `file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件名',
-  `error_msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '错误信息',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `finish_time` datetime NULL DEFAULT NULL COMMENT '完成时间',
-  `export_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '导出类型: ORDER-订单, etc.',
-  `export_params` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '导出参数(JSON)',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_create_by`(`create_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '导出任务表' ROW_FORMAT = Dynamic;
+CREATE TABLE `sys_export_task`
+(
+    `id`            bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `task_name`     varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '任务名称',
+    `status`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '状态: PENDING-待处理, PROCESSING-处理中, COMPLETED-完成, FAILED-失败',
+    `file_url`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件下载地址',
+    `file_name`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件名',
+    `error_msg`     text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci         NULL COMMENT '错误信息',
+    `create_by`     bigint                                                        NULL DEFAULT NULL COMMENT '创建人ID',
+    `create_time`   datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `finish_time`   datetime                                                      NULL DEFAULT NULL COMMENT '完成时间',
+    `export_type`   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '导出类型: ORDER-订单, etc.',
+    `export_params` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci         NULL COMMENT '导出参数(JSON)',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_create_by` (`create_by` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 29
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '导出任务表'
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_operation_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_operation_log`;
-CREATE TABLE `sys_operation_log`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_id` bigint NULL DEFAULT NULL COMMENT '操作人ID',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '操作人用户名',
-  `module` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '模块名称',
-  `operation` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '操作类型',
-  `method` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '方法名称',
-  `params` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '请求参数',
-  `ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'IP地址',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
-  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态(1:成功 0:失败)',
-  `error_msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '错误信息',
-  `cost_time` bigint NULL DEFAULT NULL COMMENT '耗时(毫秒)',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_user_id`(`user_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19052 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统操作日志表' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `sys_operation_log`
+(
+    `id`          bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`     bigint                                                        NULL DEFAULT NULL COMMENT '操作人ID',
+    `username`    varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '操作人用户名',
+    `module`      varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '模块名称',
+    `operation`   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '操作类型',
+    `method`      varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '方法名称',
+    `params`      text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci         NULL COMMENT '请求参数',
+    `ip`          varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT 'IP地址',
+    `create_time` datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+    `status`      tinyint(1)                                                    NULL DEFAULT 1 COMMENT '状态(1:成功 0:失败)',
+    `error_msg`   text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci         NULL COMMENT '错误信息',
+    `cost_time`   bigint                                                        NULL DEFAULT NULL COMMENT '耗时(毫秒)',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_user_id` (`user_id` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 19052
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统操作日志表'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
-CREATE TABLE `sys_role`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `role_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色编码（英文）',
-  `role_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色名称（中文）',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_role_code`(`role_code` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色表' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `sys_role`
+(
+    `id`          bigint                                                       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `role_code`   varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色编码（英文）',
+    `role_name`   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色名称（中文）',
+    `create_time` datetime                                                     NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_role_code` (`role_code` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 4
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色表'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
-CREATE TABLE `sys_user`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名',
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
-  `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '真实姓名',
-  `role` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色：ADMIN（管理员）、SALES（销售员）、INSTALLER（安装师傅）',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人ID',
-  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除（0：否，1：是）',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_username`(`username` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户表' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `sys_user`
+(
+    `id`          bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `username`    varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '用户名',
+    `password`    varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
+    `real_name`   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '真实姓名',
+    `role`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '角色：ADMIN（管理员）、SALES（销售员）、INSTALLER（安装师傅）',
+    `create_by`   bigint                                                        NULL DEFAULT NULL COMMENT '创建人ID',
+    `update_by`   bigint                                                        NULL DEFAULT NULL COMMENT '更新人ID',
+    `is_deleted`  tinyint(1)                                                    NULL DEFAULT 0 COMMENT '是否删除（0：否，1：是）',
+    `create_time` datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_username` (`username` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 10
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户表'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for window_order
 -- ----------------------------
 DROP TABLE IF EXISTS `window_order`;
-CREATE TABLE `window_order`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `order_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '订单编号',
-  `customer_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '客户姓名',
-  `customer_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '客户电话',
-  `customer_id` bigint NULL DEFAULT NULL COMMENT '关联客户ID',
-  `address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '安装地址（完整）',
-  `province` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '省份编码',
-  `city` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '城市编码',
-  `district` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '区县编码',
-  `region_codes` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '区域编码（如：110000,110100）',
-  `detail_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户输入的详细地址',
-  `brand` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '窗户品牌',
-  `window_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '窗型（如：推拉、平开、内倒）',
-  `color` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '颜色',
-  `glass_spec` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '玻璃规格',
-  `width` double NULL DEFAULT NULL COMMENT '宽度（毫米）',
-  `height` double NULL DEFAULT NULL COMMENT '高度（毫米）',
-  `is_remeasured` tinyint(1) NULL DEFAULT 0 COMMENT '是否复尺（0：否，1：是）',
-  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
-  `paid_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '已付金额',
-  `payment_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'UNPAID' COMMENT '支付状态：UNPAID（未支付）、PARTIAL（部分支付）、PAID（已付清）',
-  `order_time` datetime NULL DEFAULT NULL COMMENT '下单时间',
-  `install_time` datetime NULL DEFAULT NULL COMMENT '计划安装时间',
-  `install_progress` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'WAITING' COMMENT '安装进度：WAITING（待安排）、SCHEDULED（已预约）、INSTALLING（安装中）、FINISHED（已完成）',
-  `production_progress` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'WAITING' COMMENT '制作进度：WAITING（待制作）、PRODUCING（制作中）、FINISHED（已完成）',
-  `logistics_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '物流状态：OUTBOUND（已出库）、SHIPPING（送货中）、INBOUND（已入库）',
-  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'SUBMITTED' COMMENT '订单状态：DRAFT（草稿）、SUBMITTED（已提交）',
-  `salesperson_id` bigint NULL DEFAULT NULL COMMENT '销售员ID',
-  `installer_id` bigint NULL DEFAULT NULL COMMENT '安装师傅ID',
-  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人ID',
-  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除（0：否，1：是）',
-  `scheduled_install_date` datetime NULL DEFAULT NULL COMMENT '预约安装日期',
-  `actual_install_end_date` datetime NULL DEFAULT NULL COMMENT '实际安装完成日期',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_order_no`(`order_no` ASC) USING BTREE,
-  INDEX `idx_salesperson`(`salesperson_id` ASC) USING BTREE,
-  INDEX `idx_installer`(`installer_id` ASC) USING BTREE,
-  INDEX `idx_customer_id`(`customer_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '窗户订单表' ROW_FORMAT = DYNAMIC;
-
-
-
-INSERT INTO `brand` (`name`, `description`, `is_deleted`) VALUES
-    ('皇派门窗', '国内知名高端隔音门窗品牌，主打系统门窗、阳光房', 0),
-    ('派雅门窗', '专注于高端铝合金门窗、系统门窗的定制', 0),
-    ('轩尼斯门窗', '知名铝合金门窗品牌，产品涵盖断桥铝门窗、阳光房等', 0),
-    ('新豪轩门窗', '集门窗产品研发、设计、生产、销售于一体的综合性企业', 0),
-    ('飞宇门窗', '主打高端定制铝合金门窗、阳光房系列产品', 0),
-    ('欧哲门窗', '高端系统门窗品牌，主打安全、节能、环保门窗', 0),
-    ('墨瑟门窗', '源自德国的高端系统门窗品牌，以木铝复合门窗见长', 0),
-    ('森鹰门窗', '以铝包木空调窗为主导产品的高端门窗企业', 0),
-    ('良木道门窗', '专注于实木、铝包木等高端木窗的定制', 0),
-    ('维盾门窗', '集研发、生产、销售、服务为一体的高端系统门窗品牌', 0),
-    ('罗兰西尼', '专注于高端系统门窗、阳光房的定制服务', 0),
-    ('亿合门窗', '产品线涵盖铝合金门窗、阳光房、原木门等', 0),
-    ('百利玛门窗', '法式轻奢门窗品牌，主推高端系统门窗', 0),
-    ('富轩门窗', '全屋门窗定制品牌，涵盖铝合金门窗、智能门窗等', 0),
-    ('尊尚门窗', '主打高端铝合金门窗、阳光房等定制产品', 0);
+CREATE TABLE `window_order`
+(
+    `id`                      bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `order_no`                varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '订单编号',
+    `customer_name`           varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '客户姓名',
+    `customer_phone`          varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '客户电话',
+    `customer_id`             bigint                                                        NULL DEFAULT NULL COMMENT '关联客户ID',
+    `address`                 varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '安装地址（完整）',
+    `province`                varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '省份编码',
+    `city`                    varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '城市编码',
+    `district`                varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '区县编码',
+    `region_codes`            varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '区域编码（如：110000,110100）',
+    `detail_address`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户输入的详细地址',
+    `brand`                   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '窗户品牌',
+    `window_type`             varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '窗型（如：推拉、平开、内倒）',
+    `color`                   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '颜色',
+    `glass_spec`              varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '玻璃规格',
+    `width`                   double                                                        NULL DEFAULT NULL COMMENT '宽度（毫米）',
+    `height`                  double                                                        NULL DEFAULT NULL COMMENT '高度（毫米）',
+    `is_remeasured`           tinyint(1)                                                    NULL DEFAULT 0 COMMENT '是否复尺（0：否，1：是）',
+    `price`                   decimal(10, 2)                                                NULL DEFAULT NULL COMMENT '价格',
+    `paid_amount`             decimal(10, 2)                                                NULL DEFAULT 0.00 COMMENT '已付金额',
+    `payment_status`          varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT 'UNPAID' COMMENT '支付状态：UNPAID（未支付）、PARTIAL（部分支付）、PAID（已付清）',
+    `order_time`              datetime                                                      NULL DEFAULT NULL COMMENT '下单时间',
+    `install_time`            datetime                                                      NULL DEFAULT NULL COMMENT '计划安装时间',
+    `install_progress`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT 'WAITING' COMMENT '安装进度：WAITING（待安排）、SCHEDULED（已预约）、INSTALLING（安装中）、FINISHED（已完成）',
+    `production_progress`     varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT 'WAITING' COMMENT '制作进度：WAITING（待制作）、PRODUCING（制作中）、FINISHED（已完成）',
+    `logistics_status`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT NULL COMMENT '物流状态：OUTBOUND（已出库）、SHIPPING（送货中）、INBOUND（已入库）',
+    `status`                  varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL DEFAULT 'SUBMITTED' COMMENT '订单状态：DRAFT（草稿）、SUBMITTED（已提交）',
+    `salesperson_id`          bigint                                                        NULL DEFAULT NULL COMMENT '销售员ID',
+    `installer_id`            bigint                                                        NULL DEFAULT NULL COMMENT '安装师傅ID',
+    `create_by`               bigint                                                        NULL DEFAULT NULL COMMENT '创建人ID',
+    `update_by`               bigint                                                        NULL DEFAULT NULL COMMENT '更新人ID',
+    `is_deleted`              tinyint(1)                                                    NULL DEFAULT 0 COMMENT '是否删除（0：否，1：是）',
+    `scheduled_install_date`  datetime                                                      NULL DEFAULT NULL COMMENT '预约安装日期',
+    `actual_install_end_date` datetime                                                      NULL DEFAULT NULL COMMENT '实际安装完成日期',
+    `create_time`             datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`             datetime                                                      NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_order_no` (`order_no` ASC) USING BTREE,
+    INDEX `idx_salesperson` (`salesperson_id` ASC) USING BTREE,
+    INDEX `idx_installer` (`installer_id` ASC) USING BTREE,
+    INDEX `idx_customer_id` (`customer_id` ASC) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 7
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT = '窗户订单表'
+  ROW_FORMAT = DYNAMIC;
 
 
 SET FOREIGN_KEY_CHECKS = 1;

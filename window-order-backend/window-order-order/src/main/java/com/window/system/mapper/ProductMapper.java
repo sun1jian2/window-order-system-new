@@ -16,6 +16,7 @@ public interface ProductMapper {
             "LEFT JOIN brand b ON p.brand_id = b.id " +
             "WHERE p.is_deleted = 0 " +
             "<if test='categoryId != null'> AND p.category_id = #{categoryId} </if> " +
+            "<if test='brandId != null'> AND p.brand_id = #{brandId} </if> " +
             "<if test='keyword != null and keyword != \"\"'> AND (p.name LIKE CONCAT('%', #{keyword}, '%') OR p.code LIKE CONCAT('%', #{keyword}, '%')) </if> " +
             "ORDER BY p.id DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
@@ -25,6 +26,7 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT COUNT(1) FROM product p WHERE p.is_deleted = 0 " +
             "<if test='categoryId != null'> AND p.category_id = #{categoryId} </if> " +
+            "<if test='brandId != null'> AND p.brand_id = #{brandId} </if> " +
             "<if test='keyword != null and keyword != \"\"'> AND (p.name LIKE CONCAT('%', #{keyword}, '%') OR p.code LIKE CONCAT('%', #{keyword}, '%')) </if> " +
             "</script>")
     long countList(ProductListReq req);

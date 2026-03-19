@@ -60,7 +60,7 @@ const routes = [
         path: 'products',
         name: 'ProductList',
         component: () => import('../views/ProductList.vue'),
-        meta: { requiresAuth: true, title: '产品管理' }
+        meta: { requiresAuth: true, title: '产品列表' }
       },
       {
         path: 'product-categories',

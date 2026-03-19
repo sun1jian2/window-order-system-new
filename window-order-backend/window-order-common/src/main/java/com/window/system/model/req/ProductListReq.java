@@ -7,5 +7,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ProductListReq extends BasePageReq {
     private Long categoryId;
+    private Long brandId;
     private String keyword;
 }
