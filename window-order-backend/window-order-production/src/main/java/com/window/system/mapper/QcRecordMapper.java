@@ -5,20 +5,23 @@ import com.window.system.model.req.QcRecordListReq;
 import org.apache.ibatis.annotations.*;
 import java.util.List;
 
-@Mapper
 /**
  * QcRecordMapper Mapper接口
  */
+@Mapper
 public interface QcRecordMapper {
 
+    /**
+     * 新增质检记录方法
+     */
     @Insert("INSERT INTO qc_record (plan_id, plan_no, process_id, inspector_id, check_time, result, defect_reason, remark, create_time, create_by, update_by, is_deleted) " +
             "VALUES (#{planId}, #{planNo}, #{processId}, #{inspectorId}, #{checkTime}, #{result}, #{defectReason}, #{remark}, NOW(), #{createBy}, #{updateBy}, 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    /**
-     * insert 方法
-     */
     int insert(QcRecord record);
 
+    /**
+     * 更新质检记录方法
+     */
     @Update("<script>" +
             "UPDATE qc_record SET update_time = NOW() " +
             "<if test='result != null'>, result = #{result}</if> " +
@@ -27,27 +30,27 @@ public interface QcRecordMapper {
             "<if test='updateBy != null'>, update_by = #{updateBy}</if> " +
             "WHERE id = #{id}" +
             "</script>")
-    /**
-     * update 方法
-     */
     int update(QcRecord record);
 
-    @Update("UPDATE qc_record SET is_deleted = 1, update_time = NOW() WHERE id = #{id}")
     /**
-     * delete 方法
+     * 根据主键删除质检记录方法
      */
+    @Update("UPDATE qc_record SET is_deleted = 1, update_time = NOW() WHERE id = #{id}")
     int delete(Long id);
 
+    /**
+     * 根据主键查询质检记录方法
+     */
     @Select("SELECT q.*, pr.process_name as process_name, u.real_name as inspector_name " +
             "FROM qc_record q " +
             "LEFT JOIN production_process pr ON q.process_id = pr.id " +
             "LEFT JOIN sys_user u ON q.inspector_id = u.id " +
             "WHERE q.id = #{id} AND q.is_deleted = 0")
-    /**
-     * getById 方法
-     */
     QcRecord getById(Long id);
 
+    /**
+     * 查询质检记录列表总数方法
+     */
     @Select("<script>" +
             "SELECT count(1) FROM qc_record q " +
             "WHERE q.is_deleted = 0 " +
@@ -59,11 +62,11 @@ public interface QcRecordMapper {
             "<if test='startDate != null'> AND q.check_time &gt;= #{startDate}</if> " +
             "<if test='endDate != null'> AND q.check_time &lt;= #{endDate}</if> " +
             "</script>")
-    /**
-     * countList 方法
-     */
     long countList(QcRecordListReq req);
 
+    /**
+     * 条件查询质检记录列表方法
+     */
     @Select("<script>" +
             "SELECT q.*, pr.process_name as process_name, u.real_name as inspector_name " +
             "FROM qc_record q " +
@@ -80,14 +83,11 @@ public interface QcRecordMapper {
             "ORDER BY q.check_time DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
-    /**
-     * list 方法
-     */
     List<QcRecord> list(QcRecordListReq req);
 
-    @Select("SELECT id FROM production_plan WHERE plan_no = #{planNo} AND is_deleted = 0 LIMIT 1")
     /**
-     * checkPlanExists 方法
+     * 校验排产计划是否存在的方法
      */
+    @Select("SELECT id FROM production_plan WHERE plan_no = #{planNo} AND is_deleted = 0 LIMIT 1")
     Long checkPlanExists(@Param("planNo") String planNo);
 }

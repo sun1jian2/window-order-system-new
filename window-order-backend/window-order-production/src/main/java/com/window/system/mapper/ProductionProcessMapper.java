@@ -5,20 +5,23 @@ import com.window.system.model.req.ProductionProcessListReq;
 import org.apache.ibatis.annotations.*;
 import java.util.List;
 
-@Mapper
 /**
  * ProductionProcessMapper Mapper接口
  */
+@Mapper
 public interface ProductionProcessMapper {
 
+    /**
+     * 新增生产工序方法
+     */
     @Insert("INSERT INTO production_process (plan_id, plan_no, process_name, operator_id, status, start_time, end_time, remark, create_time, create_by, update_by, is_deleted) " +
             "VALUES (#{planId}, #{planNo}, #{processName}, #{operatorId}, #{status}, #{startTime}, #{endTime}, #{remark}, NOW(), #{createBy}, #{updateBy}, 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    /**
-     * insert 方法
-     */
     int insert(ProductionProcess process);
 
+    /**
+     * 更新生产工序方法
+     */
     @Update("<script>" +
             "UPDATE production_process SET update_time = NOW() " +
             "<if test='processName != null'>, process_name = #{processName}</if> " +
@@ -30,26 +33,26 @@ public interface ProductionProcessMapper {
             "<if test='updateBy != null'>, update_by = #{updateBy}</if> " +
             "WHERE id = #{id}" +
             "</script>")
-    /**
-     * update 方法
-     */
     int update(ProductionProcess process);
 
-    @Update("UPDATE production_process SET is_deleted = 1, update_time = NOW() WHERE id = #{id}")
     /**
-     * delete 方法
+     * 根据主键删除生产工序方法
      */
+    @Update("UPDATE production_process SET is_deleted = 1, update_time = NOW() WHERE id = #{id}")
     int delete(Long id);
 
+    /**
+     * 根据主键查询生产工序方法
+     */
     @Select("SELECT p.*, u.real_name as operator_name " +
             "FROM production_process p " +
             "LEFT JOIN sys_user u ON p.operator_id = u.id " +
             "WHERE p.id = #{id} AND p.is_deleted = 0")
-    /**
-     * getById 方法
-     */
     ProductionProcess getById(Long id);
 
+    /**
+     * 查询生产工序列表总数方法
+     */
     @Select("<script>" +
             "SELECT count(1) FROM production_process p " +
             "WHERE p.is_deleted = 0 " +
@@ -59,11 +62,11 @@ public interface ProductionProcessMapper {
             "<if test='status != null and status != \"\"'> AND p.status = #{status}</if> " +
             "<if test='operatorId != null'> AND p.operator_id = #{operatorId}</if> " +
             "</script>")
-    /**
-     * countList 方法
-     */
     long countList(ProductionProcessListReq req);
 
+    /**
+     * 条件查询生产工序列表方法
+     */
     @Select("<script>" +
             "SELECT p.*, u.real_name as operator_name " +
             "FROM production_process p " +
@@ -77,14 +80,11 @@ public interface ProductionProcessMapper {
             "ORDER BY p.create_time DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
-    /**
-     * list 方法
-     */
     List<ProductionProcess> list(ProductionProcessListReq req);
 
-    @Select("SELECT id FROM production_plan WHERE plan_no = #{planNo} AND is_deleted = 0 LIMIT 1")
     /**
-     * checkPlanExists 方法
+     * 校验排产计划是否存在的方法
      */
+    @Select("SELECT id FROM production_plan WHERE plan_no = #{planNo} AND is_deleted = 0 LIMIT 1")
     Long checkPlanExists(@Param("planNo") String planNo);
 }

@@ -8,22 +8,22 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-@Mapper
 /**
  * OrderPaymentAttachmentMapper Mapper接口
  */
+@Mapper
 public interface OrderPaymentAttachmentMapper {
 
+    /**
+     * 新增订单支付附件方法
+     */
     @Insert("INSERT INTO order_payment_attachment (payment_id, url, create_time) VALUES (#{paymentId}, #{url}, NOW())")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    /**
-     * insert 方法
-     */
     int insert(OrderPaymentAttachment attachment);
 
-    @Select("SELECT * FROM order_payment_attachment WHERE payment_id = #{paymentId} ORDER BY id ASC")
     /**
-     * getByPaymentId 方法
+     * 根据支付ID查询附件列表方法
      */
+    @Select("SELECT * FROM order_payment_attachment WHERE payment_id = #{paymentId} ORDER BY id ASC")
     List<OrderPaymentAttachment> getByPaymentId(Long paymentId);
 }

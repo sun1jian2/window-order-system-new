@@ -6,21 +6,21 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-@Mapper
 /**
  * SysRoleMapper Mapper接口
  */
+@Mapper
 public interface SysRoleMapper {
     
-    @Select("SELECT * FROM sys_role ORDER BY create_time ASC")
     /**
-     * selectAll 方法
+     * 查询所有角色方法
      */
+    @Select("SELECT * FROM sys_role ORDER BY create_time ASC")
     List<SysRole> selectAll();
     
-    @Select("SELECT * FROM sys_role WHERE role_code = #{roleCode}")
     /**
-     * findByCode 方法
+     * 根据角色代码查询角色方法
      */
+    @Select("SELECT * FROM sys_role WHERE role_code = #{roleCode}")
     SysRole findByCode(String roleCode);
 }

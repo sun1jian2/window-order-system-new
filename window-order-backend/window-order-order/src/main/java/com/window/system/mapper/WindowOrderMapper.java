@@ -11,20 +11,23 @@ import org.apache.ibatis.annotations.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Mapper
 /**
  * WindowOrderMapper Mapper接口
  */
+@Mapper
 public interface WindowOrderMapper {
 
+    /**
+     * 新增订单方法
+     */
     @Insert("INSERT INTO window_order (order_no, customer_id, customer_name, customer_phone, address, region_codes, province, city, district, detail_address, brand, window_type, color, glass_spec, width, height, price, paid_amount, payment_status, order_time, scheduled_install_date, actual_install_end_date, salesperson_id, installer_id, install_progress, production_progress, logistics_status, status, create_time, create_by, update_by, is_deleted) " +
             "VALUES (#{orderNo}, #{customerId}, #{customerName}, #{customerPhone}, #{address}, #{regionCodes}, #{province}, #{city}, #{district}, #{detailAddress}, #{brand}, #{windowType}, #{color}, #{glassSpec}, #{width}, #{height}, #{price}, #{paidAmount}, #{paymentStatus}, #{orderTime}, #{scheduledInstallDate}, #{actualInstallEndDate}, #{salespersonId}, #{installerId}, #{installProgress}, #{productionProgress}, #{logisticsStatus}, #{status}, NOW(), #{createBy}, #{updateBy}, 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    /**
-     * insert 方法
-     */
     int insert(WindowOrder order);
 
+    /**
+     * 更新订单方法
+     */
     @Update("<script>" +
             "UPDATE window_order SET update_time = NOW() " +
             "<if test='customerName != null'>, customer_name = #{customerName}</if> " +
@@ -57,27 +60,27 @@ public interface WindowOrderMapper {
             "<if test='updateBy != null'>, update_by = #{updateBy}</if> " +
             "WHERE id = #{id}" +
             "</script>")
-    /**
-     * update 方法
-     */
     int update(WindowOrder order);
 
-    @Update("UPDATE window_order SET is_deleted = 1, update_time = NOW() WHERE id = #{id}")
     /**
-     * delete 方法
+     * 根据主键删除订单方法
      */
+    @Update("UPDATE window_order SET is_deleted = 1, update_time = NOW() WHERE id = #{id}")
     int delete(Long id);
 
+    /**
+     * 根据主键查询订单方法
+     */
     @Select("SELECT o.*, s.real_name as salesperson_name, i.real_name as installer_name " +
             "FROM window_order o " +
             "LEFT JOIN sys_user s ON o.salesperson_id = s.id " +
             "LEFT JOIN sys_user i ON o.installer_id = i.id " +
             "WHERE o.id = #{id} AND o.is_deleted = 0")
-    /**
-     * getById 方法
-     */
     WindowOrder getById(Long id);
 
+    /**
+     * 查询订单列表总数方法
+     */
     @Select("<script>" +
             "SELECT count(1) FROM window_order WHERE is_deleted = 0 " +
             "<if test='orderNo != null and orderNo != \"\"'> AND order_no LIKE CONCAT('%', #{orderNo}, '%')</if> " +
@@ -92,11 +95,11 @@ public interface WindowOrderMapper {
             "<if test='currentUserRole == \"SALES\"'> AND salesperson_id = #{currentUserId}</if> " +
             "<if test='currentUserRole == \"INSTALLER\"'> AND installer_id = #{currentUserId}</if> " +
             "</script>")
-    /**
-     * countList 方法
-     */
     long countList(OrderListReq req);
 
+    /**
+     * 条件查询订单列表方法
+     */
     @Select("<script>" +
             "SELECT o.*, s.real_name as salesperson_name, i.real_name as installer_name " +
             "FROM window_order o " +
@@ -118,11 +121,11 @@ public interface WindowOrderMapper {
             "ORDER BY o.create_time DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
-    /**
-     * selectList 方法
-     */
     List<WindowOrder> selectList(OrderListReq req);
 
+    /**
+     * 导出订单列表方法
+     */
     @Select("<script>" +
             "SELECT o.*, s.real_name as salesperson_name, i.real_name as installer_name " +
             "FROM window_order o " +
@@ -142,9 +145,6 @@ public interface WindowOrderMapper {
             "<if test='currentUserRole == \"INSTALLER\"'> AND o.installer_id = #{currentUserId}</if> " +
             "ORDER BY o.create_time DESC " +
             "</script>")
-    /**
-     * exportList 方法
-     */
     List<WindowOrder> exportList(OrderListReq req);
     
     @Select("<script>" +
@@ -233,22 +233,22 @@ public interface WindowOrderMapper {
     long countOrdersByDateRange(@Param("userId") Long userId, @Param("role") String role,
                                              @Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    @Select("SELECT count(1) FROM customer WHERE is_deleted = 0")
     /**
-     * countTotalCustomers 方法
+     * 统计总客户数方法
      */
+    @Select("SELECT count(1) FROM customer WHERE is_deleted = 0")
     long countTotalCustomers();
     
-    @Select("SELECT count(1) FROM sys_user WHERE is_deleted = 0")
     /**
-     * countTotalUsers 方法
+     * 统计总用户数方法
      */
+    @Select("SELECT count(1) FROM sys_user WHERE is_deleted = 0")
     long countTotalUsers();
 
-    @Select("SELECT * FROM window_order WHERE is_deleted = 0 ORDER BY create_time DESC")
     /**
-     * selectAll 方法
+     * 查询所有订单方法
      */
+    @Select("SELECT * FROM window_order WHERE is_deleted = 0 ORDER BY create_time DESC")
     List<WindowOrder> selectAll();
     
     @Select("<script>" +
@@ -315,13 +315,13 @@ public interface WindowOrderMapper {
             "</script>")
     List<NameValueDto> getStatusDistribution(@Param("userId") Long userId, @Param("role") String role);
 
+    /**
+     * 获取最近活动记录方法
+     */
     @Select("<script>" +
             "SELECT module, operation, username, create_time as createTime " +
             "FROM sys_operation_log " +
             "ORDER BY create_time DESC LIMIT 10" +
             "</script>")
-    /**
-     * getRecentActivities 方法
-     */
     List<RecentActivityDto> getRecentActivities();
 }

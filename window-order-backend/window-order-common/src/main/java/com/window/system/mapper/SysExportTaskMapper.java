@@ -6,20 +6,23 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
-@Mapper
 /**
  * SysExportTaskMapper Mapper接口
  */
+@Mapper
 public interface SysExportTaskMapper {
 
+    /**
+     * 新增系统导出任务方法
+     */
     @Insert("INSERT INTO sys_export_task(task_name, status, file_url, file_name, error_msg, export_type, export_params, create_by, create_time) " +
             "VALUES(#{taskName}, #{status}, #{fileUrl}, #{fileName}, #{errorMsg}, #{exportType}, #{exportParams}, #{createBy}, NOW())")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    /**
-     * insert 方法
-     */
     int insert(SysExportTask task);
 
+    /**
+     * 更新系统导出任务方法
+     */
     @Update("<script>" +
             "UPDATE sys_export_task SET status = #{status} " +
             "<if test='fileUrl != null'>, file_url = #{fileUrl}</if> " +
@@ -28,17 +31,17 @@ public interface SysExportTaskMapper {
             "<if test='finishTime != null'>, finish_time = #{finishTime}</if> " +
             "WHERE id = #{id}" +
             "</script>")
-    /**
-     * update 方法
-     */
     int update(SysExportTask task);
 
-    @Select("SELECT * FROM sys_export_task WHERE id = #{id}")
     /**
-     * getById 方法
+     * 根据主键查询系统导出任务方法
      */
+    @Select("SELECT * FROM sys_export_task WHERE id = #{id}")
     SysExportTask getById(Long id);
 
+    /**
+     * 查询系统导出任务列表总数方法
+     */
     @Select("<script>" +
             "SELECT count(1) FROM sys_export_task t " +
             "LEFT JOIN sys_user u ON t.create_by = u.id " +
@@ -50,6 +53,9 @@ public interface SysExportTaskMapper {
             "</script>")
     long count(@Param("req") ExportTaskListReq req, @Param("userId") Long userId);
 
+    /**
+     * 条件查询系统导出任务列表方法
+     */
     @Select("<script>" +
             "SELECT t.*, u.real_name as createByName " +
             "FROM sys_export_task t " +

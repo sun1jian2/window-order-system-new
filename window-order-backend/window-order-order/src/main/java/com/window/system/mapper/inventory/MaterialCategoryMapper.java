@@ -5,15 +5,15 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
-@Mapper
 /**
  * MaterialCategoryMapper Mapper接口
  */
+@Mapper
 public interface MaterialCategoryMapper {
 
-    @Select("SELECT * FROM material_category WHERE is_deleted = 0 ORDER BY sort ASC, id DESC")
     /**
-     * listAll 方法
+     * 查询所有材料分类方法
      */
+    @Select("SELECT * FROM material_category WHERE is_deleted = 0 ORDER BY sort ASC, id DESC")
     List<MaterialCategory> listAll();
 }

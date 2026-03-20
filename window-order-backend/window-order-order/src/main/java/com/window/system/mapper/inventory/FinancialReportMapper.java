@@ -7,12 +7,15 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-@Mapper
 /**
  * FinancialReportMapper Mapper接口
  */
+@Mapper
 public interface FinancialReportMapper {
 
+    /**
+     * 获取财务报表方法
+     */
     @Select("<script>" +
             "SELECT " +
             "<if test='type == \"MONTH\"'> DATE_FORMAT(o.create_time, '%Y-%m') as period, </if> " +

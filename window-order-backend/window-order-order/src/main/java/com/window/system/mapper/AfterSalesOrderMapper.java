@@ -6,20 +6,23 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
-@Mapper
 /**
  * AfterSalesOrderMapper Mapper接口
  */
+@Mapper
 public interface AfterSalesOrderMapper {
 
+    /**
+     * 新增售后工单方法
+     */
     @Insert("INSERT INTO after_sales_order (ticket_no, order_id, customer_name, customer_phone, address, issue_description, status, handler_id, appointment_time, create_by, create_time, is_deleted) " +
             "VALUES (#{ticketNo}, #{orderId}, #{customerName}, #{customerPhone}, #{address}, #{issueDescription}, #{status}, #{handlerId}, #{appointmentTime}, #{createBy}, NOW(), 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    /**
-     * insert 方法
-     */
     int insert(AfterSalesOrder order);
 
+    /**
+     * 更新售后工单方法
+     */
     @Update("<script>" +
             "UPDATE after_sales_order SET update_time = NOW() " +
             "<if test='status != null'>, status = #{status}</if> " +
@@ -30,21 +33,21 @@ public interface AfterSalesOrderMapper {
             "<if test='fee != null'>, fee = #{fee}</if> " +
             "WHERE id = #{id}" +
             "</script>")
-    /**
-     * update 方法
-     */
     int update(AfterSalesOrder order);
 
+    /**
+     * 根据主键查询售后工单方法
+     */
     @Select("SELECT aso.*, u.real_name as handler_name, wo.order_no " +
             "FROM after_sales_order aso " +
             "LEFT JOIN sys_user u ON aso.handler_id = u.id " +
             "LEFT JOIN window_order wo ON aso.order_id = wo.id " +
             "WHERE aso.id = #{id} AND aso.is_deleted = 0")
-    /**
-     * getById 方法
-     */
     AfterSalesOrder getById(Long id);
     
+    /**
+     * 查询售后工单列表总数方法
+     */
     @Select("<script>" +
             "SELECT count(1) FROM after_sales_order aso " +
             "LEFT JOIN window_order wo ON aso.order_id = wo.id " +
@@ -57,11 +60,11 @@ public interface AfterSalesOrderMapper {
             "<if test='currentUserRole == \"SALES\"'> AND wo.salesperson_id = #{currentUserId}</if> " +
             "<if test='currentUserRole == \"INSTALLER\"'> AND aso.handler_id = #{currentUserId}</if> " +
             "</script>")
-    /**
-     * countList 方法
-     */
     long countList(AfterSalesListReq req);
 
+    /**
+     * 条件查询售后工单列表方法
+     */
     @Select("<script>" +
             "SELECT aso.*, u.real_name as handler_name, wo.order_no " +
             "FROM after_sales_order aso " +
@@ -78,11 +81,11 @@ public interface AfterSalesOrderMapper {
             "ORDER BY aso.create_time DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
-    /**
-     * selectList 方法
-     */
     List<AfterSalesOrder> selectList(AfterSalesListReq req);
     
+    /**
+     * 导出售后工单列表方法
+     */
     @Select("<script>" +
             "SELECT aso.*, u.real_name as handler_name, wo.order_no " +
             "FROM after_sales_order aso " +
@@ -98,14 +101,11 @@ public interface AfterSalesOrderMapper {
             "<if test='currentUserRole == \"INSTALLER\"'> AND aso.handler_id = #{currentUserId}</if> " +
             "ORDER BY aso.create_time DESC " +
             "</script>")
-    /**
-     * exportList 方法
-     */
     List<AfterSalesOrder> exportList(AfterSalesListReq req);
     
-    @Update("UPDATE after_sales_order SET is_deleted = 1 WHERE id = #{id}")
     /**
-     * delete 方法
+     * 删除售后工单方法
      */
+    @Update("UPDATE after_sales_order SET is_deleted = 1 WHERE id = #{id}")
     int delete(Long id);
 }

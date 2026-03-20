@@ -6,20 +6,23 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
-@Mapper
 /**
  * RemeasureTaskMapper Mapper接口
  */
+@Mapper
 public interface RemeasureTaskMapper {
 
+    /**
+     * 新增复尺任务方法
+     */
     @Insert("INSERT INTO remeasure_task (order_id, assignee_id, status, precise_width, precise_height, sketch_url, site_photos, remark, create_time, update_time) " +
             "VALUES (#{orderId}, #{assigneeId}, #{status}, #{preciseWidth}, #{preciseHeight}, #{sketchUrl}, #{sitePhotos}, #{remark}, NOW(), NOW())")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    /**
-     * insert 方法
-     */
     int insert(RemeasureTask task);
 
+    /**
+     * 更新复尺任务方法
+     */
     @Update("<script>" +
             "UPDATE remeasure_task SET update_time = NOW() " +
             "<if test='assigneeId != null'>, assignee_id = #{assigneeId}</if> " +
@@ -31,32 +34,32 @@ public interface RemeasureTaskMapper {
             "<if test='remark != null'>, remark = #{remark}</if> " +
             "WHERE id = #{id}" +
             "</script>")
-    /**
-     * update 方法
-     */
     int update(RemeasureTask task);
 
+    /**
+     * 根据主键查询复尺任务方法
+     */
     @Select("SELECT t.*, o.order_no, o.customer_name, o.address, s.real_name as assignee_name " +
             "FROM remeasure_task t " +
             "LEFT JOIN window_order o ON t.order_id = o.id " +
             "LEFT JOIN sys_user s ON t.assignee_id = s.id " +
             "WHERE t.id = #{id}")
-    /**
-     * getById 方法
-     */
     RemeasureTask getById(Long id);
     
+    /**
+     * 根据订单ID查询复尺任务方法
+     */
     @Select("SELECT t.*, o.order_no, o.customer_name, o.address, s.real_name as assignee_name " +
             "FROM remeasure_task t " +
             "LEFT JOIN window_order o ON t.order_id = o.id " +
             "LEFT JOIN sys_user s ON t.assignee_id = s.id " +
             "WHERE t.order_id = #{orderId} " +
             "ORDER BY t.create_time DESC LIMIT 1")
-    /**
-     * getByOrderId 方法
-     */
     RemeasureTask getByOrderId(Long orderId);
 
+    /**
+     * 查询复尺任务列表总数方法
+     */
     @Select("<script>" +
             "SELECT count(1) FROM remeasure_task t " +
             "LEFT JOIN window_order o ON t.order_id = o.id " +
@@ -68,11 +71,11 @@ public interface RemeasureTaskMapper {
             "<if test='assigneeId != null'> AND t.assignee_id = #{assigneeId}</if> " +
             "<if test='status != null and status != \"\"'> AND t.status = #{status}</if> " +
             "</script>")
-    /**
-     * countList 方法
-     */
     long countList(RemeasureTaskListReq req);
 
+    /**
+     * 条件查询复尺任务列表方法
+     */
     @Select("<script>" +
             "SELECT t.*, o.order_no, o.customer_name, o.address, s.real_name as assignee_name " +
             "FROM remeasure_task t " +
@@ -88,11 +91,11 @@ public interface RemeasureTaskMapper {
             "ORDER BY t.create_time DESC " +
             "LIMIT #{startIndex}, #{pageSize}" +
             "</script>")
-    /**
-     * selectList 方法
-     */
     List<RemeasureTask> selectList(RemeasureTaskListReq req);
 
+    /**
+     * 导出复尺任务列表方法
+     */
     @Select("<script>" +
             "SELECT t.*, o.order_no, o.customer_name, o.address, s.real_name as assignee_name " +
             "FROM remeasure_task t " +
@@ -107,8 +110,5 @@ public interface RemeasureTaskMapper {
             "<if test='status != null and status != \"\"'> AND t.status = #{status}</if> " +
             "ORDER BY t.create_time DESC " +
             "</script>")
-    /**
-     * exportList 方法
-     */
     List<RemeasureTask> exportList(RemeasureTaskListReq req);
 }
