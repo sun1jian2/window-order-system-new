@@ -79,6 +79,16 @@
         <el-menu-item index="/suppliers">供应商管理</el-menu-item>
         <el-menu-item index="/purchase-orders">采购单管理</el-menu-item>
       </el-sub-menu>
+
+      <el-sub-menu index="production" v-if="userStore.currentUser.role === 'ADMIN'">
+        <template #title>
+          <el-icon><DataLine /></el-icon>
+          <span>生产管理</span>
+        </template>
+        <el-menu-item index="/production-plan">排产计划</el-menu-item>
+        <el-menu-item index="/production-process">工序报工</el-menu-item>
+        <el-menu-item index="/qc-record">质检记录</el-menu-item>
+      </el-sub-menu>
       
       <el-menu-item index="/export-center">
         <el-icon><Download /></el-icon>
@@ -97,7 +107,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '../stores/user'
-import { House, Odometer, List, User, Goods, Document, Service, UserFilled, Tools, Trophy, Download, Menu, DataBoard } from '@element-plus/icons-vue'
+import { House, Odometer, List, User, Goods, Document, Service, UserFilled, Tools, Trophy, Download, Menu, DataBoard, DataLine } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const userStore = useUserStore()

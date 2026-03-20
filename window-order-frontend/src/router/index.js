@@ -93,6 +93,24 @@ const routes = [
         meta: { requiresAuth: true, title: '采购单管理' }
       },
       {
+        path: 'production-plan',
+        name: 'ProductionPlanList',
+        component: () => import('../views/ProductionPlanList.vue'),
+        meta: { requiresAuth: true, title: '排产计划' }
+      },
+      {
+        path: 'production-process',
+        name: 'ProductionProcessList',
+        component: () => import('../views/ProductionProcessList.vue'),
+        meta: { requiresAuth: true, title: '工序报工' }
+      },
+      {
+        path: 'qc-record',
+        name: 'QcRecordList',
+        component: () => import('../views/QcRecordList.vue'),
+        meta: { requiresAuth: true, title: '质检记录' }
+      },
+      {
         path: 'users',
         name: 'UserList',
         component: UserList,

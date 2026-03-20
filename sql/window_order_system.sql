@@ -549,4 +549,74 @@ CREATE TABLE `order_cost`
   DEFAULT CHARSET = utf8mb4 COMMENT ='订单成本核算表';
 
 
+-- =========================================================
+-- 8. 排产计划表 (Production Plan)
+-- =========================================================
+DROP TABLE IF EXISTS `production_plan`;
+CREATE TABLE `production_plan`
+(
+    `id`                 bigint         NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `plan_no`            varchar(50)    NOT NULL COMMENT '排产单号',
+    `order_id`           bigint         NOT NULL COMMENT '订单ID',
+    `planned_start_date` date           NULL DEFAULT NULL COMMENT '预计开始日期',
+    `planned_end_date`   date           NULL DEFAULT NULL COMMENT '预计完成日期',
+    `manager_id`         bigint         NULL DEFAULT NULL COMMENT '负责人ID',
+    `status`             varchar(20)    NULL DEFAULT 'PENDING' COMMENT '状态：PENDING(待生产), PRODUCING(生产中), FINISHED(已完成)',
+    `remark`             varchar(500)   NULL DEFAULT NULL COMMENT '备注',
+    `create_by`          bigint         NULL DEFAULT NULL COMMENT '创建人ID',
+    `update_by`          bigint         NULL DEFAULT NULL COMMENT '更新人ID',
+    `create_time`        datetime       NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`        datetime       NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_deleted`         tinyint(1)     NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_plan_no` (`plan_no` ASC) USING BTREE,
+    INDEX `idx_order_id` (`order_id` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '排产计划表';
+
+-- =========================================================
+-- 9. 生产工序记录表 (Production Process)
+-- =========================================================
+DROP TABLE IF EXISTS `production_process`;
+CREATE TABLE `production_process`
+(
+    `id`             bigint         NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `plan_id`        bigint         NOT NULL COMMENT '排产计划ID',
+    `process_name`   varchar(50)    NOT NULL COMMENT '工序名称(如:下料,组装,打胶,入玻璃)',
+    `operator_id`    bigint         NULL DEFAULT NULL COMMENT '操作人ID',
+    `status`         varchar(20)    NULL DEFAULT 'PENDING' COMMENT '状态：PENDING(待开工), IN_PROGRESS(进行中), COMPLETED(已完成)',
+    `start_time`     datetime       NULL DEFAULT NULL COMMENT '开工时间',
+    `end_time`       datetime       NULL DEFAULT NULL COMMENT '完工时间',
+    `remark`         varchar(500)   NULL DEFAULT NULL COMMENT '备注',
+    `create_by`      bigint         NULL DEFAULT NULL COMMENT '创建人ID',
+    `update_by`      bigint         NULL DEFAULT NULL COMMENT '更新人ID',
+    `create_time`    datetime       NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`    datetime       NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_deleted`     tinyint(1)     NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_plan_id` (`plan_id` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '生产工序记录表';
+
+-- =========================================================
+-- 10. 质量检验记录表 (QC Record)
+-- =========================================================
+DROP TABLE IF EXISTS `qc_record`;
+CREATE TABLE `qc_record`
+(
+    `id`             bigint         NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `plan_id`        bigint         NOT NULL COMMENT '排产计划ID',
+    `process_id`     bigint         NULL DEFAULT NULL COMMENT '工序ID（可选，如果是工序检）',
+    `inspector_id`   bigint         NOT NULL COMMENT '检验员ID',
+    `check_time`     datetime       NOT NULL COMMENT '检验时间',
+    `result`         varchar(20)    NOT NULL COMMENT '结果：PASS(合格), FAIL(不合格)',
+    `defect_reason`  varchar(255)   NULL DEFAULT NULL COMMENT '不合格原因',
+    `remark`         varchar(500)   NULL DEFAULT NULL COMMENT '备注',
+    `create_by`      bigint         NULL DEFAULT NULL COMMENT '创建人ID',
+    `update_by`      bigint         NULL DEFAULT NULL COMMENT '更新人ID',
+    `create_time`    datetime       NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`    datetime       NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_deleted`     tinyint(1)     NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_plan_id` (`plan_id` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '质量检验记录表';
+
 SET FOREIGN_KEY_CHECKS = 1;
