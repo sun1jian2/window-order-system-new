@@ -89,9 +89,9 @@ public interface ProductionPlanMapper {
      */
     List<ProductionPlan> list(ProductionPlanListReq req);
 
-    @Select("SELECT count(1) FROM window_order WHERE order_no = #{orderNo} AND is_deleted = 0")
+    @Select("SELECT id FROM window_order WHERE order_no = #{orderNo} AND is_deleted = 0 LIMIT 1")
     /**
      * checkOrderExists 方法
      */
-    long checkOrderExists(@Param("orderNo") String orderNo);
+    Long checkOrderExists(@Param("orderNo") String orderNo);
 }

@@ -82,9 +82,9 @@ public interface ProductionProcessMapper {
      */
     List<ProductionProcess> list(ProductionProcessListReq req);
 
-    @Select("SELECT count(1) FROM production_plan WHERE plan_no = #{planNo} AND is_deleted = 0")
+    @Select("SELECT id FROM production_plan WHERE plan_no = #{planNo} AND is_deleted = 0 LIMIT 1")
     /**
      * checkPlanExists 方法
      */
-    long checkPlanExists(@Param("planNo") String planNo);
+    Long checkPlanExists(@Param("planNo") String planNo);
 }

@@ -41,10 +41,11 @@ public class ProductionPlanService {
      */
     public Result<String> create(ProductionPlanSaveReq req) {
         if (req.getOrderNo() != null && !req.getOrderNo().isEmpty()) {
-            long orderExists = productionPlanMapper.checkOrderExists(req.getOrderNo());
-            if (orderExists == 0) {
+            Long orderId = productionPlanMapper.checkOrderExists(req.getOrderNo());
+            if (orderId == null) {
                 return Result.error("单号校验失败：系统内不存在该订单号 (" + req.getOrderNo() + ")");
             }
+            req.setOrderId(orderId);
         }
 
         ProductionPlan plan = new ProductionPlan();
@@ -61,10 +62,11 @@ public class ProductionPlanService {
      */
     public Result<String> update(ProductionPlanSaveReq req) {
         if (req.getOrderNo() != null && !req.getOrderNo().isEmpty()) {
-            long orderExists = productionPlanMapper.checkOrderExists(req.getOrderNo());
-            if (orderExists == 0) {
+            Long orderId = productionPlanMapper.checkOrderExists(req.getOrderNo());
+            if (orderId == null) {
                 return Result.error("单号校验失败：系统内不存在该订单号 (" + req.getOrderNo() + ")");
             }
+            req.setOrderId(orderId);
         }
 
         ProductionPlan plan = new ProductionPlan();

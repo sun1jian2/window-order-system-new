@@ -40,10 +40,11 @@ public class QcRecordService {
      */
     public Result<String> create(QcRecordSaveReq req) {
         if (req.getPlanNo() != null && !req.getPlanNo().isEmpty()) {
-            long planExists = qcRecordMapper.checkPlanExists(req.getPlanNo());
-            if (planExists == 0) {
+            Long planId = qcRecordMapper.checkPlanExists(req.getPlanNo());
+            if (planId == null) {
                 return Result.error("单号校验失败：系统内不存在该排产单号 (" + req.getPlanNo() + ")");
             }
+            req.setPlanId(planId);
         }
 
         QcRecord record = new QcRecord();
@@ -58,10 +59,11 @@ public class QcRecordService {
      */
     public Result<String> update(QcRecordSaveReq req) {
         if (req.getPlanNo() != null && !req.getPlanNo().isEmpty()) {
-            long planExists = qcRecordMapper.checkPlanExists(req.getPlanNo());
-            if (planExists == 0) {
+            Long planId = qcRecordMapper.checkPlanExists(req.getPlanNo());
+            if (planId == null) {
                 return Result.error("单号校验失败：系统内不存在该排产单号 (" + req.getPlanNo() + ")");
             }
+            req.setPlanId(planId);
         }
 
         QcRecord record = new QcRecord();

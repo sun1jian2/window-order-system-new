@@ -40,10 +40,11 @@ public class ProductionProcessService {
      */
     public Result<String> create(ProductionProcessSaveReq req) {
         if (req.getPlanNo() != null && !req.getPlanNo().isEmpty()) {
-            long planExists = productionProcessMapper.checkPlanExists(req.getPlanNo());
-            if (planExists == 0) {
+            Long planId = productionProcessMapper.checkPlanExists(req.getPlanNo());
+            if (planId == null) {
                 return Result.error("单号校验失败：系统内不存在该排产单号 (" + req.getPlanNo() + ")");
             }
+            req.setPlanId(planId);
         }
 
         ProductionProcess process = new ProductionProcess();
@@ -58,10 +59,11 @@ public class ProductionProcessService {
      */
     public Result<String> update(ProductionProcessSaveReq req) {
         if (req.getPlanNo() != null && !req.getPlanNo().isEmpty()) {
-            long planExists = productionProcessMapper.checkPlanExists(req.getPlanNo());
-            if (planExists == 0) {
+            Long planId = productionProcessMapper.checkPlanExists(req.getPlanNo());
+            if (planId == null) {
                 return Result.error("单号校验失败：系统内不存在该排产单号 (" + req.getPlanNo() + ")");
             }
+            req.setPlanId(planId);
         }
 
         ProductionProcess process = new ProductionProcess();
