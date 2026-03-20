@@ -1062,32 +1062,33 @@ const handleGenerateContract = async () => {
 
 const handleSignContract = () => {
   if (currentContract.value && currentContract.value.signUrl) {
-    window.open(currentContract.value.signUrl, '_blank')
-    ElMessageBox.confirm('是否已在第三方平台完成签署？', '签署确认', {
-      confirmButtonText: '已完成',
-      cancelButtonText: '未完成/取消',
-      type: 'info'
-    }).then(async () => {
-      // 模拟回调更新状态
-      try {
-        await request.post('/order/contract/sign-callback', {
-          contractNo: currentContract.value.contractNo,
-          status: 'COMPLETED'
-        })
-        ElMessage.success('签署状态已更新')
-        handleContract(currentOrderForContract.value)
-      } catch (e) {
-        console.error(e)
+    // 标记为签署中
+    request.post('/order/contract/sign-callback', {
+      contractNo: currentContract.value.contractNo,
+      status: 'SIGNING'
+    }).then(() => {
+      handleContract(currentOrderForContract.value)
+    }).catch(() => {})
+
+    // 处理动态端口（将后端硬编码的 localhost:5173 替换为当前前端实际地址）
+    let targetUrl = currentContract.value.signUrl
+    try {
+      if (targetUrl.includes('/mock-sign')) {
+        const urlObj = new URL(targetUrl)
+        targetUrl = window.location.origin + urlObj.pathname + urlObj.search
       }
-    }).catch(async () => {
-      try {
-        await request.post('/order/contract/sign-callback', {
-          contractNo: currentContract.value.contractNo,
-          status: 'SIGNING'
-        })
-        handleContract(currentOrderForContract.value)
-      } catch (e) {}
-    })
+    } catch (e) {}
+
+    // 打开第三方签署页面（此处为我们实现的模拟页面）
+    window.open(targetUrl, '_blank')
+    
+    ElMessageBox.confirm('签署页面已在新的标签页中打开。签署完成后，请点击刷新状态。', '签署提示', {
+      confirmButtonText: '刷新状态',
+      cancelButtonText: '稍后刷新',
+      type: 'info'
+    }).then(() => {
+      handleContract(currentOrderForContract.value)
+    }).catch(() => {})
   }
 }
 

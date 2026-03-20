@@ -22,6 +22,12 @@ const routes = [
     component: Login
   },
   {
+    path: '/mock-sign',
+    name: 'MockSign',
+    component: () => import('../views/MockSign.vue'),
+    meta: { title: '在线签署' }
+  },
+  {
     path: '/',
     component: MainLayout,
     redirect: '/dashboard',

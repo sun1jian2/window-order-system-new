@@ -76,7 +76,9 @@ public class ContractService {
 
             // 3. 模拟电子签章平台的签约初始化（法大大/上机签等）
             String contractNo = "C" + System.currentTimeMillis();
-            String mockSignUrl = "http://localhost:8000/mock-sign?contractNo=" + contractNo;
+            // 使用前端的路由地址，假设前端运行在 5173 端口
+            String encodedPdfUrl = java.net.URLEncoder.encode(pdfUrl, "UTF-8");
+            String mockSignUrl = "http://localhost:5173/mock-sign?contractNo=" + contractNo + "&pdfUrl=" + encodedPdfUrl;
             String mockThirdPartyId = UUID.randomUUID().toString();
 
             // 4. 保存合同记录
