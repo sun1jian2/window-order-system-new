@@ -1,65 +1,76 @@
 <template>
-  <div class="production-process-container">
-    <el-card>
-      <!-- Search Form -->
-      <el-form :inline="true" :model="searchForm" class="search-form">
-        <el-form-item label="工序名称">
-          <el-input v-model="searchForm.processName" placeholder="请输入工序名称" clearable />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="searchForm.status" placeholder="请选择状态" clearable>
-            <el-option label="待开工" value="PENDING" />
-            <el-option label="进行中" value="IN_PROGRESS" />
-            <el-option label="已完成" value="COMPLETED" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSearch">搜索</el-button>
-          <el-button @click="resetSearch">重置</el-button>
-          <el-button type="success" @click="handleAdd">工序报工</el-button>
-        </el-form-item>
-      </el-form>
+  <div class="production-process-container app-container">
+    <div class="main-content">
+      <el-card class="search-card" shadow="hover">
+        <el-form :inline="true" :model="searchForm" class="search-form">
+          <el-row :gutter="20" class="w-full">
+            <el-col :span="6">
+              <el-form-item label="工序名称" class="w-full">
+                <el-input v-model="searchForm.processName" placeholder="请输入工序名称" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="状态" class="w-full">
+                <el-select v-model="searchForm.status" placeholder="请选择状态" clearable class="w-full">
+                  <el-option label="待开工" value="PENDING" />
+                  <el-option label="进行中" value="IN_PROGRESS" />
+                  <el-option label="已完成" value="COMPLETED" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" class="text-right">
+              <el-form-item class="search-actions">
+                <el-button type="primary" @click="handleSearch">搜索</el-button>
+                <el-button @click="resetSearch">重置</el-button>
+                <el-button type="success" @click="handleAdd">工序报工</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </el-card>
 
-      <!-- Table -->
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%">
-        <el-table-column prop="planNo" label="排产单号" width="150" />
-        <el-table-column prop="processName" label="工序名称" width="120" />
-        <el-table-column prop="operatorName" label="操作人" width="120" />
-        <el-table-column prop="status" label="状态" width="100">
-          <template #default="scope">
-            <el-tag :type="getStatusType(scope.row.status)">
-              {{ getStatusLabel(scope.row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="startTime" label="开工时间" width="160" />
-        <el-table-column prop="endTime" label="完工时间" width="160" />
-        <el-table-column prop="createTime" label="记录时间" width="160" />
-        <el-table-column label="操作" fixed="right" width="150">
-          <template #default="scope">
-            <el-button link type="primary" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-popconfirm title="确定要删除吗？" @confirm="handleDelete(scope.row)">
-              <template #reference>
-                <el-button link type="danger">删除</el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-card class="table-card" shadow="hover">
+        <el-table :data="tableData" v-loading="loading" style="width: 100%" stripe border>
+          <el-table-column prop="planNo" label="排产单号" min-width="220" />
+          <el-table-column prop="processName" label="工序名称" min-width="120" />
+          <el-table-column prop="operatorName" label="操作人" width="120" />
+          <el-table-column prop="status" label="状态" width="100" align="center">
+            <template #default="scope">
+              <el-tag :type="getStatusType(scope.row.status)" effect="light">
+                {{ getStatusLabel(scope.row.status) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="startTime" label="开工时间" width="160" />
+          <el-table-column prop="endTime" label="完工时间" width="160" />
+          <el-table-column prop="createTime" label="记录时间" width="160" />
+          <el-table-column label="操作" fixed="right" width="150" align="center">
+            <template #default="scope">
+              <div class="action-cell">
+                <el-button link type="primary" @click="handleEdit(scope.row)">编辑</el-button>
+                <el-popconfirm title="确定要删除吗？" @confirm="handleDelete(scope.row)">
+                  <template #reference>
+                    <el-button link type="danger">删除</el-button>
+                  </template>
+                </el-popconfirm>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
 
-      <!-- Pagination -->
-      <div class="pagination-container">
-        <el-pagination
-          v-model:current-page="searchForm.pageNo"
-          v-model:page-size="searchForm.pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
-    </el-card>
+        <div class="pagination">
+          <el-pagination
+            v-model:current-page="searchForm.pageNo"
+            v-model:page-size="searchForm.pageSize"
+            :page-sizes="[10, 20, 50, 100]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
+      </el-card>
+    </div>
 
     <!-- Dialog -->
     <el-dialog
@@ -257,15 +268,105 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.production-process-container {
-  padding: 20px;
+.app-container {
+  min-height: 100%;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
 }
+
+/* 产品明细表格行高优化 */
+:deep(.el-table .el-table__row) {
+  height: 55px;
+}
+:deep(.el-table .cell) {
+  line-height: normal;
+}
+
+.main-content {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.search-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: none;
+}
+
 .search-form {
-  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
-.pagination-container {
-  margin-top: 20px;
+
+.w-full {
+  width: 100%;
+}
+
+.text-right {
+  text-align: right;
   display: flex;
   justify-content: flex-end;
+}
+
+/* Remove default inline form margin */
+.search-form .el-form-item {
+  margin-right: 0;
+  margin-bottom: 10px;
+}
+
+.search-actions {
+  margin-left: auto;
+}
+
+.table-card {
+  border-radius: 8px;
+  border: none;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+:deep(.table-card .el-card__body) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+:deep(.el-table) {
+  flex: 1;
+}
+
+.action-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+:deep(.el-dialog) {
+  border-radius: 12px;
+}
+
+:deep(.el-dialog__header) {
+  margin-right: 0;
+  border-bottom: 1px solid #EBEEF5;
+  padding: 20px;
+}
+
+:deep(.el-dialog__footer) {
+  border-top: 1px solid #EBEEF5;
+  padding: 20px;
 }
 </style>

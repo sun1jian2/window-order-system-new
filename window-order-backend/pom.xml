@@ -16,6 +16,7 @@
         <module>window-order-brand</module>
         <module>window-order-customer</module>
         <module>window-order-order</module>
+        <module>window-order-production</module>
         <module>window-order-api</module>
     </modules>
 

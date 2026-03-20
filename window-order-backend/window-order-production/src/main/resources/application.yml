@@ -1,0 +1,56 @@
+server:
+  port: 18085
+
+spring:
+  config:
+    import: "optional:nacos:window-order-production.yaml"
+  application:
+    name: window-order-production
+  cloud:
+    nacos:
+      config:
+        server-addr: 10.100.106.134:8848
+        namespace: dev123456
+      discovery:
+        server-addr: 10.100.106.134:8848
+        namespace: dev123456
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/window_order_system?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  data:
+    redis:
+      host: 192.168.97.243
+      port: 6379
+      password: d6c0b13e7cb5
+      database: 0
+
+window:
+  cache:
+    ttl-seconds: 600
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.window.system.model.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.window.system.mapper: debug
+
+minio:
+  endpoint: http://127.0.0.1:9000
+  access-key: lkANXxJWqWDjNG9nECfG
+  secret-key: 6r9lidmuaHG5kABZe82WWS6S7TwCtMPrCZIKIBYJ
+  bucket-name: ssjj
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
