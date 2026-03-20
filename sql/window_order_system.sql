@@ -622,4 +622,29 @@ CREATE TABLE `qc_record`
     INDEX `idx_plan_id` (`plan_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '质量检验记录表';
 
+-- =========================================================
+-- 11. 订单合同表 (Order Contract)
+-- =========================================================
+DROP TABLE IF EXISTS `order_contract`;
+CREATE TABLE `order_contract`
+(
+    `id`             bigint         NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `contract_no`    varchar(50)    NOT NULL COMMENT '合同编号',
+    `order_id`       bigint         NOT NULL COMMENT '订单ID',
+    `customer_id`    bigint         NULL DEFAULT NULL COMMENT '客户ID',
+    `pdf_url`        varchar(500)   NULL DEFAULT NULL COMMENT '合同PDF文件地址',
+    `sign_status`    varchar(20)    NULL DEFAULT 'PENDING' COMMENT '签署状态: PENDING(待签署), SIGNING(签署中), COMPLETED(已签署), EXPIRED(已过期)',
+    `sign_url`       varchar(500)   NULL DEFAULT NULL COMMENT '电子签署链接',
+    `third_party_id` varchar(100)   NULL DEFAULT NULL COMMENT '第三方电子签章合同ID（如法大大返回的ID）',
+    `remark`         varchar(500)   NULL DEFAULT NULL COMMENT '备注',
+    `create_by`      bigint         NULL DEFAULT NULL COMMENT '创建人ID',
+    `update_by`      bigint         NULL DEFAULT NULL COMMENT '更新人ID',
+    `create_time`    datetime       NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`    datetime       NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_deleted`     tinyint(1)     NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uk_contract_no` (`contract_no` ASC) USING BTREE,
+    INDEX `idx_order_id` (`order_id` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '订单合同表';
+
 SET FOREIGN_KEY_CHECKS = 1;

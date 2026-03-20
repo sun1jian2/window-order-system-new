@@ -85,20 +85,20 @@
                 </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="状态" min-width="100">
+          <el-table-column label="状态" min-width="80">
             <template #default="scope">
                <el-tag v-if="scope.row.status === 'DRAFT'" type="info" effect="plain">草稿</el-tag>
                <el-tag v-else type="success" effect="plain">已提交</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="制作进度" min-width="110">
+          <el-table-column label="制作进度" min-width="90">
             <template #default="scope">
                <el-tag size="small" :type="getProgressType(scope.row.productionProgress)" effect="light">
                   {{ getProgressLabel(scope.row.productionProgress) }}
                 </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="物流状态" min-width="110">
+          <el-table-column label="物流状态" min-width="90">
             <template #default="scope">
                <el-tag v-if="scope.row.logisticsStatus" size="small" :type="getLogisticsStatusType(scope.row.logisticsStatus)" effect="light">
                   {{ getLogisticsStatusLabel(scope.row.logisticsStatus) }}
@@ -106,7 +106,7 @@
                 <span v-else class="text-placeholder">-</span>
             </template>
           </el-table-column>
-          <el-table-column label="安装进度" min-width="110">
+          <el-table-column label="安装进度" min-width="90">
             <template #default="scope">
                <el-tag size="small" :type="getProgressType(scope.row.installProgress)" effect="light">
                   {{ getProgressLabel(scope.row.installProgress) }}
@@ -120,9 +120,12 @@
               <span v-else class="text-placeholder">未分配</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" width="220" align="center">
+          <el-table-column label="操作" fixed="right" width="260" align="center">
             <template #default="scope">
               <div class="action-cell">
+                <el-tooltip content="合同" placement="top" v-if="scope.row.status !== 'DRAFT'">
+                  <el-button class="action-btn" circle size="small" type="primary" plain :icon="Document" @click="handleContract(scope.row)" />
+                </el-tooltip>
                 <el-tooltip content="详情" placement="top">
                   <el-button class="action-btn" circle size="small" type="primary" plain :icon="View" @click="handleDetail(scope.row)" />
                 </el-tooltip>
@@ -422,6 +425,38 @@
       </template>
     </el-dialog>
 
+    <!-- Contract Dialog -->
+    <el-dialog v-model="contractDialogVisible" title="订单合同管理" width="600px" destroy-on-close>
+      <div v-loading="contractLoading">
+        <div v-if="!currentContract" class="text-center py-4" style="text-align: center; padding: 30px 0;">
+          <el-empty description="暂无合同">
+            <el-button type="primary" @click="handleGenerateContract">生成 PDF 合同</el-button>
+          </el-empty>
+        </div>
+        <div v-else>
+          <el-descriptions :column="1" border>
+            <el-descriptions-item label="合同编号">{{ currentContract.contractNo }}</el-descriptions-item>
+            <el-descriptions-item label="签署状态">
+              <el-tag :type="currentContract.signStatus === 'COMPLETED' ? 'success' : (currentContract.signStatus === 'SIGNING' ? 'warning' : 'info')">
+                {{ currentContract.signStatus === 'COMPLETED' ? '已签署' : (currentContract.signStatus === 'SIGNING' ? '签署中' : '未签署') }}
+              </el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item label="合同文件">
+              <el-link type="primary" :href="currentContract.pdfUrl" target="_blank">点击查看/下载 PDF</el-link>
+            </el-descriptions-item>
+          </el-descriptions>
+          <div style="margin-top: 20px; text-align: center;">
+            <el-button v-if="currentContract.signStatus === 'PENDING' || currentContract.signStatus === 'SIGNING'" type="success" @click="handleSignContract">
+              发起/继续在线签署
+            </el-button>
+            <el-button type="primary" @click="handleCheckSignStatus">
+              刷新签署状态
+            </el-button>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -429,9 +464,9 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Plus, Edit, Delete, User, Phone, Goods, House, SwitchButton, UserFilled, ArrowDown, View, Refresh, Download, Tools, InfoFilled, Money } from '@element-plus/icons-vue'
+import { Search, Plus, Edit, Delete, User, Phone, Goods, House, SwitchButton, UserFilled, ArrowDown, View, Refresh, Download, Tools, InfoFilled, Money, Document } from '@element-plus/icons-vue'
 import { regionData, codeToText } from 'element-china-area-data'
-import { listOrders, createOrder, updateOrder, deleteOrder } from '../api/order'
+import { listOrders, createOrder, updateOrder, deleteOrder, generateContract, getOrderContracts } from '../api/order'
 import { assignRemeasureTask } from '../api/remeasure'
 import { listCustomers, getCustomerDetail } from '../api/customer'
 import { useUserStore } from '../stores/user'
@@ -979,6 +1014,85 @@ const getUserDisplayName = (id, listRef) => {
   if (!id || !listRef?.value) return ''
   const u = listRef.value.find(item => item.id === id)
   return u ? (u.realName || u.username) : ''
+}
+
+// Contract Methods
+const contractDialogVisible = ref(false)
+const contractLoading = ref(false)
+const currentContract = ref(null)
+const currentOrderForContract = ref(null)
+
+const handleContract = async (row) => {
+  currentOrderForContract.value = row
+  contractDialogVisible.value = true
+  contractLoading.value = true
+  currentContract.value = null
+  try {
+    const res = await getOrderContracts(row.id)
+    if (res.code === 200 && res.data && res.data.length > 0) {
+      currentContract.value = res.data[res.data.length - 1] // 取最新的一条
+    }
+  } catch (e) {
+    console.error(e)
+  } finally {
+    contractLoading.value = false
+  }
+}
+
+const handleGenerateContract = async () => {
+  if (!currentOrderForContract.value) return
+  contractLoading.value = true
+  try {
+    const res = await generateContract({
+      orderId: currentOrderForContract.value.id,
+      remark: '系统自动生成'
+    })
+    if (res.code === 200) {
+      ElMessage.success('合同生成成功')
+      currentContract.value = res.data
+    } else {
+      ElMessage.error(res.message || '合同生成失败')
+    }
+  } catch (e) {
+    console.error(e)
+  } finally {
+    contractLoading.value = false
+  }
+}
+
+const handleSignContract = () => {
+  if (currentContract.value && currentContract.value.signUrl) {
+    window.open(currentContract.value.signUrl, '_blank')
+    ElMessageBox.confirm('是否已在第三方平台完成签署？', '签署确认', {
+      confirmButtonText: '已完成',
+      cancelButtonText: '未完成/取消',
+      type: 'info'
+    }).then(async () => {
+      // 模拟回调更新状态
+      try {
+        await request.post('/order/contract/sign-callback', {
+          contractNo: currentContract.value.contractNo,
+          status: 'COMPLETED'
+        })
+        ElMessage.success('签署状态已更新')
+        handleContract(currentOrderForContract.value)
+      } catch (e) {
+        console.error(e)
+      }
+    }).catch(async () => {
+      try {
+        await request.post('/order/contract/sign-callback', {
+          contractNo: currentContract.value.contractNo,
+          status: 'SIGNING'
+        })
+        handleContract(currentOrderForContract.value)
+      } catch (e) {}
+    })
+  }
+}
+
+const handleCheckSignStatus = () => {
+  handleContract(currentOrderForContract.value)
 }
 
 // Helpers

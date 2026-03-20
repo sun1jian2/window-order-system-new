@@ -7,3 +7,7 @@ export const deleteOrder = (id, params) => request.delete(`/order/${id}`, { para
 export const getOrder = (id) => request.get(`/order/detail/${id}`)
 
 export const getDashboardStats = (params) => request.get('/dashboard/stats', { params })
+
+// 合同相关接口
+export const generateContract = (data) => request.post('/order/contract/generate', data)
+export const getOrderContracts = (orderId) => request.get(`/order/contract/list/${orderId}`)
