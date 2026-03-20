@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface ProductionPlanMapper {
 
-    @Insert("INSERT INTO production_plan (plan_no, order_id, planned_start_date, planned_end_date, manager_id, status, remark, create_time, create_by, update_by, is_deleted) " +
-            "VALUES (#{planNo}, #{orderId}, #{plannedStartDate}, #{plannedEndDate}, #{managerId}, #{status}, #{remark}, NOW(), #{createBy}, #{updateBy}, 0)")
+    @Insert("INSERT INTO production_plan (plan_no, order_id, order_no, planned_start_date, planned_end_date, manager_id, status, remark, create_time, create_by, update_by, is_deleted) " +
+            "VALUES (#{planNo}, #{orderId}, #{orderNo}, #{plannedStartDate}, #{plannedEndDate}, #{managerId}, #{status}, #{remark}, NOW(), #{createBy}, #{updateBy}, 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     /**
      * insert 方法
@@ -57,6 +57,7 @@ public interface ProductionPlanMapper {
             "WHERE p.is_deleted = 0 " +
             "<if test='planNo != null and planNo != \"\"'> AND p.plan_no LIKE CONCAT('%', #{planNo}, '%')</if> " +
             "<if test='orderId != null'> AND p.order_id = #{orderId}</if> " +
+            "<if test='orderNo != null and orderNo != \"\"'> AND p.order_no LIKE CONCAT('%', #{orderNo}, '%')</if> " +
             "<if test='status != null and status != \"\"'> AND p.status = #{status}</if> " +
             "<if test='managerId != null'> AND p.manager_id = #{managerId}</if> " +
             "<if test='startDate != null'> AND p.planned_start_date &gt;= #{startDate}</if> " +
@@ -68,13 +69,14 @@ public interface ProductionPlanMapper {
     long countList(ProductionPlanListReq req);
 
     @Select("<script>" +
-            "SELECT p.*, o.order_no as order_no, o.customer_name as customer_name, u.real_name as manager_name " +
+            "SELECT p.*, o.customer_name as customer_name, u.real_name as manager_name " +
             "FROM production_plan p " +
             "LEFT JOIN window_order o ON p.order_id = o.id " +
             "LEFT JOIN sys_user u ON p.manager_id = u.id " +
             "WHERE p.is_deleted = 0 " +
             "<if test='planNo != null and planNo != \"\"'> AND p.plan_no LIKE CONCAT('%', #{planNo}, '%')</if> " +
             "<if test='orderId != null'> AND p.order_id = #{orderId}</if> " +
+            "<if test='orderNo != null and orderNo != \"\"'> AND p.order_no LIKE CONCAT('%', #{orderNo}, '%')</if> " +
             "<if test='status != null and status != \"\"'> AND p.status = #{status}</if> " +
             "<if test='managerId != null'> AND p.manager_id = #{managerId}</if> " +
             "<if test='startDate != null'> AND p.planned_start_date &gt;= #{startDate}</if> " +
@@ -86,4 +88,10 @@ public interface ProductionPlanMapper {
      * list 方法
      */
     List<ProductionPlan> list(ProductionPlanListReq req);
+
+    @Select("SELECT count(1) FROM window_order WHERE order_no = #{orderNo} AND is_deleted = 0")
+    /**
+     * checkOrderExists 方法
+     */
+    long checkOrderExists(@Param("orderNo") String orderNo);
 }

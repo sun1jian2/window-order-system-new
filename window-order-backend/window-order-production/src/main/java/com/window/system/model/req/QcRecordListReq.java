@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 public class QcRecordListReq extends BasePageReq {
     private Long planId;
+    private String planNo;
     private Long processId;
     private Long inspectorId;
     private String result;

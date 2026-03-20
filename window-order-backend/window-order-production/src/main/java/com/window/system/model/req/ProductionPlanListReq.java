@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class ProductionPlanListReq extends BasePageReq {
     private String planNo;
     private Long orderId;
+    private String orderNo;
     private String status;
     private Long managerId;
     private LocalDate startDate;

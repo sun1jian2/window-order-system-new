@@ -39,8 +39,16 @@ public class QcRecordService {
      * create 方法
      */
     public Result<String> create(QcRecordSaveReq req) {
+        if (req.getPlanNo() != null && !req.getPlanNo().isEmpty()) {
+            long planExists = qcRecordMapper.checkPlanExists(req.getPlanNo());
+            if (planExists == 0) {
+                return Result.error("单号校验失败：系统内不存在该排产单号 (" + req.getPlanNo() + ")");
+            }
+        }
+
         QcRecord record = new QcRecord();
         BeanUtils.copyProperties(req, record);
+        // planId 可以为空，现在使用 planNo
         qcRecordMapper.insert(record);
         return Result.success("创建成功");
     }
@@ -49,6 +57,13 @@ public class QcRecordService {
      * update 方法
      */
     public Result<String> update(QcRecordSaveReq req) {
+        if (req.getPlanNo() != null && !req.getPlanNo().isEmpty()) {
+            long planExists = qcRecordMapper.checkPlanExists(req.getPlanNo());
+            if (planExists == 0) {
+                return Result.error("单号校验失败：系统内不存在该排产单号 (" + req.getPlanNo() + ")");
+            }
+        }
+
         QcRecord record = new QcRecord();
         BeanUtils.copyProperties(req, record);
         qcRecordMapper.update(record);

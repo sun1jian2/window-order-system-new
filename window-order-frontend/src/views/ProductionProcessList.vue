@@ -5,6 +5,11 @@
         <el-form :inline="true" :model="searchForm" class="search-form">
           <el-row :gutter="20" class="w-full">
             <el-col :span="6">
+              <el-form-item label="排产单号" class="w-full">
+                <el-input v-model="searchForm.planNo" placeholder="请输入排产单号" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item label="工序名称" class="w-full">
                 <el-input v-model="searchForm.processName" placeholder="请输入工序名称" clearable />
               </el-form-item>
@@ -18,7 +23,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12" class="text-right">
+            <el-col :span="6" class="text-right">
               <el-form-item class="search-actions">
                 <el-button type="primary" @click="handleSearch">搜索</el-button>
                 <el-button @click="resetSearch">重置</el-button>
@@ -79,8 +84,8 @@
       width="500px"
     >
       <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="排产计划ID" prop="planId">
-          <el-input v-model.number="form.planId" placeholder="请输入排产计划ID" />
+        <el-form-item label="排产单号" prop="planNo">
+          <el-input v-model="form.planNo" placeholder="请输入排产单号" />
         </el-form-item>
         <el-form-item label="工序名称" prop="processName">
           <el-input v-model="form.processName" placeholder="如下料、组装、打胶" />
@@ -121,6 +126,7 @@ import { ElMessage } from 'element-plus'
 import { getProductionProcessList, createProductionProcess, updateProductionProcess, deleteProductionProcess } from '../api/production'
 
 const searchForm = reactive({
+  planNo: '',
   processName: '',
   status: '',
   pageNo: 1,
@@ -139,6 +145,7 @@ const formRef = ref(null)
 const form = reactive({
   id: null,
   planId: null,
+  planNo: '',
   processName: '',
   operatorId: null,
   status: 'PENDING',
@@ -148,7 +155,7 @@ const form = reactive({
 })
 
 const rules = {
-  planId: [{ required: true, message: '请输入计划ID', trigger: 'blur' }],
+  planNo: [{ required: true, message: '请输入排产单号', trigger: 'blur' }],
   processName: [{ required: true, message: '请输入工序名称', trigger: 'blur' }]
 }
 
@@ -191,6 +198,7 @@ const handleSearch = () => {
 }
 
 const resetSearch = () => {
+  searchForm.planNo = ''
   searchForm.processName = ''
   searchForm.status = ''
   handleSearch()
@@ -211,6 +219,7 @@ const handleAdd = () => {
   Object.assign(form, {
     id: null,
     planId: null,
+    planNo: '',
     processName: '',
     operatorId: null,
     status: 'PENDING',

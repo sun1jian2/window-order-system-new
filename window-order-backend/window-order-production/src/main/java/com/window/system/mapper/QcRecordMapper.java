@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface QcRecordMapper {
 
-    @Insert("INSERT INTO qc_record (plan_id, process_id, inspector_id, check_time, result, defect_reason, remark, create_time, create_by, update_by, is_deleted) " +
-            "VALUES (#{planId}, #{processId}, #{inspectorId}, #{checkTime}, #{result}, #{defectReason}, #{remark}, NOW(), #{createBy}, #{updateBy}, 0)")
+    @Insert("INSERT INTO qc_record (plan_id, plan_no, process_id, inspector_id, check_time, result, defect_reason, remark, create_time, create_by, update_by, is_deleted) " +
+            "VALUES (#{planId}, #{planNo}, #{processId}, #{inspectorId}, #{checkTime}, #{result}, #{defectReason}, #{remark}, NOW(), #{createBy}, #{updateBy}, 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     /**
      * insert 方法
@@ -38,9 +38,8 @@ public interface QcRecordMapper {
      */
     int delete(Long id);
 
-    @Select("SELECT q.*, p.plan_no as plan_no, pr.process_name as process_name, u.real_name as inspector_name " +
+    @Select("SELECT q.*, pr.process_name as process_name, u.real_name as inspector_name " +
             "FROM qc_record q " +
-            "LEFT JOIN production_plan p ON q.plan_id = p.id " +
             "LEFT JOIN production_process pr ON q.process_id = pr.id " +
             "LEFT JOIN sys_user u ON q.inspector_id = u.id " +
             "WHERE q.id = #{id} AND q.is_deleted = 0")
@@ -53,6 +52,7 @@ public interface QcRecordMapper {
             "SELECT count(1) FROM qc_record q " +
             "WHERE q.is_deleted = 0 " +
             "<if test='planId != null'> AND q.plan_id = #{planId}</if> " +
+            "<if test='planNo != null and planNo != \"\"'> AND q.plan_no LIKE CONCAT('%', #{planNo}, '%')</if> " +
             "<if test='processId != null'> AND q.process_id = #{processId}</if> " +
             "<if test='inspectorId != null'> AND q.inspector_id = #{inspectorId}</if> " +
             "<if test='result != null and result != \"\"'> AND q.result = #{result}</if> " +
@@ -65,13 +65,13 @@ public interface QcRecordMapper {
     long countList(QcRecordListReq req);
 
     @Select("<script>" +
-            "SELECT q.*, p.plan_no as plan_no, pr.process_name as process_name, u.real_name as inspector_name " +
+            "SELECT q.*, pr.process_name as process_name, u.real_name as inspector_name " +
             "FROM qc_record q " +
-            "LEFT JOIN production_plan p ON q.plan_id = p.id " +
             "LEFT JOIN production_process pr ON q.process_id = pr.id " +
             "LEFT JOIN sys_user u ON q.inspector_id = u.id " +
             "WHERE q.is_deleted = 0 " +
             "<if test='planId != null'> AND q.plan_id = #{planId}</if> " +
+            "<if test='planNo != null and planNo != \"\"'> AND q.plan_no LIKE CONCAT('%', #{planNo}, '%')</if> " +
             "<if test='processId != null'> AND q.process_id = #{processId}</if> " +
             "<if test='inspectorId != null'> AND q.inspector_id = #{inspectorId}</if> " +
             "<if test='result != null and result != \"\"'> AND q.result = #{result}</if> " +
@@ -84,4 +84,10 @@ public interface QcRecordMapper {
      * list 方法
      */
     List<QcRecord> list(QcRecordListReq req);
+
+    @Select("SELECT count(1) FROM production_plan WHERE plan_no = #{planNo} AND is_deleted = 0")
+    /**
+     * checkPlanExists 方法
+     */
+    long checkPlanExists(@Param("planNo") String planNo);
 }

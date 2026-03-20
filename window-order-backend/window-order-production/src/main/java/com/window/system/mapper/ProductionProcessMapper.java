@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface ProductionProcessMapper {
 
-    @Insert("INSERT INTO production_process (plan_id, process_name, operator_id, status, start_time, end_time, remark, create_time, create_by, update_by, is_deleted) " +
-            "VALUES (#{planId}, #{processName}, #{operatorId}, #{status}, #{startTime}, #{endTime}, #{remark}, NOW(), #{createBy}, #{updateBy}, 0)")
+    @Insert("INSERT INTO production_process (plan_id, plan_no, process_name, operator_id, status, start_time, end_time, remark, create_time, create_by, update_by, is_deleted) " +
+            "VALUES (#{planId}, #{planNo}, #{processName}, #{operatorId}, #{status}, #{startTime}, #{endTime}, #{remark}, NOW(), #{createBy}, #{updateBy}, 0)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     /**
      * insert 方法
@@ -41,9 +41,8 @@ public interface ProductionProcessMapper {
      */
     int delete(Long id);
 
-    @Select("SELECT p.*, pl.plan_no as plan_no, u.real_name as operator_name " +
+    @Select("SELECT p.*, u.real_name as operator_name " +
             "FROM production_process p " +
-            "LEFT JOIN production_plan pl ON p.plan_id = pl.id " +
             "LEFT JOIN sys_user u ON p.operator_id = u.id " +
             "WHERE p.id = #{id} AND p.is_deleted = 0")
     /**
@@ -55,6 +54,7 @@ public interface ProductionProcessMapper {
             "SELECT count(1) FROM production_process p " +
             "WHERE p.is_deleted = 0 " +
             "<if test='planId != null'> AND p.plan_id = #{planId}</if> " +
+            "<if test='planNo != null and planNo != \"\"'> AND p.plan_no LIKE CONCAT('%', #{planNo}, '%')</if> " +
             "<if test='processName != null and processName != \"\"'> AND p.process_name LIKE CONCAT('%', #{processName}, '%')</if> " +
             "<if test='status != null and status != \"\"'> AND p.status = #{status}</if> " +
             "<if test='operatorId != null'> AND p.operator_id = #{operatorId}</if> " +
@@ -65,12 +65,12 @@ public interface ProductionProcessMapper {
     long countList(ProductionProcessListReq req);
 
     @Select("<script>" +
-            "SELECT p.*, pl.plan_no as plan_no, u.real_name as operator_name " +
+            "SELECT p.*, u.real_name as operator_name " +
             "FROM production_process p " +
-            "LEFT JOIN production_plan pl ON p.plan_id = pl.id " +
             "LEFT JOIN sys_user u ON p.operator_id = u.id " +
             "WHERE p.is_deleted = 0 " +
             "<if test='planId != null'> AND p.plan_id = #{planId}</if> " +
+            "<if test='planNo != null and planNo != \"\"'> AND p.plan_no LIKE CONCAT('%', #{planNo}, '%')</if> " +
             "<if test='processName != null and processName != \"\"'> AND p.process_name LIKE CONCAT('%', #{processName}, '%')</if> " +
             "<if test='status != null and status != \"\"'> AND p.status = #{status}</if> " +
             "<if test='operatorId != null'> AND p.operator_id = #{operatorId}</if> " +
@@ -81,4 +81,10 @@ public interface ProductionProcessMapper {
      * list 方法
      */
     List<ProductionProcess> list(ProductionProcessListReq req);
+
+    @Select("SELECT count(1) FROM production_plan WHERE plan_no = #{planNo} AND is_deleted = 0")
+    /**
+     * checkPlanExists 方法
+     */
+    long checkPlanExists(@Param("planNo") String planNo);
 }

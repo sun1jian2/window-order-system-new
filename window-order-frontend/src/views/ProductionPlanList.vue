@@ -83,8 +83,8 @@
         <el-form-item label="排产单号" prop="planNo" v-if="dialogType === 'edit'">
           <el-input v-model="form.planNo" disabled placeholder="自动生成" />
         </el-form-item>
-        <el-form-item label="订单ID" prop="orderId">
-          <el-input v-model.number="form.orderId" placeholder="请输入订单ID" />
+        <el-form-item label="订单号" prop="orderNo">
+          <el-input v-model="form.orderNo" placeholder="请输入订单号" />
         </el-form-item>
         <el-form-item label="预计开始" prop="plannedStartDate">
           <el-date-picker v-model="form.plannedStartDate" type="date" value-format="YYYY-MM-DD" placeholder="选择日期" />
@@ -92,8 +92,15 @@
         <el-form-item label="预计结束" prop="plannedEndDate">
           <el-date-picker v-model="form.plannedEndDate" type="date" value-format="YYYY-MM-DD" placeholder="选择日期" />
         </el-form-item>
-        <el-form-item label="负责人ID" prop="managerId">
-          <el-input v-model.number="form.managerId" placeholder="请输入负责人ID" />
+        <el-form-item label="负责人" prop="managerId">
+          <el-select v-model="form.managerId" placeholder="请选择负责人" filterable style="width: 100%">
+            <el-option 
+              v-for="user in salesList" 
+              :key="user.id" 
+              :label="user.realName || user.username" 
+              :value="user.id" 
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择状态">
@@ -119,6 +126,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
+import request from '@/utils/request'
 import { getProductionPlanList, createProductionPlan, updateProductionPlan, deleteProductionPlan } from '../api/production'
 
 const searchForm = reactive({
@@ -136,11 +144,13 @@ const dialogVisible = ref(false)
 const dialogType = ref('add')
 const submitLoading = ref(false)
 const formRef = ref(null)
+const salesList = ref([])
 
 const form = reactive({
   id: null,
   planNo: '',
   orderId: null,
+  orderNo: '',
   plannedStartDate: '',
   plannedEndDate: '',
   managerId: null,
@@ -149,7 +159,7 @@ const form = reactive({
 })
 
 const rules = {
-  orderId: [{ required: true, message: '请输入订单ID', trigger: 'blur' }]
+  orderNo: [{ required: true, message: '请输入订单号', trigger: 'blur' }]
 }
 
 const getStatusType = (status) => {
@@ -212,6 +222,7 @@ const handleAdd = () => {
     id: null,
     planNo: '',
     orderId: null,
+    orderNo: '',
     plannedStartDate: '',
     plannedEndDate: '',
     managerId: null,
@@ -262,8 +273,20 @@ const submitForm = () => {
   })
 }
 
+const fetchSalesList = async () => {
+  try {
+    const res = await request.get('/auth/role/SALES')
+    if (res.code === 200) {
+      salesList.value = res.data
+    }
+  } catch (e) {
+    console.error('Failed to fetch sales list', e)
+  }
+}
+
 onMounted(() => {
   fetchList()
+  fetchSalesList()
 })
 </script>
 

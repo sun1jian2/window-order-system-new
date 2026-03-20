@@ -5,6 +5,11 @@
         <el-form :inline="true" :model="searchForm" class="search-form">
           <el-row :gutter="20" class="w-full">
             <el-col :span="6">
+              <el-form-item label="排产单号" class="w-full">
+                <el-input v-model="searchForm.planNo" placeholder="请输入排产单号" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item label="结果" class="w-full">
                 <el-select v-model="searchForm.result" placeholder="请选择结果" clearable class="w-full">
                   <el-option label="合格" value="PASS" />
@@ -12,7 +17,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="18" class="text-right">
+            <el-col :span="12" class="text-right">
               <el-form-item class="search-actions">
                 <el-button type="primary" @click="handleSearch">搜索</el-button>
                 <el-button @click="resetSearch">重置</el-button>
@@ -72,8 +77,8 @@
       width="500px"
     >
       <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="排产计划ID" prop="planId">
-          <el-input v-model.number="form.planId" placeholder="请输入排产计划ID" />
+        <el-form-item label="排产单号" prop="planNo">
+          <el-input v-model="form.planNo" placeholder="请输入排产单号" />
         </el-form-item>
         <el-form-item label="工序ID" prop="processId">
           <el-input v-model.number="form.processId" placeholder="可选：工序ID" />
@@ -113,6 +118,7 @@ import { ElMessage } from 'element-plus'
 import { getQcRecordList, createQcRecord, updateQcRecord, deleteQcRecord } from '../api/production'
 
 const searchForm = reactive({
+  planNo: '',
   result: '',
   pageNo: 1,
   pageSize: 10
@@ -130,6 +136,7 @@ const formRef = ref(null)
 const form = reactive({
   id: null,
   planId: null,
+  planNo: '',
   processId: null,
   inspectorId: null,
   checkTime: '',
@@ -139,7 +146,7 @@ const form = reactive({
 })
 
 const rules = {
-  planId: [{ required: true, message: '请输入计划ID', trigger: 'blur' }],
+  planNo: [{ required: true, message: '请输入排产单号', trigger: 'blur' }],
   inspectorId: [{ required: true, message: '请输入检验员ID', trigger: 'blur' }],
   checkTime: [{ required: true, message: '请选择检验时间', trigger: 'blur' }],
   result: [{ required: true, message: '请选择结果', trigger: 'change' }]
@@ -166,6 +173,7 @@ const handleSearch = () => {
 }
 
 const resetSearch = () => {
+  searchForm.planNo = ''
   searchForm.result = ''
   handleSearch()
 }
@@ -185,6 +193,7 @@ const handleAdd = () => {
   Object.assign(form, {
     id: null,
     planId: null,
+    planNo: '',
     processId: null,
     inspectorId: null,
     checkTime: new Date().toISOString().replace('T', ' ').substring(0, 19),

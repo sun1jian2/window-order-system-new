@@ -14,6 +14,7 @@ public class ProductionPlanSaveReq {
     private Long id;
     private String planNo;
     private Long orderId;
+    private String orderNo;
     
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate plannedStartDate;

@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 public class ProductionProcessListReq extends BasePageReq {
     private Long planId;
+    private String planNo;
     private String processName;
     private String status;
     private Long operatorId;

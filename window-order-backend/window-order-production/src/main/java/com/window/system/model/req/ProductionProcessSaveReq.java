@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class ProductionProcessSaveReq {
     private Long id;
     private Long planId;
+    private String planNo;
     private String processName;
     private Long operatorId;
     private String status;

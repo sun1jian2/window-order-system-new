@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class QcRecordSaveReq {
     private Long id;
     private Long planId;
+    private String planNo;
     private Long processId;
     private Long inspectorId;
     

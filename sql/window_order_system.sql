@@ -557,7 +557,8 @@ CREATE TABLE `production_plan`
 (
     `id`                 bigint         NOT NULL AUTO_INCREMENT COMMENT '主键',
     `plan_no`            varchar(50)    NOT NULL COMMENT '排产单号',
-    `order_id`           bigint         NOT NULL COMMENT '订单ID',
+    `order_id`           bigint         NULL DEFAULT NULL COMMENT '订单ID',
+    `order_no`           varchar(50)    NULL DEFAULT NULL COMMENT '订单号',
     `planned_start_date` date           NULL DEFAULT NULL COMMENT '预计开始日期',
     `planned_end_date`   date           NULL DEFAULT NULL COMMENT '预计完成日期',
     `manager_id`         bigint         NULL DEFAULT NULL COMMENT '负责人ID',
@@ -580,7 +581,8 @@ DROP TABLE IF EXISTS `production_process`;
 CREATE TABLE `production_process`
 (
     `id`             bigint         NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `plan_id`        bigint         NOT NULL COMMENT '排产计划ID',
+    `plan_id`        bigint         NULL DEFAULT NULL COMMENT '排产计划ID',
+    `plan_no`        varchar(50)    NULL DEFAULT NULL COMMENT '排产单号',
     `process_name`   varchar(50)    NOT NULL COMMENT '工序名称(如:下料,组装,打胶,入玻璃)',
     `operator_id`    bigint         NULL DEFAULT NULL COMMENT '操作人ID',
     `status`         varchar(20)    NULL DEFAULT 'PENDING' COMMENT '状态：PENDING(待开工), IN_PROGRESS(进行中), COMPLETED(已完成)',
@@ -603,7 +605,8 @@ DROP TABLE IF EXISTS `qc_record`;
 CREATE TABLE `qc_record`
 (
     `id`             bigint         NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `plan_id`        bigint         NOT NULL COMMENT '排产计划ID',
+    `plan_id`        bigint         NULL DEFAULT NULL COMMENT '排产计划ID',
+    `plan_no`        varchar(50)    NULL DEFAULT NULL COMMENT '排产单号',
     `process_id`     bigint         NULL DEFAULT NULL COMMENT '工序ID（可选，如果是工序检）',
     `inspector_id`   bigint         NOT NULL COMMENT '检验员ID',
     `check_time`     datetime       NOT NULL COMMENT '检验时间',

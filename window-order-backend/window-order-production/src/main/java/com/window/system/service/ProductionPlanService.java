@@ -40,10 +40,18 @@ public class ProductionPlanService {
      * create 方法
      */
     public Result<String> create(ProductionPlanSaveReq req) {
+        if (req.getOrderNo() != null && !req.getOrderNo().isEmpty()) {
+            long orderExists = productionPlanMapper.checkOrderExists(req.getOrderNo());
+            if (orderExists == 0) {
+                return Result.error("单号校验失败：系统内不存在该订单号 (" + req.getOrderNo() + ")");
+            }
+        }
+
         ProductionPlan plan = new ProductionPlan();
         BeanUtils.copyProperties(req, plan);
         // 自动生成排产单号，前缀 PP
         plan.setPlanNo("PP" + IdUtil.getSnowflake(1, 1).nextIdStr());
+        // orderId 可以为空，因为现在使用 orderNo
         productionPlanMapper.insert(plan);
         return Result.success("创建成功");
     }
@@ -52,6 +60,13 @@ public class ProductionPlanService {
      * update 方法
      */
     public Result<String> update(ProductionPlanSaveReq req) {
+        if (req.getOrderNo() != null && !req.getOrderNo().isEmpty()) {
+            long orderExists = productionPlanMapper.checkOrderExists(req.getOrderNo());
+            if (orderExists == 0) {
+                return Result.error("单号校验失败：系统内不存在该订单号 (" + req.getOrderNo() + ")");
+            }
+        }
+
         ProductionPlan plan = new ProductionPlan();
         BeanUtils.copyProperties(req, plan);
         productionPlanMapper.update(plan);
